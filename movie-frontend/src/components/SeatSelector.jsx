@@ -25,7 +25,7 @@ function SeatSelector() {
       {/* 1. 銀幕 (Screen) */}
       <div className="mb-6">
         <div className="h-2 bg-gray-600 rounded-t-full w-3/4 mx-auto"></div>
-        <p className="text-center text-sm text-white mt-2">銀幕在此</p>
+        <p className="text-center text-sm text-white mt-2">螢幕</p>
       </div>
 
       {/* 2. 座位圖 (使用 Flex 佈局) */}
