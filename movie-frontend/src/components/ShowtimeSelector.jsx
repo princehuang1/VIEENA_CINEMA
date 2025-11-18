@@ -73,7 +73,7 @@ function ShowtimeSelector() {
     switch (style) {
       case 'gold': return 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-yellow-100 shadow-yellow-800/10';
       case 'silver': return 'bg-gradient-to-r from-gray-400 to-gray-600 text-white shadow-gray-400/40';
-      case 'bronze': return 'bg-gradient-to-r from-orange-800 to-orange-900 text-orange-100 shadow-orange-2000/40';
+      case 'bronze': return 'bg-gradient-to-r from-[#d8b58a] to-[#b28252] text-yellow-100 shadow-amber-500/20';
       default: return 'bg-neutral-700 text-white shadow-purple-500/20';
     }
   };

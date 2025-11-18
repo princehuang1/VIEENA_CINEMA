@@ -28,6 +28,13 @@ const carouselMoviesData = [
       ticketLink: '#', 
       trailerLink: 'https://www.youtube.com/watch?v=c--np1lcdgQ', 
     },
+    {
+      id: 3, title: '銀翼殺手 2049',
+      description: '在未來的荒涼世界中，銀翼殺手 K 負責追捕失控複製人。一次任務中，他意外發現足以動搖整個社會的秘密……',
+      poster: 'https://miro.medium.com/1*4QAzUOAdeXI1qBgs86lK5Q.jpeg',
+      ticketLink: '#', 
+      trailerLink: 'https://www.youtube.com/watch?v=QMAk8W1O3G8', 
+    },
 ];
 
 // 🎯 我們不再需要 nowShowingMovies 和 comingSoonMovies 的假資料，已刪除
