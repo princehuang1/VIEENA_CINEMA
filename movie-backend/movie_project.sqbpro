@@ -1,15 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Movies" custom_title="0" dock_id="1" table="4,6:mainMovies"/><dock_state state="000000ff00000000fd00000001000000020000033c000002abfc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000012500ffffff000002790000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="73"/><column index="2" value="60"/><column index="3" value="67"/><column index="4" value="65"/><column index="5" value="72"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Movies" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="48"/><column index="2" value="300"/><column index="3" value="118"/><column index="4" value="64"/><column index="5" value="300"/><column index="6" value="148"/><column index="7" value="249"/><column index="8" value="300"/><column index="9" value="75"/><column index="10" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">-- 🎯 修正所有 13 筆電影資料的 posterUrl 欄位，將 Windows 錯誤路徑修正為 Web URL 路徑
-    
-UPDATE Movies SET posterUrl = '/posters/Dune2.jpg' WHERE movieId = 1;
-UPDATE Movies SET posterUrl = '/posters/chainsaw_reze.png' WHERE movieId = 2;
-UPDATE Movies SET posterUrl = '/posters/spiderman_across.jpg' WHERE movieId = 3;
-UPDATE Movies SET posterUrl = '/posters/kpop_demon.jpg' WHERE movieId = 4;
-UPDATE Movies SET posterUrl = '/posters/blade_runner_2049.jpg' WHERE movieId = 5;
-UPDATE Movies SET posterUrl = '/posters/TITANIC.jpg' WHERE movieId = 6;
-UPDATE Movies SET posterUrl = '/posters/Oppenheimer.jpg' WHERE movieId = 7;
-UPDATE Movies SET posterUrl = '/posters/avengers4.avif' WHERE movieId = 8;
-UPDATE Movies SET posterUrl = '/posters/avatar_wayofwater.jpeg' WHERE movieId = 9;
-UPDATE Movies SET posterUrl = '/posters/avengers_doomsday.jpg' WHERE movieId = 10;
-UPDATE Movies SET posterUrl = '/posters/Dune3.webp' WHERE movieId = 11;
-UPDATE Movies SET posterUrl = '/posters/星與翼的悖論.jpg' WHERE movieId = 12;
-UPDATE Movies SET posterUrl = '/posters/super-mario-bros-movie-2.webp' WHERE movieId = 13;</sql><current_tab id="0"/></tab_sql></sqlb_project>
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Movies" custom_title="0" dock_id="1" table="4,6:mainMovies"/><dock_state state="000000ff00000000fd00000001000000020000033c000002abfc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000012500ffffff000002790000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="73"/><column index="2" value="60"/><column index="3" value="67"/><column index="4" value="65"/><column index="5" value="72"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Movies" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort><column index="4" mode="0"/></sort><column_widths><column index="1" value="48"/><column index="2" value="300"/><column index="3" value="118"/><column index="4" value="64"/><column index="5" value="300"/><column index="6" value="148"/><column index="7" value="249"/><column index="8" value="83"/><column index="9" value="300"/><column index="10" value="75"/><column index="11" value="93"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">UPDATE Movies SET synopsis =
+'亞崔迪家族的保羅在宿命的引導下，與契妮和弗雷曼人團結一心，誓將展開一場針對哈肯能家族的復仇。隨著他逐漸融入弗雷曼文化，保羅不僅面對愛情與信任的考驗，也必須承擔被視為「救世者」的命運重擔。在戰火與陰謀交織的阿拉基斯星球上，他一步步走向可能改變宇宙秩序的未來，並在復仇、希望與犧牲之間做出艱難抉擇。'
+WHERE movieId = 1;
+UPDATE Movies SET synopsis =
+'電次與惡魔「鏈鋸惡魔」波奇塔簽訂契約，成為鏈鋸人，過著狩獵惡魔的日子。某天，他遇見了神秘少女蕾潔，兩人之間逐漸產生曖昧情愫，但蕾潔背後卻隱藏著足以顛覆電次世界的祕密。隨著新的敵人陸續現身，電次被迫在信任與背叛、愛情與生存之間做出痛苦選擇，而「鏈鋸人」真正的力量也將在這場殘酷衝突中被推向極限。'
+WHERE movieId = 2;
+UPDATE Movies SET synopsis =
+'邁爾斯·莫拉萊斯回歸，展開一場史詩般的冒險，穿梭於無數平行宇宙，遇見各式各樣的蜘蛛人夥伴。當一場足以摧毀多重宇宙的新威脅浮現時，邁爾斯必須與關·史黛西及其他盟友聯手對抗。面對命運的束縛與英雄的責任，他不僅要守護所愛之人，更要決定自己的道路，挑戰「命運既定」的信念。'
+WHERE movieId = 3;
+UPDATE Movies SET synopsis =
+'韓國流行偶像團體在首爾巡演的過程中，秘密兼職為惡魔獵人。他們白天在舞台上散發魅力，夜晚則在城市陰影中對抗異界生物。當一股前所未見的強大惡魔力量蘇醒時，團員們被迫面對自身隱藏的黑暗過去與羈絆的考驗。他們必須在舞台與戰場之間取得平衡，並以音樂與決心守護世界。'
+WHERE movieId = 4;
+UPDATE Movies SET synopsis =
+'在泰瑞爾公司崩潰的三十年後，一名新的銀翼殺手——洛杉磯警員 K，發現了一個深埋已久的秘密，可能顛覆整個社會的秩序。他的調查讓他踏入迷霧般的陰謀，並追尋失蹤多年的前銀翼殺手戴克。隨著真相逐漸揭露，人類與複製人之間的界線變得越來越模糊，而 K 必須面對關於身份、記憶與靈魂的終極提問。'
+WHERE movieId = 5;
+UPDATE Movies SET synopsis =
+'《鐵達尼號》描述在 1912 年泰坦尼克號處女航上，出身不同階級的傑克與蘿絲因命運相遇而墜入愛河。兩人在奢華與壓抑的環境中彼此依靠，試圖衝破階級與家庭束縛。然而當巨輪撞上冰山、危機四伏時，他們的愛情面臨最殘酷的考驗。在生死抉擇之間，傑克與蘿絲的故事成為跨越時代的永恆傳說。'
+WHERE movieId = 6;
+UPDATE Movies SET synopsis =
+'《奧本海默》講述「原子彈之父」J·羅伯特·奧本海默的一生，他在曼哈頓計畫中扮演關鍵角色，帶領科學家們研發史上最具毀滅性的武器。隨著戰爭結束與核爆造成的後果浮現，他開始受到道德、政治與心理的多重折磨。影片深入描繪天才與毀滅、理性與良知的衝突，呈現奧本海默被歷史推向審判舞台的矛盾人生。'
+WHERE movieId = 7;
+UPDATE Movies SET synopsis =
+'在薩諾斯彈指造成全宇宙人口消失後，倖存的復仇者們陷入前所未有的絕望。當希望的曙光意外出現時，他們決心再次集結，穿越時空尋求改變過去的機會。每位英雄都必須面對自己的傷痕與犧牲，而這場最終之戰將決定宇宙的命運。英雄們將以無比勇氣，迎接復仇者史詩般的最終章。'
+WHERE movieId = 8;
+UPDATE Movies SET synopsis =
+'傑克·薩利與他在潘朵拉星球上新組成的家庭一起生活，珍惜著與納美族之間的羈絆。然而當人類軍隊再度回歸、威脅重現時，傑克一家被迫離開熟悉的森林，前往海洋部族尋求庇護。在全新的文化、環境與挑戰中，他們學習「水之道」，並面對關於家庭、生存與犧牲的艱難試煉。'
+WHERE movieId = 9;
+UPDATE Movies SET synopsis =
+'世界面臨前所未有的巨大危機，一股名為「末日」的宇宙級力量席捲而來，使地球陷入崩毀邊緣。殘存的英雄們在混亂中重新集結，試圖阻止即將到來的全面滅亡。他們必須跨越分歧、面對內心恐懼，並展開一場決定多重宇宙命運的最終對抗。這將是英雄們前所未有的生死戰。'
+WHERE movieId = 10;
+UPDATE Movies SET synopsis =
+'在「沙丘」戰爭的餘波中，保羅·亞崔迪的命運持續向未知延伸。新的政治勢力紛紛崛起，宇宙再度陷入權力鬥爭。弗雷曼人的信仰、星際帝國的秩序與保羅的預知能力交錯，使他必須面對更加複雜的選擇。為了阻止毀滅性的未來降臨，保羅踏上新的征途，決定宇宙最終的走向。'
+WHERE movieId = 11;
+UPDATE Movies SET synopsis =
+'在遙遠的星際文明中，人類與外星勢力為爭奪宇宙核心能源而爆發激烈衝突。少年駕駛員意外與名為「星翼」的神秘戰鬥機融合，成為左右戰局的關鍵人物。隨著戰火蔓延，他逐漸揭開能源背後的真相，並在友情、犧牲與命運之間做出抉擇。宇宙的未來握在他的手中。'
+WHERE movieId = 12;
+UPDATE Movies SET synopsis =
+'在首次冒險後，瑪利歐與路易吉再次捲入蘑菇王國的新危機。當一股來自異世界的力量威脅王國和平時，兄弟倆必須與碧姬公主及其他盟友合作，展開充滿驚奇與幽默的旅程。他們將穿越全新世界、挑戰更強大的敵人，並在混亂中證明兄弟情義與勇氣依然是最強大的力量。'
+WHERE movieId = 13;
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

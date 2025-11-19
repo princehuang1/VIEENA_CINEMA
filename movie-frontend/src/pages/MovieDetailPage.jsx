@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // 引入 useNavigate
+import { useParams, useNavigate } from 'react-router-dom'; 
 import axios from 'axios'; 
 import Navbar from '../components/Navbar';
 import ShowtimeSelector from '../components/ShowtimeSelector';
 import MealSelector from "../components/MealSelector"; 
-// import SeatSelector from '../components/SeatSelector'; // 移除 SeatSelector，因為它移到下一頁了
 
 function MovieDetailPage() {
   const { movieId } = useParams(); 
-  const navigate = useNavigate(); // 用於頁面跳轉
+  const navigate = useNavigate(); 
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -34,7 +33,6 @@ function MovieDetailPage() {
   
   // 處理跳轉到確認頁面
   const handleConfirm = () => {
-    // 這裡未來可以傳遞選擇的票種和餐點資料
     navigate(`/booking-confirmation/${movieId}`); 
   };
 
@@ -103,9 +101,29 @@ function MovieDetailPage() {
               </div>
               
               <h2 className="text-2xl font-bold text-white mt-8 mb-4">劇情簡介</h2>
-              <p className="text-lg text-gray-300 mb-8">
+              <p className="text-lg text-gray-300 mb-6">
                 {movie.synopsis || "暫無簡介"}
               </p>
+
+              {/* 🎯 詳細資訊：種類、導演、演員、語言 (全部從資料庫讀取) */}
+              <div className="bg-neutral-800/50 p-4 rounded-lg border border-neutral-700 space-y-2">
+                <p className="text-gray-300">
+                  <span className="font-bold text-white mr-2">電影種類:</span> 
+                  {movie.movieType}
+                </p>
+                <p className="text-gray-300">
+                  <span className="font-bold text-white mr-2">導演:</span> 
+                  {movie.director || 'N/A'}
+                </p>
+                <p className="text-gray-300">
+                  <span className="font-bold text-white mr-2">演員:</span> 
+                  {movie.actors || 'N/A'}
+                </p>
+                <p className="text-gray-300">
+                  <span className="font-bold text-white mr-2">語言:</span> 
+                  {movie.language || '未知'} {/* 🎯 使用資料庫中的 language 欄位 */}
+                </p>
+              </div>
             </div>
             
             <hr className="border-gray-700" />
@@ -121,7 +139,7 @@ function MovieDetailPage() {
               <h2 className="text-3xl font-bold text-white mb-6">加購餐飲</h2>
               <MealSelector />
               
-              {/* 🎯 確認按鈕移到這裡 (餐飲加購的右下方) */}
+              {/* 🎯 確認按鈕 */}
               <div className="flex justify-end pt-6">
                 <button 
                   onClick={handleConfirm}
@@ -132,8 +150,6 @@ function MovieDetailPage() {
               </div>
             </div>
             
-            {/* 4. 座位選擇 (已移除，移至下一頁) */}
-
           </div>
         </div>
       </main>
