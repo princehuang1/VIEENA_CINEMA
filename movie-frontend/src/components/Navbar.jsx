@@ -17,7 +17,7 @@ function Navbar() {
           <Link to="/showtimes" className="text-gray-300 hover:text-white transition duration-300">場次查詢</Link>
           <Link to="#" className="text-gray-300 hover:text-white transition duration-300">影城</Link>
           <Link to="/movie-info" className="text-gray-300 hover:text-white transition duration-300">電影資訊</Link>
-          <Link to="#" className="text-gray-300 hover:text-white transition duration-300">商城</Link>
+          <Link to="/store" className="text-gray-300 hover:text-white transition duration-300">商城</Link>
         </div>
 
         {/* 登入/註冊按鈕 */}
