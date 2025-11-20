@@ -25,7 +25,7 @@ const mockItems = [
     { id: 10, name: '艾爾登法環', category: 'Game', price: 1990, image: '/posters/艾爾登法環.webp' },
 
     // 電影周邊 (假資料)
-    { id: 11, name: '波奇塔爆米花桶', category: 'Merchandise', price: 999, image: '/posters/波奇塔爆米花桶.png' },
+    { id: 11, name: '波奇塔爆米花桶', category: 'Merchandise', price: 999, image: '/posters/波奇塔爆米花桶.jpg' },
     { id: 12, name: '蕾潔海報', category: 'Merchandise', price: 450, image: '/posters/蕾潔海報.jpg' },
     { id: 15, name: '鏈鋸人明信片', category: 'Merchandise', price: 1200, image: '/posters/明信片.webp' }, 
     

@@ -23,10 +23,10 @@ const concessionData = [
     price: 150, 
     image: '/posters/薯條.jpg' 
   },
-  { id: 5, name: '炸雞盒', 
+  { id: 5, name: '炸雞桶', 
     content: '炸雞 x4', 
     price: 200, 
-    image: '/posters/炸雞盒.png' 
+    image: '/posters/炸雞桶.jpg' 
   },
   // 套餐
   { id: 6, name: '基本套餐', 
