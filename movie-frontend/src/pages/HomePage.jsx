@@ -144,19 +144,20 @@ function App() {
           </button>
         </section>
 
-        {/* 正在上映電影 (8 部) */}
+        {/* 正在上映電影 */}
         <section className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">現正熱映</h2>
             <a href="#" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-            {/*  顯示 loading 或 API 回傳的資料 */}
+          
+          {/* lg:grid-cols-5 (一排5個), gap-8 (間距縮小一點) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {loading ? (
               <p>資料載入中...</p>
             ) : (
-              // 🎯 【已修正】只選取前 8 部電影來顯示
-              nowShowingMovies.slice(0, 8).map((movie) => (
+              // slice(0, 10) 顯示 10 部，剛好兩排 (5x2)
+              nowShowingMovies.slice(0, 10).map((movie) => (
                 <MovieCard key={movie.movieId} movie={{
                   id: movie.movieId,
                   title: movie.movieName,
@@ -281,18 +282,20 @@ function App() {
         </section>
 
 
-        {/* 即將上映電影 (4 部) */}
+        {/* 即將上映電影 */}
         <section>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">即將推出</h2>
             <a href="#" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
-            {/* 🎯 顯示 loading 或 API 回傳的資料 */}
+
+          {/* 即將上映電影 5 欄佈局 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {loading ? (
               <p>資料載入中...</p>
             ) : (
-              comingSoonMovies.map((movie) => (
+              // 如果希望顯示更多，也可以改為 slice(0, 5) 或 slice(0, 10)
+              comingSoonMovies.slice(0, 5).map((movie) => (
                 <MovieCard key={movie.movieId} movie={{
                   id: movie.movieId,
                   title: movie.movieName,

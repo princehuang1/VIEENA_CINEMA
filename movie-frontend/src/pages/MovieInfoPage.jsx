@@ -68,7 +68,8 @@ function MovieInfoPage() {
         </div>
 
         {/* 3. 電影列表網格 (使用與首頁相同的樣式) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+        {/* 🎯 修改：將 lg:grid-cols-4 改為 lg:grid-cols-5，並將 gap-12 改為 gap-8 以適應較密的佈局 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           {loading ? (
             <p>資料載入中...</p>
           ) : (
