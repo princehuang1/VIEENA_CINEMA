@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // 🎯 1. 引入 Link
 import Navbar from '../components/Navbar';
 
-// 🎯 這是商城頁面的篩選類別
+// 🎯 商城頁面的篩選類別
 const storeCategories = [
     { label: '遊戲商城', status: 'Game' },
     { label: '電影周邊', status: 'Merchandise' },
@@ -14,7 +15,7 @@ const storeCategories = [
 const mockItems = [
     // 遊戲商城 (10個)
     { id: 1, name: '對馬戰鬼', category: 'Game', price: 1500, image: '/posters/對馬戰鬼.avif' },
-    { id: 2, name: '33號遠征隊', category: 'Game', price: 1790, image: '/posters/33號.avif' },
+    { id: 2, name: 'SILENT HILL f', category: 'Game', price: 1790, image: '/posters/silenthill.avif' },
     { id: 3, name: 'FF7 Rebirth', category: 'Game', price: 1390, image: '/posters/FF7Rebirth.avif' },
     { id: 4, name: '地平線西域境地', category: 'Game', price: 1690, image: '/posters/地平線.avif' },
     { id: 5, name: '尼爾 自動人形', category: 'Game', price: 990, image: '/posters/尼爾.avif' },
@@ -31,33 +32,33 @@ const mockItems = [
     
     // 餐飲 (假資料)
     { id: 13, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },
-    
 ];
 
-// 遊戲商城使用的卡片組件 (保持不變)
+// 🎯 2. 修改 GameItemCard：整張卡片變成一個 Link，導向詳細頁面
 const GameItemCard = ({ item }) => (
-  <div className="group cursor-pointer relative rounded-xl overflow-hidden shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-1">
-    <img
-        src={item.image || 'https://via.placeholder.com/400x400?text=Game'}
-        alt={item.name}
-        className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500" 
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-4">
-      <h3 className="text-white text-sm md:text-base font-bold truncate group-hover:text-purple-400 transition-colors text-left">
-        {item.name}
-      </h3>
-      <p className="text-gray-300 text-xs mt-1 text-left">$ {item.price}</p>
+  <Link to={`/store/game/${item.id}`} className="block h-full">
+    <div className="group cursor-pointer relative rounded-xl overflow-hidden shadow-lg hover:shadow-purple-500/50 transition-all duration-300 transform hover:-translate-y-1 h-full">
+      <img
+          src={item.image || 'https://via.placeholder.com/400x400?text=Game'}
+          alt={item.name}
+          className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-500" 
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-4">
+        <h3 className="text-white text-sm md:text-base font-bold truncate group-hover:text-purple-400 transition-colors text-left">
+          {item.name}
+        </h3>
+        <p className="text-gray-300 text-xs mt-1 text-left">$ {item.price}</p>
+      </div>
     </div>
-  </div>
+  </Link>
 );
 
-// 🎯 一般商品卡片 (周邊、餐飲用) - 已更新
+// 一般商品卡片 (周邊、餐飲用) - 維持原樣
 const StoreItemCard = ({ item }) => (
-    <div className="bg-neutral-800 rounded-xl overflow-hidden shadow-xl hover:shadow-purple-500/30 transition-all duration-300">
+    <div className="bg-neutral-800 rounded-xl overflow-hidden shadow-xl hover:shadow-purple-500/30 transition-all duration-300 h-full">
       <img
         src={item.image || 'https://via.placeholder.com/400x400?text=Item'}
         alt={item.name}
-        // 🎯 修改：這裡改為 aspect-square (1:1 正方形)，原本是 aspect-[4/3]
         className="w-full aspect-square object-cover" 
       />
       <div className="p-4">
@@ -68,8 +69,7 @@ const StoreItemCard = ({ item }) => (
         </button>
       </div>
     </div>
-  );
-
+);
 
 function StorePage() {
   const [activeFilter, setActiveFilter] = useState(storeCategories[0].status); 
@@ -79,7 +79,6 @@ function StorePage() {
     const filterData = mockItems.filter(item => item.category === activeFilter);
     setFilteredItems(filterData);
   }, [activeFilter]);
-
 
   const FilterButton = ({ label, status }) => (
     <button
@@ -109,8 +108,7 @@ function StorePage() {
           ))}
         </div>
 
-        {/* 3. 商品列表網格 */}
-        {/* 🎯 修改：現在所有分類都統一使用 5 欄佈局 (lg:grid-cols-5) */}
+        {/* 商品列表網格 */}
         <div className="grid gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (

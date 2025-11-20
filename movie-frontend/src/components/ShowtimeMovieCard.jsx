@@ -8,23 +8,25 @@ function ShowtimeMovieCard({ movie }) {
     // 🎯 卡片整體高度將由左側海報決定
     <div className="bg-neutral-800 rounded-xl overflow-hidden shadow-xl flex transition-all duration-300 ease-in-out hover:shadow-purple-500/30">
       
-      {/* flex-shrink-0 確保圖片不被壓縮，h-72 固定高度 */}
+      {/* 左側海報 */}
       <div className="w-1/3 md:w-1/4 flex-shrink-0 h-76"> 
         <img 
           src={movie.posterUrl} 
           alt={movie.movieName}
-          className="w-full h-full object-cover" // 圖片將填充這個 h-56 的空間
+          className="w-full h-full object-cover" 
         />
       </div>
 
-      {/* 🎯 右側：電影資訊 - 讓它填滿剩餘空間，同時按鈕推到右下角 */}
-      <div className="flex-grow px-5 md:px-6 py-3 flex flex-col justify-between"> {/* justify-between 讓內容和按鈕分開 */}
+      {/* 右側：電影資訊 */}
+      <div className="flex-grow px-5 md:px-6 py-3 flex flex-col justify-between">
         
-        {/* 上方文字區塊 (所有文字壓縮在一起) */}
+        {/* 上方文字區塊 */}
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">{movie.movieName}</h2> 
-          <p className="text-sm text-gray-400 mb-2">{movie.movieDurationMinutes}</p>
-          <div className="text-sm text-gray-300 space-y-0.5 mb-0"> {/* 這裡的 mb-0 很重要，不再有額外間距 */}
+          <p className="text-sm text-gray-400 mb-4">{movie.movieDurationMinutes}</p> {/* 增加這裡的 mb，讓時間跟下面資訊分開一點 */}
+          
+          {/* 🎯 修改這裡：將 space-y-0.5 改為 space-y-2，加大行距 */}
+          <div className="text-sm text-gray-300 space-y-2 mb-0"> 
             <p><span className="font-semibold text-gray-400">電影種類:</span> {movie.movieType}</p>
             <p><span className="font-semibold text-gray-400">導演:</span> {movie.director || 'N/A'}</p>
             <p><span className="font-semibold text-gray-400">演員:</span> {movie.actors || 'N/A'}</p>
@@ -32,7 +34,7 @@ function ShowtimeMovieCard({ movie }) {
           </div>
         </div>
         
-        {/* 🎯 按鈕區塊 - ml-auto 將按鈕推到右側，mt-4 提供上方間距 */}
+        {/* 按鈕區塊 */}
         <div className="flex space-x-4 mt-4 ml-auto">
           <Link 
             to={`/movie/${movie.movieId}`}

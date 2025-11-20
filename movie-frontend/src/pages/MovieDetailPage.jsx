@@ -5,58 +5,77 @@ import Navbar from '../components/Navbar';
 import ShowtimeSelector from '../components/ShowtimeSelector';
 import MealSelector from "../components/MealSelector";
 
-// 🎯 1. 將原本的 duneMediaData 改寫為一個更通用的資料產生函數
+// 🎯 輔助函數：根據電影資料產生媒體清單 (1部影片 + N張圖片)
 const getMediaForMovie = (movie) => {
   if (!movie) return [];
 
-  // 針對「沙丘」回傳特定的素材
-  if (movie.movieName.includes('沙丘')) {
-    return [
-      { type: 'video', src: 'https://www.youtube.com/embed/5b6bKqgn7y8' },
-      { type: 'image', src: '/posters/dune01.webp' },
-      { type: 'image', src: '/posters/dune02.webp' },
-      { type: 'image', src: '/posters/dune03.jpg' },
-      { type: 'image', src: '/posters/dune04.jpg' },
-    ];
+  const mediaList = [];
+
+  // 1. 處理預告片 (從資料庫讀取 trailerUrl)
+  // 如果資料庫沒填，就給一個預設值 (Rick Roll) 避免空白
+  const trailerSrc = movie.trailerUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  
+  mediaList.push({
+    type: 'video',
+    src: trailerSrc
+  });
+
+  // 2. 處理劇照 (從資料庫讀取 stills JSON 字串)
+  let images = [];
+  try {
+    if (movie.stills) {
+      // 資料庫存的是像 '["/a.jpg", "/b.jpg"]' 的字串，需轉回陣列
+      images = JSON.parse(movie.stills);
+    }
+  } catch (e) {
+    console.error("解析劇照 JSON 失敗:", e);
   }
 
-  // 🎯 針對其他電影：如果沒有特定素材，自動生成「預設素材」
-  // 這裡暫時用該電影的海報重複 4 次來模擬劇照，影片則用一個通用預告 (或您可以換成空字串來隱藏)
-  return [
-    { type: 'video', src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }, // 範例預告 (Rick Roll 警告! 可自行更換)
-    { type: 'image', src: movie.posterUrl },
-    { type: 'image', src: movie.posterUrl },
-    { type: 'image', src: movie.posterUrl },
-    { type: 'image', src: movie.posterUrl },
-  ];
+  // 3. 組合清單
+  if (images.length > 0) {
+    images.forEach(imgSrc => {
+      mediaList.push({ type: 'image', src: imgSrc });
+    });
+  } else {
+    // 🎯 防呆機制：如果資料庫沒填劇照，自動用「海報」重複 4 次來填空
+    // 這樣即使您還沒去資料庫加圖片，版面也不會壞掉
+    for (let i = 0; i < 4; i++) {
+      mediaList.push({ type: 'image', src: movie.posterUrl });
+    }
+  }
+
+  return mediaList;
 };
 
 function MovieDetailPage() {
   const { movieId } = useParams();
   const navigate = useNavigate();
+  
+  // --- State ---
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [imageError, setImageError] = useState(false);
   
-  // 輪播圖的狀態管理
+  // 輪播圖 State
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-  const [mediaData, setMediaData] = useState([]); // 🎯 新增 state 來存當前電影的媒體資料
-  const itemsPerView = 3; 
+  const [mediaData, setMediaData] = useState([]); 
+  const itemsPerView = 3; // 一次顯示 3 格
 
   const defaultPosterUrl = 'https://via.placeholder.com/600x900?text=Image+Not+Found';
 
+  // --- Fetch Data ---
   useEffect(() => {
     setImageError(false);
     setLoading(true);
-    setCurrentMediaIndex(0); 
+    setCurrentMediaIndex(0); // 重置輪播位置
 
     axios.get(`http://localhost:4000/api/movies/${movieId}`)
       .then(response => {
         const fetchedMovie = response.data;
         setMovie(fetchedMovie);
         
-        // 🎯 資料載入後，立刻生成該電影對應的媒體資料
+        // 🎯 資料回來後，立刻產生對應的媒體清單
         setMediaData(getMediaForMovie(fetchedMovie));
         
         setLoading(false);
@@ -68,11 +87,11 @@ function MovieDetailPage() {
       });
   }, [movieId]);
 
+  // --- Handlers ---
   const handleConfirm = () => {
     navigate(`/booking-confirmation/${movieId}`);
   };
 
-  // 輪播圖控制函數 (使用 mediaData 而不是 duneMediaData)
   const nextSlide = () => {
     if (currentMediaIndex < mediaData.length - itemsPerView) {
       setCurrentMediaIndex(prev => prev + 1);
@@ -85,6 +104,7 @@ function MovieDetailPage() {
     }
   };
 
+  // --- Render Loading/Error ---
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans">
@@ -109,11 +129,12 @@ function MovieDetailPage() {
 
   const posterToShow = imageError ? defaultPosterUrl : movie.posterUrl;
 
+  // --- Main Render ---
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans">
       <Navbar />
       
-      {/* --- 電影橫幅 --- */}
+      {/* --- 頂部模糊橫幅 --- */}
       <section 
         className="relative w-full h-[50vh] bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${posterToShow})` }}
@@ -137,10 +158,10 @@ function MovieDetailPage() {
             />
           </div>
 
-          {/* 右側：電影資訊 + 所有選擇器 */}
+          {/* 右側：資訊與選擇器 */}
           <div className="w-full md:w-2/3 space-y-8">
             
-            {/* 1. 電影資訊 */}
+            {/* 1. 電影基本資訊 */}
             <div>
               <h1 className="text-5xl font-extrabold text-white mb-3">{movie.movieName}</h1>
               <div className="flex space-x-4 text-gray-400 mb-4">
@@ -154,7 +175,7 @@ function MovieDetailPage() {
                 {movie.synopsis || "暫無簡介"}
               </p>
 
-              {/* 詳細資訊區塊 */}
+              {/* 詳細資訊表格 */}
               <div className="bg-neutral-800/50 p-4 rounded-lg border border-neutral-700 space-y-2">
                 <p className="text-gray-300">
                   <span className="font-bold text-white mr-2">電影種類:</span> 
@@ -175,10 +196,11 @@ function MovieDetailPage() {
               </div>
             </div>
 
-            {/* 🎯 2. 多媒體輪播 (現在每部電影都會顯示) */}
+            {/* 🎯 2. 多媒體輪播 (無標題版本) */}
+            {/* mb-8 確保與下方的分隔線保持距離 */}
             <div className="relative group mb-8"> 
               
-              {/* 輪播容器 */}
+              {/* 輪播視窗 */}
               <div className="relative overflow-hidden rounded-xl">
                 {/* 滑動軌道 */}
                 <div 
@@ -210,7 +232,7 @@ function MovieDetailPage() {
                 </div>
               </div>
 
-              {/* 左箭頭 */}
+              {/* 左箭頭 (只有當不在第一頁時顯示) */}
               {currentMediaIndex > 0 && (
                 <button 
                   onClick={prevSlide}
@@ -222,7 +244,7 @@ function MovieDetailPage() {
                 </button>
               )}
 
-              {/* 右箭頭 */}
+              {/* 右箭頭 (只有當後面還有內容時顯示) */}
               {currentMediaIndex < (mediaData.length - itemsPerView) && (
                 <button 
                   onClick={nextSlide}
