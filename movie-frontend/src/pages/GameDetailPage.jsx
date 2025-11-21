@@ -1,18 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
+// 假資料
+// 🎯 新增 screenshots 欄位：您可以在這裡定義每款遊戲要顯示幾張截圖，以及路徑為何
 const mockItems = [
-    { id: 1, name: '對馬戰鬼', category: 'Game', price: 1500, image: '/posters/對馬戰鬼.jpg' },
-    { id: 2, name: 'SILENT HILL f', category: 'Game', price: 1790, image: '/posters/silenthill.jpg' },
-    { id: 3, name: 'FF7 Rebirth', category: 'Game', price: 1390, image: '/posters/FF7Rebirth.jpg' },
-    { id: 4, name: '地平線西域境地', category: 'Game', price: 1690, image: '/posters/地平線.jpg' },
-    { id: 5, name: '尼爾 自動人形', category: 'Game', price: 990, image: '/posters/尼爾.jpg' },
-    { id: 6, name: '惡靈古堡4', category: 'Game', price: 1190, image: '/posters/惡靈古堡4.jpg' },
-    { id: 7, name: 'FF16', category: 'Game', price: 1490, image: '/posters/FF16.jpg' },
-    { id: 8, name: 'Cyberpunk 2077', category: 'Game', price: 1090, image: '/posters/Cyberpunk 2077.jpg' },
-    { id: 9, name: '空洞騎士', category: 'Game', price: 1890, image: '/posters/空洞騎士.jpg' },
-    { id: 10, name: '艾爾登法環', category: 'Game', price: 1990, image: '/posters/艾爾登法環.jpg' },
+    { 
+        id: 1, 
+        name: '對馬戰鬼', 
+        category: 'Game', 
+        price: 1500, 
+        image: '/posters/對馬戰鬼.jpg', 
+        trailer: 'https://www.youtube.com/embed/SrnvY8bSLjI', 
+        screenshots: [
+            '/posters/對馬戰鬼.jpg', '/posters/對馬戰鬼.jpg', '/posters/對馬戰鬼.jpg', '/posters/對馬戰鬼.jpg' 
+        ]
+    },
+    { 
+        id: 2, 
+        name: 'SILENT HILL f', 
+        category: 'Game', 
+        price: 1790, 
+        image: '/posters/silenthill.jpg', 
+        trailer: 'https://www.youtube.com/embed/N_kGf1tV67I', // 🎯 更新預告片
+        // 沒寫 screenshots 欄位 -> 會自動跑預設 (5張圖)
+    },
+    { 
+        id: 3, 
+        name: 'FF7 Rebirth', 
+        category: 'Game', 
+        price: 1390, 
+        image: '/posters/FF7Rebirth.jpg', 
+        trailer: 'https://www.youtube.com/embed/okGnXYjvJRM', 
+        screenshots: [
+            '/posters/FF7Rebirth.jpg', '/posters/FF7Rebirth.jpg', '/posters/FF7Rebirth.jpg', '/posters/FF7Rebirth.jpg', '/posters/FF7Rebirth.jpg', '/posters/FF7Rebirth.jpg' 
+        ]
+    },
+    { 
+        id: 4, 
+        name: '地平線西域境地', 
+        category: 'Game', 
+        price: 1690, 
+        image: '/posters/地平線.jpg', 
+        trailer: 'https://www.youtube.com/embed/Lq594XmpPBg' 
+    },
+    { 
+        id: 5, 
+        name: '劍星', 
+        category: 'Game', 
+        price: 1590, 
+        image: '/posters/劍星.jpg', 
+        trailer: 'https://www.youtube.com/embed/ayek3ZzWb1E' 
+    },
+    { 
+        id: 6, 
+        name: '惡靈古堡4', 
+        category: 'Game', 
+        price: 1190, 
+        image: '/posters/惡靈古堡4.jpg', 
+        trailer: 'https://www.youtube.com/embed/Id2EaldBaWw' 
+    },
+    { 
+        id: 7, 
+        name: 'FF16', 
+        category: 'Game', 
+        price: 1490, 
+        image: '/posters/FF16.jpg', 
+        trailer: 'https://www.youtube.com/embed/Y6M2cqm7Jl0' 
+    },
+    { 
+        id: 8, 
+        name: 'Cyberpunk 2077', 
+        category: 'Game', 
+        price: 1090, 
+        image: '/posters/Cyberpunk 2077.jpg', 
+        trailer: 'https://www.youtube.com/embed/8X2kIfS6fb8' 
+    },
+    { 
+        id: 9, 
+        name: '空洞騎士', 
+        category: 'Game', 
+        price: 990, 
+        image: '/posters/空洞騎士.jpg', 
+        trailer: 'https://www.youtube.com/embed/FzzsWP2GWmg' 
+    },
+    { 
+        id: 10, 
+        name: '艾爾登法環', 
+        category: 'Game', 
+        price: 1990, 
+        image: '/posters/艾爾登法環.jpg', 
+        trailer: 'https://www.youtube.com/embed/E3Huy2cdih0' 
+    },
 ];
 
 function GameDetailPage() {
@@ -20,54 +99,95 @@ function GameDetailPage() {
   const navigate = useNavigate();
   const game = mockItems.find(item => item.id === parseInt(id));
 
+  // 輪播圖狀態
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const itemsPerView = 3; 
+
   if (!game) {
     return <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center">找不到遊戲</div>;
   }
 
+  // --- 輔助函式 ---
+  
+  // 1. 取得背景大圖 (自動轉 02)
   const getDetailImageUrl = (originalPath) => {
     if (!originalPath) return '';
     const lastDotIndex = originalPath.lastIndexOf('.');
     if (lastDotIndex === -1) return originalPath; 
-    
     const namePart = originalPath.substring(0, lastDotIndex);
     const extPart = originalPath.substring(lastDotIndex);
     return `${namePart}02${extPart}`;
   };
 
+  // 2. 自動生成媒體清單
+  const getMediaList = () => {
+    const list = [];
+    
+    // 第一格：固定放預告片 (若 mockItems 沒填，給個預設值)
+    list.push({ 
+        type: 'video', 
+        src: game.trailer || 'https://www.youtube.com/embed/dQw4w9WgXcQ' 
+    });
+    
+    // 後面幾格：顯示截圖
+    // 🎯 邏輯：如果有設定 screenshots 就用設定的，沒有就自動產生 5 張封面圖
+    if (game.screenshots && game.screenshots.length > 0) {
+        game.screenshots.forEach(src => {
+            list.push({ type: 'image', src: src });
+        });
+    } else {
+        // 預設自動產生 5 張 (避免空白)
+        for (let i = 0; i < 5; i++) {
+            list.push({ type: 'image', src: game.image });
+        }
+    }
+    
+    return list;
+  };
+
   const detailImage = getDetailImageUrl(game.image);
+  const mediaData = getMediaList();
+
+  // 輪播控制
+  const nextSlide = () => {
+    if (currentMediaIndex < mediaData.length - itemsPerView) {
+      setCurrentMediaIndex(prev => prev + 1);
+    }
+  };
+  const prevSlide = () => {
+    if (currentMediaIndex > 0) {
+      setCurrentMediaIndex(prev => prev - 1);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans overflow-x-hidden">
-      <Navbar />
-
+    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans overflow-x-hidden relative flex flex-col">
+      
       {/* ======================================================== */}
-      {/* 1. 頂部橫幅區塊 (Hero Section) - 包含大圖與主要購買資訊 */}
+      {/* 1. 上半部：全螢幕大圖橫幅 */}
       {/* ======================================================== */}
       <div className="relative w-full">
-        
-        {/* 底圖：高度由圖片自動撐開，但設定最大高度限制 */}
+        {/* 背景圖 */}
         <img 
             src={detailImage} 
             alt={game.name} 
-            // 🎯 修改處：
-            // w-full: 寬度全滿
-            // h-auto: 讓圖片保持原始比例
-            // max-h-[85vh]: 設定一個最大高度 (約螢幕 85%)，防止直式圖片把頁面撐太長
-            // object-cover: 如果圖片超過 max-h，多餘部分裁切掉，保持滿版不變形
-            // object-top: 裁切時優先保留圖片上方 (通常重點在上面)
             className="w-full h-auto max-h-[85vh] object-cover object-top block align-top" 
             onError={(e) => { e.target.src = game.image; }}
         />
-
-        {/* 漸層遮罩 1：整體變暗，讓文字清楚 */}
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/60 to-transparent lg:bg-gradient-to-r lg:from-neutral-900 lg:via-neutral-900/40 lg:to-transparent"></div>
         
-        {/* 🎯 漸層遮罩 2：底部邊緣融合 (Fade to Black) */}
+        {/* 漸層遮罩 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/80 to-transparent lg:bg-gradient-to-r lg:from-neutral-900 lg:via-neutral-900/40 lg:to-transparent"></div>
+        
+        {/* 底部漸層接合 */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-neutral-900 to-transparent"></div>
 
-        {/* 橫幅內容層 */}
-        <div className="absolute inset-0 flex flex-col justify-center">
-            <div className="container mx-auto px-8 lg:px-20">
+        {/* 內容層 */}
+        <div className="absolute inset-0 flex flex-col">
+            <div className="relative z-20">
+                <Navbar />
+            </div>
+
+            <main className="flex-1 container mx-auto px-8 lg:px-20 flex flex-col justify-center">
                 
                 <button 
                     onClick={() => navigate(-1)} 
@@ -83,18 +203,14 @@ function GameDetailPage() {
                         <span className="text-xs border border-gray-400 px-2 py-0.5 rounded bg-black/20 backdrop-blur-sm">PS5</span>
                     </p>
 
+                    {/* 只保留目前價格 */}
                     <div className="mb-8">
-                        <div className="flex items-baseline gap-4">
-                            <p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-md">NT$ {game.price}</p>
-                            <p className="text-gray-400 text-xl line-through">NT$ {Math.round(game.price * 1.2)}</p>
-                        </div>
-                        <p className="text-purple-400 text-sm mt-2 font-medium bg-black/40 w-fit px-2 py-1 rounded">
-                            省下 20% • 優惠截止於 2025/12/25
-                        </p>
+                        <p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-md">NT$ {game.price}</p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                        <button className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-orange-600/40 flex-grow sm:flex-grow-0 text-center">
+                        {/* 按鈕為紫色 */}
+                        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-600/40 flex-grow sm:flex-grow-0 text-center">
                             加入購物籃
                         </button>
                         <button className="p-4 rounded-full border border-gray-500 hover:border-white hover:bg-white/10 transition backdrop-blur-sm w-fit">
@@ -110,64 +226,79 @@ function GameDetailPage() {
                         <br />
                         現在預購即可獲得獨家特典服裝與數位原聲帶。
                     </p>
+
+                    <div className="grid grid-cols-2 gap-y-2 gap-x-8 text-sm text-gray-300 max-w-md">
+                        <div className="flex items-center gap-2"><span className="text-white text-lg">●</span> 可離線遊玩</div>
+                        <div className="flex items-center gap-2"><span className="text-white text-lg">●</span> 1 名玩家</div>
+                        <div className="flex items-center gap-2"><span className="text-white text-lg">●</span> 支援震動功能</div>
+                        <div className="flex items-center gap-2"><span className="text-white text-lg">●</span> PS5 Pro 增強</div>
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. 下方詳細內容區塊 (這是您之後要放內容的地方) */}
+      {/* 2. 下方多媒體輪播區塊 */}
       {/* ======================================================== */}
-      <div className="container mx-auto px-8 lg:px-20 py-12">
+      <div className="container mx-auto px-8 lg:px-20 py-12 relative group">
         
-        {/* 這裡示範一些簡單的後續內容 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            
-            {/* 左邊兩欄：遊戲介紹 */}
-            <div className="lg:col-span-2 space-y-8">
-                <section>
-                    <h3 className="text-2xl font-bold text-white mb-4">關於這款遊戲</h3>
-                    <p className="text-gray-400 leading-loose">
-                        這是一個預留的文字區塊。您可以在這裡放入更詳細的遊戲介紹、故事背景、玩法說明等等。
-                        隨著頁面往下捲動，上方的橫幅會自然地留在上方。
-                        <br /><br />
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                </section>
-
-                <section>
-                    <h3 className="text-2xl font-bold text-white mb-4">螢幕截圖</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="aspect-video bg-neutral-800 rounded-lg flex items-center justify-center text-gray-600">截圖 1</div>
-                        <div className="aspect-video bg-neutral-800 rounded-lg flex items-center justify-center text-gray-600">截圖 2</div>
+        {/* 輪播容器 */}
+        <div className="relative overflow-hidden rounded-xl">
+            {/* 滑動軌道 */}
+            <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentMediaIndex * (100 / itemsPerView)}%)` }}
+            >
+                {mediaData.map((item, index) => (
+                    <div key={index} className="min-w-[33.333%] px-2 box-border">
+                        <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black shadow-lg border border-neutral-700 group-hover:border-purple-500/50 transition-colors">
+                            {item.type === 'video' ? (
+                                <iframe 
+                                    className="w-full h-full"
+                                    src={item.src} 
+                                    title="Trailer" 
+                                    frameBorder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowFullScreen
+                                ></iframe>
+                            ) : (
+                                <img 
+                                    src={item.src} 
+                                    alt={`Screenshot ${index}`} 
+                                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                                />
+                            )}
+                        </div>
                     </div>
-                </section>
+                ))}
             </div>
-
-            {/* 右邊一欄：規格資訊 */}
-            <div className="bg-neutral-800 p-6 rounded-xl h-fit">
-                <h3 className="text-xl font-bold text-white mb-4">詳細資訊</h3>
-                <ul className="space-y-4 text-gray-400 text-sm">
-                    <li className="flex justify-between border-b border-gray-700 pb-2">
-                        <span>發行商</span>
-                        <span className="text-white">Konami</span>
-                    </li>
-                    <li className="flex justify-between border-b border-gray-700 pb-2">
-                        <span>平台</span>
-                        <span className="text-white">PS5</span>
-                    </li>
-                    <li className="flex justify-between border-b border-gray-700 pb-2">
-                        <span>類型</span>
-                        <span className="text-white">恐怖, 冒險</span>
-                    </li>
-                    <li className="flex justify-between pt-2">
-                        <span>發售日</span>
-                        <span className="text-white">2025/12/25</span>
-                    </li>
-                </ul>
-            </div>
-
         </div>
+
+        {/* 左箭頭 */}
+        {currentMediaIndex > 0 && (
+            <button 
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-3 shadow-lg transition-all transform -translate-x-1/2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+        )}
+
+        {/* 右箭頭 */}
+        {currentMediaIndex < (mediaData.length - itemsPerView) && (
+            <button 
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-3 shadow-lg transition-all transform translate-x-1/2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        )}
+
       </div>
 
     </div>

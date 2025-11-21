@@ -18,11 +18,11 @@ const mockItems = [
     { id: 2, name: 'SILENT HILL f', category: 'Game', price: 1790, image: '/posters/silenthill.jpg' },
     { id: 3, name: 'FF7 Rebirth', category: 'Game', price: 1390, image: '/posters/FF7Rebirth.jpg' },
     { id: 4, name: '地平線西域境地', category: 'Game', price: 1690, image: '/posters/地平線.jpg' },
-    { id: 5, name: '尼爾 自動人形', category: 'Game', price: 990, image: '/posters/劍星.jpg' },
+    { id: 5, name: '劍星', category: 'Game', price: 1590, image: '/posters/劍星.jpg' },
     { id: 6, name: '惡靈古堡4', category: 'Game', price: 1190, image: '/posters/惡靈古堡4.jpg' },
     { id: 7, name: 'FF16', category: 'Game', price: 1490, image: '/posters/FF16.jpg' },
     { id: 8, name: 'Cyberpunk 2077', category: 'Game', price: 1090, image: '/posters/Cyberpunk 2077.jpg' },
-    { id: 9, name: '空洞騎士', category: 'Game', price: 1890, image: '/posters/空洞騎士.jpg' },
+    { id: 9, name: '空洞騎士', category: 'Game', price: 990, image: '/posters/空洞騎士.jpg' },
     { id: 10, name: '艾爾登法環', category: 'Game', price: 1990, image: '/posters/艾爾登法環.jpg' },
 
     // 電影周邊 (假資料)
