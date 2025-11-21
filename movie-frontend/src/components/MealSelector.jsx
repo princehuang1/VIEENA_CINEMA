@@ -6,7 +6,7 @@ const concessionData = [
   { id: 1, name: '爆米花', 
     content: '爆米花 x1', 
     price: 200, 
-    image: '/posters/爆米花.avif' 
+    image: '/posters/爆米花.jpg' 
   }, 
   { id: 2, name: '可樂', 
     content: '可樂 x1', 
@@ -40,7 +40,7 @@ const concessionData = [
     image: '/posters/高級套餐.jpg' 
   },
   { id: 8, name: '豪華套餐', 
-    content: '爆米花 x1, 可樂 x1, 薯條 x1, 熱狗 x1, 炸雞盒 x1', 
+    content: '爆米花 x1, 可樂 x1, 薯條 x1, 熱狗 x1, 炸雞桶 x1', 
     price: 500, 
     image: '/posters/豪華套餐.jpg' 
   },
