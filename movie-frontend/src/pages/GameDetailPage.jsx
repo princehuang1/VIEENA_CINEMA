@@ -34,7 +34,7 @@ function GameDetailPage() {
 
   // --- Helper Functions ---
 
-  // 1. 取得背景大圖 (自動將檔名轉為 "02" 版本，例如 game.jpg -> game02.jpg)
+  // 1. 取得背景大圖 (自動將檔名轉為 "02" 版本)
   const getDetailImageUrl = (originalPath) => {
     if (!originalPath) return '';
     const lastDotIndex = originalPath.lastIndexOf('.');
@@ -68,8 +68,8 @@ function GameDetailPage() {
     }
 
     // 防呆：如果完全沒截圖，塞幾張封面圖避免空白
-    if (list.length === 1) { // 只有預告片時
-       for(let i=0; i<4; i++) list.push({ type: 'image', src: game.image });
+    if (list.length === 1) {
+       for(let i=0; i<5; i++) list.push({ type: 'image', src: game.image });
     }
     
     return list;
@@ -102,8 +102,13 @@ function GameDetailPage() {
         <img 
             src={detailImage} 
             alt={game.name} 
+            // w-full: 寬度全滿
+            // h-auto: 讓圖片保持原始比例
+            // max-h-[85vh]: 設定一個最大高度，防止直式圖片把頁面撐太長
+            // object-cover: 超過高度時裁切，保持滿版
+            // object-top: 裁切時優先保留上方
             className="w-full h-auto max-h-[85vh] object-cover object-top block align-top" 
-            onError={(e) => { e.target.src = game.image; }} // 若找不到 02 圖，退回使用原圖
+            onError={(e) => { e.target.src = game.image; }} 
         />
         
         {/* 漸層遮罩 1：整體變暗 */}
@@ -169,9 +174,10 @@ function GameDetailPage() {
       </div>
 
       {/* ======================================================== */}
-      {/* 2. 下方多媒體輪播區塊 (Media Carousel) */}
+      {/* 2. 下方多媒體輪播區塊 (加大版) */}
       {/* ======================================================== */}
-      <div className="container mx-auto px-8 lg:px-20 py-12 relative group">
+      {/* 🎯 修改：max-w-[90%] 讓容器更寬，padding 減少 */}
+      <div className="container mx-auto px-4 lg:px-8 py-12 max-w-[90%] relative group">
         
         <div className="relative overflow-hidden rounded-xl">
             {/* 滑動軌道 */}
@@ -180,8 +186,9 @@ function GameDetailPage() {
                 style={{ transform: `translateX(-${currentMediaIndex * (100 / itemsPerView)}%)` }}
             >
                 {mediaData.map((item, index) => (
-                    <div key={index} className="min-w-[33.333%] px-2 box-border">
-                        <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-black shadow-lg border border-neutral-700 group-hover:border-purple-500/50 transition-colors">
+                    <div key={index} className="min-w-[33.333%] px-3 box-border">
+                        {/* 🎯 修改：hover:scale-[1.02] 微放大效果 */}
+                        <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-2xl border border-neutral-700 group-hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02]">
                             {item.type === 'video' ? (
                                 <iframe 
                                     className="w-full h-full"
@@ -195,7 +202,7 @@ function GameDetailPage() {
                                 <img 
                                     src={item.src} 
                                     alt={`Screenshot ${index}`} 
-                                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
                                 />
                             )}
                         </div>
@@ -204,25 +211,25 @@ function GameDetailPage() {
             </div>
         </div>
 
-        {/* 左箭頭 */}
+        {/* 左箭頭 - 加大 */}
         {currentMediaIndex > 0 && (
             <button 
                 onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-3 shadow-lg transition-all transform -translate-x-1/2"
+                className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-500 text-white rounded-full p-4 shadow-2xl transition-all transform hover:scale-110"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
             </button>
         )}
 
-        {/* 右箭頭 */}
+        {/* 右箭頭 - 加大 */}
         {currentMediaIndex < (mediaData.length - itemsPerView) && (
             <button 
                 onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-700 text-white rounded-full p-3 shadow-lg transition-all transform translate-x-1/2"
+                className="absolute right-[-20px] top-1/2 -translate-y-1/2 z-10 bg-purple-600 hover:bg-purple-500 text-white rounded-full p-4 shadow-2xl transition-all transform hover:scale-110"
             >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                 </svg>
             </button>
