@@ -79,6 +79,35 @@ app.get("/api/movies/:id", (req, res) => {
   });
 });
 
+// 🎯 新增：取得所有遊戲 (用於 StorePage)
+app.get("/api/games", (req, res) => {
+  const sql = "SELECT * FROM Games";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+// 🎯 新增：取得單一遊戲詳情 (用於 GameDetailPage)
+app.get("/api/games/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "SELECT * FROM Games WHERE gameId = ?";
+  db.get(sql, [id], (err, row) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    if (row) {
+      res.json(row);
+    } else {
+      res.status(404).json({ error: "Game not found" });
+    }
+  });
+});
+
 // --- 伺服器啟動 ---
 
 // 7. 啟動伺服器

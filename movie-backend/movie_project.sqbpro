@@ -1,44 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/></tab_structure><tab_browse><table title="." custom_title="0" dock_id="2" table="0,0:"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000012100ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 2. 鏈鋸人
-UPDATE Movies 
-SET stills = '[&quot;/posters/reze01.jpg&quot;, &quot;/posters/reze02.jpg&quot;, &quot;/posters/reze03.jpg&quot;, &quot;/posters/reze04.jpg&quot;]'
-WHERE movieId = 2;
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000033c000002abfc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000011f00ffffff000002790000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="73"/><column index="2" value="60"/><column index="3" value="67"/><column index="4" value="65"/><column index="5" value="72"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 建立 Games 表格
+CREATE TABLE &quot;Games&quot; (
+    &quot;gameId&quot; INTEGER PRIMARY KEY AUTOINCREMENT,
+    &quot;name&quot; TEXT NOT NULL,
+    &quot;category&quot; TEXT,
+    &quot;price&quot; INTEGER,
+    &quot;image&quot; TEXT,
+    &quot;trailer&quot; TEXT,
+    &quot;screenshots&quot; TEXT -- 用 JSON 字串存多張圖: '[&quot;/posters/1-1.jpg&quot;, &quot;/posters/1-2.jpg&quot;]'
+);
 
--- 3. 蜘蛛人：穿越蜘蛛宇宙
-UPDATE Movies 
-SET stills = '[&quot;/posters/spider01.jpg&quot;, &quot;/posters/spider02.jpg&quot;, &quot;/posters/spider03.jpg&quot;, &quot;/posters/spider04.jpg&quot;]'
-WHERE movieId = 3;
-
--- 4. K-Pop：惡魔獵人
-UPDATE Movies 
-SET stills = '[&quot;/posters/kpop01.jpg&quot;, &quot;/posters/kpop02.jpg&quot;, &quot;/posters/kpop03.jpg&quot;, &quot;/posters/kpop04.jpg&quot;]'
-WHERE movieId = 4;
-
--- 5. 銀翼殺手 2049
-UPDATE Movies 
-SET stills = '[&quot;/posters/銀翼殺手01.jpg&quot;, &quot;/posters/銀翼殺手02.jpg&quot;, &quot;/posters/銀翼殺手03.jpg&quot;, &quot;/posters/銀翼殺手04.jpg&quot;]'
-WHERE movieId = 5;
-
--- 6. 鐵達尼號
-UPDATE Movies 
-SET stills = '[&quot;/posters/titanic01.jpg&quot;, &quot;/posters/titanic02.jpg&quot;, &quot;/posters/titanic03.jpg&quot;, &quot;/posters/titanic04.jpg&quot;]'
-WHERE movieId = 6;
-
--- 7. 奧本海默
-UPDATE Movies 
-SET stills = '[&quot;/posters/oppenheimer01.jpg&quot;, &quot;/posters/oppenheimer02.jpg&quot;, &quot;/posters/oppenheimer03.jpg&quot;, &quot;/posters/oppenheimer04.jpg&quot;]'
-WHERE movieId = 7;
-
--- 8. 復仇者聯盟：無限之戰
-UPDATE Movies 
-SET stills = '[&quot;/posters/avengers01.jpg&quot;, &quot;/posters/avengers02.jpg&quot;, &quot;/posters/avengers03.jpg&quot;, &quot;/posters/avengers04.jpg&quot;]'
-WHERE movieId = 8;
-
--- 9. 神隱少女
-UPDATE Movies 
-SET stills = '[&quot;/posters/神隱少女01.jpg&quot;, &quot;/posters/神隱少女02.jpg&quot;, &quot;/posters/神隱少女03.jpg&quot;, &quot;/posters/神隱少女04.jpg&quot;]'
-WHERE movieId = 9;
-
--- 10. 星際大戰:俠盜一號
-UPDATE Movies 
-SET stills = '[&quot;/posters/rogue01.jpg&quot;, &quot;/posters/rogue02.jpg&quot;, &quot;/posters/rogue03.jpg&quot;, &quot;/posters/rogue04.jpg&quot;]'
-WHERE movieId = 10;</sql><current_tab id="0"/></tab_sql></sqlb_project>
+-- 2. 插入遊戲資料
+INSERT INTO Games (gameId, name, category, price, image, trailer, screenshots) VALUES
+(1, '對馬戰鬼', 'Game', 1500, '/posters/對馬戰鬼.jpg', 'https://www.youtube.com/embed/SrnvY8bSLjI', '[&quot;/posters/1-1.jpg&quot;, &quot;/posters/1-2.jpg&quot;, &quot;/posters/1-3.jpg&quot;, &quot;/posters/1-4.jpg&quot;, &quot;/posters/1-5.jpg&quot;]'),
+(2, 'SILENT HILL f', 'Game', 1790, '/posters/silenthill.jpg', 'https://www.youtube.com/embed/N_kGf1tV67I', '[&quot;/posters/2-1.jpg&quot;, &quot;/posters/2-2.jpg&quot;, &quot;/posters/2-3.jpg&quot;, &quot;/posters/2-4.jpg&quot;]'),
+(3, 'FF7 Rebirth', 'Game', 1390, '/posters/FF7Rebirth.jpg', 'https://www.youtube.com/embed/okGnXYjvJRM', '[&quot;/posters/3-1.jpg&quot;, &quot;/posters/3-2.jpg&quot;, &quot;/posters/3-3.jpg&quot;, &quot;/posters/3-4.jpg&quot;, &quot;/posters/3-5.jpg&quot;, &quot;/posters/3-6.jpg&quot;]'),
+(4, '地平線西域境地', 'Game', 1690, '/posters/地平線.jpg', 'https://www.youtube.com/embed/Lq594XmpPBg', '[&quot;/posters/4-1.jpg&quot;, &quot;/posters/4-2.jpg&quot;, &quot;/posters/4-3.jpg&quot;, &quot;/posters/4-4.jpg&quot;, &quot;/posters/4-5.jpg&quot;]'),
+(5, '劍星', 'Game', 1590, '/posters/劍星.jpg', 'https://www.youtube.com/embed/ayek3ZzWb1E', '[&quot;/posters/5-1.jpg&quot;, &quot;/posters/5-2.jpg&quot;, &quot;/posters/5-3.jpg&quot;, &quot;/posters/5-4.jpg&quot;, &quot;/posters/5-5.jpg&quot;]'),
+(6, '惡靈古堡4', 'Game', 1190, '/posters/惡靈古堡4.jpg', 'https://www.youtube.com/embed/Id2EaldBaWw', '[&quot;/posters/6-1.jpg&quot;, &quot;/posters/6-2.jpg&quot;, &quot;/posters/6-3.jpg&quot;, &quot;/posters/6-4.jpg&quot;, &quot;/posters/6-5.jpg&quot;]'),
+(7, 'FF16', 'Game', 1490, '/posters/FF16.jpg', 'https://www.youtube.com/embed/2tBnBAkHv9M', '[&quot;/posters/7-1.jpg&quot;, &quot;/posters/7-2.jpg&quot;, &quot;/posters/7-3.jpg&quot;, &quot;/posters/7-4.jpg&quot;, &quot;/posters/7-5.jpg&quot;, &quot;/posters/7-6.jpg&quot;, &quot;/posters/7-7.jpg&quot;, &quot;/posters/7-8.jpg&quot;]'),
+(8, 'Cyberpunk 2077', 'Game', 1090, '/posters/Cyberpunk 2077.jpg', 'https://www.youtube.com/embed/8X2kIfS6fb8', '[&quot;/posters/8-1.jpg&quot;, &quot;/posters/8-2.jpg&quot;, &quot;/posters/8-3.jpg&quot;, &quot;/posters/8-4.jpg&quot;, &quot;/posters/8-5.jpg&quot;]'),
+(9, '空洞騎士', 'Game', 990, '/posters/空洞騎士.jpg', 'https://www.youtube.com/embed/FzzsWP2GWmg', '[&quot;/posters/9-1.jpg&quot;, &quot;/posters/9-2.jpg&quot;, &quot;/posters/9-3.jpg&quot;, &quot;/posters/9-4.jpg&quot;]'),
+(10, '艾爾登法環', 'Game', 1990, '/posters/艾爾登法環.jpg', 'https://www.youtube.com/embed/E3Huy2cdih0', '[&quot;/posters/10-1.jpg&quot;, &quot;/posters/10-2.jpg&quot;, &quot;/posters/10-3.jpg&quot;, &quot;/posters/10-4.jpg&quot;, &quot;/posters/10-5.jpg&quot;, &quot;/posters/10-6.jpg&quot;]');</sql><current_tab id="0"/></tab_sql></sqlb_project>
