@@ -37,9 +37,6 @@ const carouselMoviesData = [
     },
 ];
 
-// 🎯 我們不再需要 nowShowingMovies 和 comingSoonMovies 的假資料，已刪除
-
-
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0); 
   const slides = carouselMoviesData; // 輪播圖使用靜態資料
@@ -76,7 +73,7 @@ function App() {
   useEffect(() => {
     const slideInterval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 10000); // 🎯  10 秒切換一次
+    }, 10000); // 10 秒切換一次
 
     return () => clearInterval(slideInterval); // 清除計時器
   }, [slides.length, currentSlide]); 
@@ -187,7 +184,7 @@ function App() {
             {/* 使用 relative 定位來讓文字疊加在圖片上 */}
             <div className="relative rounded-xl overflow-hidden shadow-xl group transition-all duration-300">
               <img
-                src="https://practicaltyping.com/wp-content/uploads/2023/07/aerith.jpg" // 您提供的 FF7 圖片
+                src="https://practicaltyping.com/wp-content/uploads/2023/07/aerith.jpg" 
                 alt="FF7:remake"
                 className="w-full h-96 object-cover brightness-90 group-hover:brightness-75 transition duration-300" // 大圖高度，增加亮度調整
               />

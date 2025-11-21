@@ -14,21 +14,21 @@ const storeCategories = [
 // ----------------------------------------------------------------------
 const mockItems = [
     // 遊戲商城 (10個)
-    { id: 1, name: '對馬戰鬼', category: 'Game', price: 1500, image: '/posters/對馬戰鬼.avif' },
-    { id: 2, name: 'SILENT HILL f', category: 'Game', price: 1790, image: '/posters/silenthill.avif' },
-    { id: 3, name: 'FF7 Rebirth', category: 'Game', price: 1390, image: '/posters/FF7Rebirth.avif' },
-    { id: 4, name: '地平線西域境地', category: 'Game', price: 1690, image: '/posters/地平線.avif' },
-    { id: 5, name: '尼爾 自動人形', category: 'Game', price: 990, image: '/posters/尼爾.avif' },
-    { id: 6, name: '惡靈古堡4', category: 'Game', price: 1190, image: '/posters/惡靈古堡4.avif' },
-    { id: 7, name: 'FF16', category: 'Game', price: 1490, image: '/posters/FF16.webp' },
-    { id: 8, name: 'Cyberpunk 2077', category: 'Game', price: 1090, image: '/posters/Cyberpunk 2077.avif' },
-    { id: 9, name: '空洞騎士', category: 'Game', price: 1890, image: '/posters/空洞騎士.avif' },
-    { id: 10, name: '艾爾登法環', category: 'Game', price: 1990, image: '/posters/艾爾登法環.webp' },
+    { id: 1, name: '對馬戰鬼', category: 'Game', price: 1500, image: '/posters/對馬戰鬼.jpg' },
+    { id: 2, name: 'SILENT HILL f', category: 'Game', price: 1790, image: '/posters/silenthill.jpg' },
+    { id: 3, name: 'FF7 Rebirth', category: 'Game', price: 1390, image: '/posters/FF7Rebirth.jpg' },
+    { id: 4, name: '地平線西域境地', category: 'Game', price: 1690, image: '/posters/地平線.jpg' },
+    { id: 5, name: '尼爾 自動人形', category: 'Game', price: 990, image: '/posters/劍星.jpg' },
+    { id: 6, name: '惡靈古堡4', category: 'Game', price: 1190, image: '/posters/惡靈古堡4.jpg' },
+    { id: 7, name: 'FF16', category: 'Game', price: 1490, image: '/posters/FF16.jpg' },
+    { id: 8, name: 'Cyberpunk 2077', category: 'Game', price: 1090, image: '/posters/Cyberpunk 2077.jpg' },
+    { id: 9, name: '空洞騎士', category: 'Game', price: 1890, image: '/posters/空洞騎士.jpg' },
+    { id: 10, name: '艾爾登法環', category: 'Game', price: 1990, image: '/posters/艾爾登法環.jpg' },
 
     // 電影周邊 (假資料)
     { id: 11, name: '波奇塔爆米花桶', category: 'Merchandise', price: 999, image: '/posters/波奇塔爆米花桶.jpg' },
     { id: 12, name: '蕾潔海報', category: 'Merchandise', price: 450, image: '/posters/蕾潔海報.jpg' },
-    { id: 15, name: '鏈鋸人明信片', category: 'Merchandise', price: 1200, image: '/posters/明信片.webp' }, 
+    { id: 15, name: '鏈鋸人明信片', category: 'Merchandise', price: 1200, image: '/posters/明信片.jpg' }, 
     
     // 餐飲 (假資料)
     { id: 13, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },
