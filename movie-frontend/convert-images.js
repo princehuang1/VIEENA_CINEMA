@@ -1,18 +1,17 @@
-// posters全部轉檔成jpg
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-// 所以直接往下找 public/posters 就可以了
+// 確保路徑指向 movie-frontend/public/posters
 const postersDir = path.join(__dirname, 'public', 'posters');
 
-// 支援的原始格式
-const supportedExts = ['.webp', '.avif', '.png', '.jpeg'];
+// 🎯 新增 '.svg' 到支援列表中
+// 這樣被標示為 "Edge HTML Document" 的 SVG 檔案也會被轉成 JPG
+const supportedExts = ['.webp', '.avif', '.png', '.jpeg', '.svg'];
 
 fs.readdir(postersDir, (err, files) => {
     if (err) {
         console.error('無法讀取資料夾:', err);
-        console.error('請確認您的路徑是否正確:', postersDir);
         return;
     }
 
@@ -22,17 +21,18 @@ fs.readdir(postersDir, (err, files) => {
         const inputPath = path.join(postersDir, file);
         const outputPath = path.join(postersDir, `${name}.jpg`);
 
-        // 如果檔案是圖片，且不是 jpg，就進行轉換
         if (supportedExts.includes(ext) && ext !== '.jpg') {
             
             sharp(inputPath)
-                .jpeg({ quality: 90 }) 
+                .jpeg({ quality: 90 })
+                // SVG 轉 JPG 時，透明背景會變黑色。如果希望背景變白色，可以加入 .flatten({ background: '#ffffff' })
+                .flatten({ background: '#ffffff' }) 
                 .toFile(outputPath)
                 .then(() => {
                     console.log(`✅ 成功轉換: ${file} -> ${name}.jpg`);
                     
-                    // (選用) 轉換後刪除舊檔 (若不需要請保持註解)
-                    // fs.unlinkSync(inputPath); 
+                    // 轉換後刪除原始檔
+                    fs.unlinkSync(inputPath); 
                 })
                 .catch(err => {
                     console.error(`❌ 轉換失敗: ${file}`, err);

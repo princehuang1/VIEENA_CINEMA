@@ -1,11 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000012100ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 更新 Movies 表格的海報路徑
-UPDATE Movies SET posterUrl = REPLACE(posterUrl, '.webp', '.jpg');
-UPDATE Movies SET posterUrl = REPLACE(posterUrl, '.avif', '.jpg');
-UPDATE Movies SET posterUrl = REPLACE(posterUrl, '.png', '.jpg');
-UPDATE Movies SET posterUrl = REPLACE(posterUrl, '.jpeg', '.jpg');
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="" readonly="0" foreign_keys="" case_sensitive_like="" temp_store="" wal_autocheckpoint="" synchronous=""/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/></tab_structure><tab_browse><table title="." custom_title="0" dock_id="2" table="0,0:"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000002fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000000000000000fb000000160064006f0063006b00420072006f00770073006500320100000000ffffffff0000012100ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 2. 鏈鋸人
+UPDATE Movies 
+SET stills = '[&quot;/posters/reze01.jpg&quot;, &quot;/posters/reze02.jpg&quot;, &quot;/posters/reze03.jpg&quot;, &quot;/posters/reze04.jpg&quot;]'
+WHERE movieId = 2;
 
--- 2. 更新 Movies 表格的劇照路徑 (stills 是 JSON 字串，REPLACE 也有效)
-UPDATE Movies SET stills = REPLACE(stills, '.webp', '.jpg');
-UPDATE Movies SET stills = REPLACE(stills, '.avif', '.jpg');
-UPDATE Movies SET stills = REPLACE(stills, '.png', '.jpg');
-UPDATE Movies SET stills = REPLACE(stills, '.jpeg', '.jpg');</sql><current_tab id="0"/></tab_sql></sqlb_project>
+-- 3. 蜘蛛人：穿越蜘蛛宇宙
+UPDATE Movies 
+SET stills = '[&quot;/posters/spider01.jpg&quot;, &quot;/posters/spider02.jpg&quot;, &quot;/posters/spider03.jpg&quot;, &quot;/posters/spider04.jpg&quot;]'
+WHERE movieId = 3;
+
+-- 4. K-Pop：惡魔獵人
+UPDATE Movies 
+SET stills = '[&quot;/posters/kpop01.jpg&quot;, &quot;/posters/kpop02.jpg&quot;, &quot;/posters/kpop03.jpg&quot;, &quot;/posters/kpop04.jpg&quot;]'
+WHERE movieId = 4;
+
+-- 5. 銀翼殺手 2049
+UPDATE Movies 
+SET stills = '[&quot;/posters/銀翼殺手01.jpg&quot;, &quot;/posters/銀翼殺手02.jpg&quot;, &quot;/posters/銀翼殺手03.jpg&quot;, &quot;/posters/銀翼殺手04.jpg&quot;]'
+WHERE movieId = 5;
+
+-- 6. 鐵達尼號
+UPDATE Movies 
+SET stills = '[&quot;/posters/titanic01.jpg&quot;, &quot;/posters/titanic02.jpg&quot;, &quot;/posters/titanic03.jpg&quot;, &quot;/posters/titanic04.jpg&quot;]'
+WHERE movieId = 6;
+
+-- 7. 奧本海默
+UPDATE Movies 
+SET stills = '[&quot;/posters/oppenheimer01.jpg&quot;, &quot;/posters/oppenheimer02.jpg&quot;, &quot;/posters/oppenheimer03.jpg&quot;, &quot;/posters/oppenheimer04.jpg&quot;]'
+WHERE movieId = 7;
+
+-- 8. 復仇者聯盟：無限之戰
+UPDATE Movies 
+SET stills = '[&quot;/posters/avengers01.jpg&quot;, &quot;/posters/avengers02.jpg&quot;, &quot;/posters/avengers03.jpg&quot;, &quot;/posters/avengers04.jpg&quot;]'
+WHERE movieId = 8;
+
+-- 9. 神隱少女
+UPDATE Movies 
+SET stills = '[&quot;/posters/神隱少女01.jpg&quot;, &quot;/posters/神隱少女02.jpg&quot;, &quot;/posters/神隱少女03.jpg&quot;, &quot;/posters/神隱少女04.jpg&quot;]'
+WHERE movieId = 9;
+
+-- 10. 星際大戰:俠盜一號
+UPDATE Movies 
+SET stills = '[&quot;/posters/rogue01.jpg&quot;, &quot;/posters/rogue02.jpg&quot;, &quot;/posters/rogue03.jpg&quot;, &quot;/posters/rogue04.jpg&quot;]'
+WHERE movieId = 10;</sql><current_tab id="0"/></tab_sql></sqlb_project>
