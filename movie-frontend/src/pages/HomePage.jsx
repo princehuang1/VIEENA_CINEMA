@@ -184,15 +184,15 @@ function App() {
             {/* 使用 relative 定位來讓文字疊加在圖片上 */}
             <div className="relative rounded-xl overflow-hidden shadow-xl group transition-all duration-300">
               <img
-                src="https://practicaltyping.com/wp-content/uploads/2023/07/aerith.jpg" 
+                src="https://cdn2.techbang.com/system/excerpt_images/122024/original/d8d7deb5bef6eeb7436a1d381ec20a27.jpg?1742282087" 
                 alt="FF7:remake"
                 className="w-full h-96 object-cover brightness-90 group-hover:brightness-75 transition duration-300" // 大圖高度，增加亮度調整
               />
               {/* 文字疊加在圖片上 */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                <h3 className="text-white text-3xl font-bold mb-2">FF7:remake</h3>
+                <h3 className="text-white text-3xl font-bold mb-2">BabyMonster</h3>
                 <p className="text-gray-200 text-xl">
-                  由 Square Enix 開發的 《FINAL FANTASY VII REMAKE》將於 2026 年 1 月 22 日推出 Switch 2...
+                  《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽
                 </p>
               </div>
             </div>
@@ -217,34 +217,34 @@ function App() {
               {/* 右側小卡片 2 */}
               <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
                 <img 
-                src="https://sm.ign.com/ign_ap/gallery/s/stellar-bl/stellar-blade-screens_sfhs.jpg" 
+                src="https://pic.upmedia.mg/uploads/content/20250826/fV250826121702229122.webp" 
                 alt="News 3" 
                 className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" />
                 <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">劍星</h4>
-                  <p className="text-gray-400 text-sm truncate">《劍星》將於6月12日推出PC版，PC版功能和規格正式公開</p>
+                  <h4 className="text-white font-semibold text-md truncate">絲之歌</h4>
+                  <p className="text-gray-400 text-sm truncate">《空洞騎士：絲之歌》PC 版更新釋出！惱人小怪遭削弱、導入社群好評中文翻譯</p>
                 </div>
               </div>
 
               {/* 右側小卡片 3 */}
               <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img src="https://substackcdn.com/image/fetch/$s_!kRZN!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdcc7124b-6df8-4dc9-b6cf-8c6a4bc52e8a_1388x788.png" 
+                <img src="https://kotaku.com/app/uploads/2024/02/f9fe09644379d674a4c003237359b0b6-1200x675.jpg" 
                 alt="News 4" 
                 className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" />
                 <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">Cyberpunk 2077</h4>
-                  <p className="text-gray-400 text-sm truncate">科幻 RPG《電馭叛客 2077》（Cyberpunk 2077）舞台夜城（Night City）的炫目市容讓玩家意猶未竟，開發商 CD Projekt Red 曾透露正在開發代號「Project Orion」（獵戶座）的續作，近日《電馭叛客》系列 IP 創作者透露更多細節，包括一座全新的城市場景。</p>
+                  <h4 className="text-white font-semibold text-md truncate">GTA6</h4>
+                  <p className="text-gray-400 text-sm truncate">《GTA6》第三支預告片要來了？Rockstar 官網改版引爆玩家期待</p>
                 </div>
               </div>
 
               {/* 右側小卡片 4 */}
               <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img src="https://oyster.ignimgs.com/mediawiki/apis.ign.com/elden-ring/e/e5/20220307193717_1.jpg?width=1280" 
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAxEqnmoOQE9gMPTIjdzlWVEvD4BTw1zGkhg&s" 
                 alt="News 5" 
                 className="w-full h-full object-cover brightness-130 group-hover:brightness-75 transition duration-300" />
                 <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">Elden Ring</h4>
-                  <p className="text-gray-400 text-sm truncate">《艾爾登法環》米凱拉的鋒刃 瑪蓮妮亞登場！</p>
+                  <h4 className="text-white font-semibold text-md truncate">黃金樹幽影</h4>
+                  <p className="text-gray-400 text-sm truncate">《艾爾登法環 黃金樹幽影》最新boss"穿刺者-梅瑟莫"</p>
                 </div>
               </div>
               
