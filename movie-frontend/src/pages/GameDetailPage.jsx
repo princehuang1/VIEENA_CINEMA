@@ -15,7 +15,7 @@ function GameDetailPage() {
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const itemsPerView = 3; 
 
-  // --- Fetch Data from API ---
+  // --- Fetch Data ---
   useEffect(() => {
     axios.get(`http://localhost:4000/api/games/${id}`)
       .then(res => {
@@ -28,34 +28,23 @@ function GameDetailPage() {
       });
   }, [id]);
 
-  // --- Loading / Error Handling ---
-  if (loading) return <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center">載入中...</div>;
-  if (!game) return <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center">找不到遊戲</div>;
-
   // --- Helper Functions ---
-
-  // 1. 取得背景大圖 (自動將檔名轉為 "02" 版本)
   const getDetailImageUrl = (originalPath) => {
     if (!originalPath) return '';
     const lastDotIndex = originalPath.lastIndexOf('.');
     if (lastDotIndex === -1) return originalPath; 
-    
     const namePart = originalPath.substring(0, lastDotIndex);
     const extPart = originalPath.substring(lastDotIndex);
     return `${namePart}02${extPart}`;
   };
 
-  // 2. 產生媒體清單 (預告片 + 資料庫截圖)
   const getMediaList = () => {
     const list = [];
-    
-    // 第一格：預告片 (若資料庫沒填，給預設值)
     list.push({ 
         type: 'video', 
         src: game.trailer || 'https://www.youtube.com/embed/dQw4w9WgXcQ' 
     });
     
-    // 後面幾格：從資料庫的 JSON 字串解析截圖
     try {
         if (game.screenshots) {
             const shots = JSON.parse(game.screenshots);
@@ -67,13 +56,15 @@ function GameDetailPage() {
         console.error("JSON Parse Error:", e);
     }
 
-    // 防呆：如果完全沒截圖，塞幾張封面圖避免空白
     if (list.length === 1) {
        for(let i=0; i<5; i++) list.push({ type: 'image', src: game.image });
     }
-    
     return list;
   };
+
+  // --- Loading / Error ---
+  if (loading) return <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center">載入中...</div>;
+  if (!game) return <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center">找不到遊戲</div>;
 
   const detailImage = getDetailImageUrl(game.image);
   const mediaData = getMediaList();
@@ -91,39 +82,38 @@ function GameDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans overflow-x-hidden relative flex flex-col">
+    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans overflow-x-hidden flex flex-col">
       
+      {/* 🎯 修改 1: Navbar 獨立在最上方，佔據空間 (不再浮動) */}
+      <div className="z-50 relative">
+        <Navbar />
+      </div>
+
       {/* ======================================================== */}
-      {/* 1. 頂部橫幅區塊 (Hero Section) */}
+      {/* 2. 橫幅區塊 (Hero Section) - 緊接在 Navbar 下方 */}
       {/* ======================================================== */}
+      {/* relative: 讓裡面的文字內容可以 absolute 覆蓋在圖片上 */}
       <div className="relative w-full">
         
-        {/* 底圖：高度由圖片自動撐開，設定最大高度限制 */}
+        {/* 底圖：高度由圖片自動撐開 */}
         <img 
             src={detailImage} 
             alt={game.name} 
-            // w-full: 寬度全滿
-            // h-auto: 讓圖片保持原始比例
-            // max-h-[85vh]: 設定一個最大高度，防止直式圖片把頁面撐太長
-            // object-cover: 超過高度時裁切，保持滿版
-            // object-top: 裁切時優先保留上方
+            // w-full h-auto: 寬度滿版，高度自動，保證不裁切
+            // max-h-[85vh]: 限制最大高度
             className="w-full h-auto max-h-[85vh] object-cover object-top block align-top" 
             onError={(e) => { e.target.src = game.image; }} 
         />
         
-        {/* 漸層遮罩 1：整體變暗 */}
+        {/* 漸層遮罩 1：讓文字清楚 */}
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/80 to-transparent lg:bg-gradient-to-r lg:from-neutral-900 lg:via-neutral-900/40 lg:to-transparent"></div>
         
         {/* 漸層遮罩 2：底部邊緣融合 */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-neutral-900 to-transparent"></div>
 
-        {/* 內容層 */}
-        <div className="absolute inset-0 flex flex-col">
-            <div className="relative z-20">
-                <Navbar />
-            </div>
-
-            <main className="flex-1 container mx-auto px-8 lg:px-20 flex flex-col justify-center">
+        {/* 橫幅文字內容層：覆蓋在圖片上 */}
+        <div className="absolute inset-0 flex flex-col justify-center">
+            <div className="container mx-auto px-8 lg:px-20">
                 
                 <button 
                     onClick={() => navigate(-1)} 
@@ -139,7 +129,6 @@ function GameDetailPage() {
                         <span className="text-xs border border-gray-400 px-2 py-0.5 rounded bg-black/20 backdrop-blur-sm">PS5</span>
                     </p>
 
-                    {/* 價格區塊 (只保留售價) */}
                     <div className="mb-8">
                         <p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-md">NT$ {game.price}</p>
                     </div>
@@ -169,25 +158,22 @@ function GameDetailPage() {
                         <div className="flex items-center gap-2"><span className="text-white text-lg">●</span> PS5 Pro 增強</div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. 下方多媒體輪播區塊 (加大版) */}
+      {/* 3. 下方多媒體輪播區塊 */}
       {/* ======================================================== */}
-      {/* 🎯 修改：max-w-[90%] 讓容器更寬，padding 減少 */}
       <div className="container mx-auto px-4 lg:px-8 py-12 max-w-[90%] relative group">
         
         <div className="relative overflow-hidden rounded-xl">
-            {/* 滑動軌道 */}
             <div 
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentMediaIndex * (100 / itemsPerView)}%)` }}
             >
                 {mediaData.map((item, index) => (
                     <div key={index} className="min-w-[33.333%] px-3 box-border">
-                        {/* 🎯 修改：hover:scale-[1.02] 微放大效果 */}
                         <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-2xl border border-neutral-700 group-hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02]">
                             {item.type === 'video' ? (
                                 <iframe 
@@ -211,7 +197,7 @@ function GameDetailPage() {
             </div>
         </div>
 
-        {/* 左箭頭 - 加大 */}
+        {/* 左箭頭 */}
         {currentMediaIndex > 0 && (
             <button 
                 onClick={prevSlide}
@@ -223,7 +209,7 @@ function GameDetailPage() {
             </button>
         )}
 
-        {/* 右箭頭 - 加大 */}
+        {/* 右箭頭 */}
         {currentMediaIndex < (mediaData.length - itemsPerView) && (
             <button 
                 onClick={nextSlide}
