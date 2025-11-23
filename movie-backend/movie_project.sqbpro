@@ -1,23 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000033c000002abfc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000011f00ffffff000002790000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="73"/><column index="2" value="60"/><column index="3" value="67"/><column index="4" value="65"/><column index="5" value="72"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 建立 Games 表格
-CREATE TABLE &quot;Games&quot; (
-    &quot;gameId&quot; INTEGER PRIMARY KEY AUTOINCREMENT,
-    &quot;name&quot; TEXT NOT NULL,
-    &quot;category&quot; TEXT,
-    &quot;price&quot; INTEGER,
-    &quot;image&quot; TEXT,
-    &quot;trailer&quot; TEXT,
-    &quot;screenshots&quot; TEXT -- 用 JSON 字串存多張圖: '[&quot;/posters/1-1.jpg&quot;, &quot;/posters/1-2.jpg&quot;]'
-);
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Games" custom_title="0" dock_id="1" table="4,5:mainGames"/><dock_state state="000000ff00000000fd00000001000000020000083c0000052afc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000083c0000012800ffffff0000027b0000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="84"/><column index="2" value="67"/><column index="3" value="73"/><column index="4" value="73"/><column index="5" value="80"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Games" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="49"/><column index="2" value="119"/><column index="3" value="56"/><column index="4" value="39"/><column index="5" value="223"/><column index="6" value="300"/><column index="7" value="300"/><column index="8" value="300"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">-- 3. FF7 Rebirth (更新為 3 筆)
+UPDATE Games SET features = '[
+    {
+        &quot;title&quot;: &quot;廣闊的世界等待探索&quot;,
+        &quot;desc&quot;: &quot;走出米德加，踏入綠意盎然的廣大世界。騎乘陸行鳥穿越草原、攀越山脈，探索這個星球上未知的角落與隱藏的寶藏。&quot;,
+        &quot;image&quot;: &quot;/posters/3-A.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;進化的戰鬥系統&quot;,
+        &quot;desc&quot;: &quot;結合動作與策略的戰鬥系統更加進化。與夥伴發動強力的聯手攻擊，利用地形與弱點屬性，在激烈的戰鬥中取得優勢。&quot;,
+        &quot;image&quot;: &quot;/posters/3-B.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;命運的糾葛&quot;,
+        &quot;desc&quot;: &quot;克勞德與夥伴們追逐賽菲罗斯的旅程進入高潮。未知的命運正在前方等待，他們的羈絆將成為對抗毀滅命運的唯一希望。&quot;,
+        &quot;image&quot;: &quot;/posters/3-C.jpg&quot;
+    }
+]' WHERE gameId = 3;
 
--- 2. 插入遊戲資料
-INSERT INTO Games (gameId, name, category, price, image, trailer, screenshots) VALUES
-(1, '對馬戰鬼', 'Game', 1500, '/posters/對馬戰鬼.jpg', 'https://www.youtube.com/embed/SrnvY8bSLjI', '[&quot;/posters/1-1.jpg&quot;, &quot;/posters/1-2.jpg&quot;, &quot;/posters/1-3.jpg&quot;, &quot;/posters/1-4.jpg&quot;, &quot;/posters/1-5.jpg&quot;]'),
-(2, 'SILENT HILL f', 'Game', 1790, '/posters/silenthill.jpg', 'https://www.youtube.com/embed/N_kGf1tV67I', '[&quot;/posters/2-1.jpg&quot;, &quot;/posters/2-2.jpg&quot;, &quot;/posters/2-3.jpg&quot;, &quot;/posters/2-4.jpg&quot;]'),
-(3, 'FF7 Rebirth', 'Game', 1390, '/posters/FF7Rebirth.jpg', 'https://www.youtube.com/embed/okGnXYjvJRM', '[&quot;/posters/3-1.jpg&quot;, &quot;/posters/3-2.jpg&quot;, &quot;/posters/3-3.jpg&quot;, &quot;/posters/3-4.jpg&quot;, &quot;/posters/3-5.jpg&quot;, &quot;/posters/3-6.jpg&quot;]'),
-(4, '地平線西域境地', 'Game', 1690, '/posters/地平線.jpg', 'https://www.youtube.com/embed/Lq594XmpPBg', '[&quot;/posters/4-1.jpg&quot;, &quot;/posters/4-2.jpg&quot;, &quot;/posters/4-3.jpg&quot;, &quot;/posters/4-4.jpg&quot;, &quot;/posters/4-5.jpg&quot;]'),
-(5, '劍星', 'Game', 1590, '/posters/劍星.jpg', 'https://www.youtube.com/embed/ayek3ZzWb1E', '[&quot;/posters/5-1.jpg&quot;, &quot;/posters/5-2.jpg&quot;, &quot;/posters/5-3.jpg&quot;, &quot;/posters/5-4.jpg&quot;, &quot;/posters/5-5.jpg&quot;]'),
-(6, '惡靈古堡4', 'Game', 1190, '/posters/惡靈古堡4.jpg', 'https://www.youtube.com/embed/Id2EaldBaWw', '[&quot;/posters/6-1.jpg&quot;, &quot;/posters/6-2.jpg&quot;, &quot;/posters/6-3.jpg&quot;, &quot;/posters/6-4.jpg&quot;, &quot;/posters/6-5.jpg&quot;]'),
-(7, 'FF16', 'Game', 1490, '/posters/FF16.jpg', 'https://www.youtube.com/embed/2tBnBAkHv9M', '[&quot;/posters/7-1.jpg&quot;, &quot;/posters/7-2.jpg&quot;, &quot;/posters/7-3.jpg&quot;, &quot;/posters/7-4.jpg&quot;, &quot;/posters/7-5.jpg&quot;, &quot;/posters/7-6.jpg&quot;, &quot;/posters/7-7.jpg&quot;, &quot;/posters/7-8.jpg&quot;]'),
-(8, 'Cyberpunk 2077', 'Game', 1090, '/posters/Cyberpunk 2077.jpg', 'https://www.youtube.com/embed/8X2kIfS6fb8', '[&quot;/posters/8-1.jpg&quot;, &quot;/posters/8-2.jpg&quot;, &quot;/posters/8-3.jpg&quot;, &quot;/posters/8-4.jpg&quot;, &quot;/posters/8-5.jpg&quot;]'),
-(9, '空洞騎士', 'Game', 990, '/posters/空洞騎士.jpg', 'https://www.youtube.com/embed/FzzsWP2GWmg', '[&quot;/posters/9-1.jpg&quot;, &quot;/posters/9-2.jpg&quot;, &quot;/posters/9-3.jpg&quot;, &quot;/posters/9-4.jpg&quot;]'),
-(10, '艾爾登法環', 'Game', 1990, '/posters/艾爾登法環.jpg', 'https://www.youtube.com/embed/E3Huy2cdih0', '[&quot;/posters/10-1.jpg&quot;, &quot;/posters/10-2.jpg&quot;, &quot;/posters/10-3.jpg&quot;, &quot;/posters/10-4.jpg&quot;, &quot;/posters/10-5.jpg&quot;, &quot;/posters/10-6.jpg&quot;]');</sql><current_tab id="0"/></tab_sql></sqlb_project>
+-- 5. 劍星 (更新為 3 筆)
+UPDATE Games SET features = '[
+    {
+        &quot;title&quot;: &quot;奪回地球的戰爭&quot;,
+        &quot;desc&quot;: &quot;扮演第7空降小隊成員伊芙，從神祕的孽奇拔手中奪回已成廢墟的地球。在這場攸關人類存亡的戰爭中，揭開隱藏的真相。&quot;,
+        &quot;image&quot;: &quot;/posters/5-A.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;華麗流暢的戰鬥&quot;,
+        &quot;desc&quot;: &quot;體驗行雲流水般的戰鬥，利用精準的格擋與閃避，施展毀滅性的連擊與強大的貝塔技能，將敵人華麗地斬殺。&quot;,
+        &quot;image&quot;: &quot;/posters/5-B.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;迎戰強大敵人&quot;,
+        &quot;desc&quot;: &quot;挑戰強勢逼人的頭目戰，感受壓迫感與成就感交織的極致對決。&quot;,
+        &quot;image&quot;: &quot;/posters/5-C.jpg&quot;
+    }
+]' WHERE gameId = 5;
+
+-- 7. FF16 (更新為 3 筆)
+UPDATE Games SET features = '[
+    {
+        &quot;title&quot;: &quot;召喚獸大戰&quot;,
+        &quot;desc&quot;: &quot;親身體驗召喚獸之間的史詩級對決。操控巨大的召喚獸進行震撼天地的戰鬥，感受PS5帶來的極致視覺衝擊。&quot;,
+        &quot;image&quot;: &quot;/posters/7-A.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;克萊夫的復仇之路&quot;,
+        &quot;desc&quot;: &quot;身為羅札利亚公國的第一王子，克萊夫誓言向毀滅國家的黑暗伊弗利特復仇。這是一段跨越數十年的壯闊史詩。&quot;,
+        &quot;image&quot;: &quot;/posters/7-B.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;聖光之都的陰影&quot;,
+        &quot;desc&quot;: &quot;踏入聖布雷克神聖帝國華麗壯闊的城堡，在金碧輝煌的外表下，潛藏著足以撼動世界的陰謀與權力角逐。探索神聖與黑暗並存的國度，揭開帝國真正的面貌。&quot;,
+        &quot;image&quot;: &quot;/posters/7-C.jpg&quot;
+    }
+]' WHERE gameId = 7;
+
+-- 10. 艾爾登法環 (更新為 3 筆)
+UPDATE Games SET features = '[
+    {
+        &quot;title&quot;: &quot;交界地的史詩&quot;,
+        &quot;desc&quot;: &quot;由宮崎英高與喬治·R·R·馬丁聯手打造的奇幻世界。探索廣闊且充滿危險的交界地，揭開艾爾登法環破碎背後的真相。&quot;,
+        &quot;image&quot;: &quot;/posters/10-A.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;自由探索與發現&quot;,
+        &quot;desc&quot;: &quot;騎乘靈馬托雷特穿越平原、沼澤與城堡，依照自己的步調探索這個世界。每一個角落都隱藏著致命的敵人或強大的寶藏。&quot;,
+        &quot;image&quot;: &quot;/posters/10-B.jpg&quot;
+    },
+    {
+        &quot;title&quot;: &quot;法環的指引&quot;,
+        &quot;desc&quot;: &quot;跟隨艾爾登法環的指引，尋找散落在交界地的大盧恩。&quot;,
+        &quot;image&quot;: &quot;/posters/10-C.jpg&quot;
+    }
+]' WHERE gameId = 10;</sql><current_tab id="0"/></tab_sql></sqlb_project>
