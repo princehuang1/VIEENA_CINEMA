@@ -184,15 +184,15 @@ function App() {
             {/* 使用 relative 定位來讓文字疊加在圖片上 */}
             <div className="relative rounded-xl overflow-hidden shadow-xl group transition-all duration-300">
               <img
-                src="https://pic.upmedia.mg/upfile/img/2025/1003/202510031218011053.webp" 
+                src="https://cdn2.techbang.com/system/excerpt_images/122024/original/d8d7deb5bef6eeb7436a1d381ec20a27.jpg?1742282087" 
                 alt="FF7:remake"
                 className="w-full h-96 object-cover brightness-90 group-hover:brightness-75 transition duration-300" // 大圖高度，增加亮度調整
               />
               {/* 文字疊加在圖片上 */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                <h3 className="text-white text-3xl font-bold mb-2">「蕾潔之花」限量特點</h3>
+                <h3 className="text-white text-3xl font-bold mb-2">BabyMonster</h3>
                 <p className="text-gray-200 text-xl">
-                  《BabyMonster》蕾潔之花】劇場版《鏈鋸人》10/8 第三周入場特典公開
+                  《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽
                 </p>
               </div>
             </div>
