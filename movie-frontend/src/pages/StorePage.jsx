@@ -20,7 +20,7 @@ const staticMerchandiseItems = [
     { id: 16, name: 'FF7 娃娃', category: 'Merchandise', price: 1200, image: '/posters/FF7 娃娃.jpg' },
     { id: 17, name: 'FF7 音樂盒', category: 'Merchandise', price: 800, image: '/posters/FF7 音樂盒.jpg' },
     { id: 18, name: 'FF7 音樂合輯', category: 'Merchandise', price: 1000, image: '/posters/FF7 音樂合輯2.jpg' },
-    { id: 19, name: '賽菲羅斯海報', category: 'Merchandise', price: 5000, image: '/posters/賽菲羅斯海報.jpg' },
+    { id: 19, name: '賽菲羅斯海報', category: 'Merchandise', price: 500, image: '/posters/賽菲羅斯海報.jpg' },
     { id: 20, name: 'FF7明信片', category: 'Merchandise', price: 1000, image: '/posters/FF7明信片.jpg' },
 
 
