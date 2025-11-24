@@ -13,10 +13,19 @@ const storeCategories = [
 // 靜態資料 (電影周邊 & 餐飲)
 const staticMerchandiseItems = [
     { id: 11, name: '波奇塔爆米花桶', category: 'Merchandise', price: 999, image: '/posters/波奇塔爆米花桶.jpg' },
-    { id: 12, name: '鏈鋸人海報收藏套組', category: 'Merchandise', price: 499, image: '/posters/鏈鋸人海報收藏套組.jpg' },
-    { id: 13, name: '鏈鋸人抱枕', category: 'Merchandise', price: 800, image: '/posters/鏈鋸人抱枕.jpg' }, 
-    { id: 14, name: '克勞德娃娃', category: 'Merchandise', price: 1200, image: '/posters/克勞德娃娃.jpg' },
-    { id: 15, name: 'FF7明信片組', category: 'Merchandise', price: 1000, image: '/posters/FF7明信片.jpg' },
+    { id: 12, name: '鏈鋸人爆米花桶', category: 'Merchandise', price: 999, image: '/posters/鏈鋸人爆米花桶.jpg' },
+    { id: 13, name: '鏈鋸人海報', category: 'Merchandise', price: 300, image: '/posters/鏈鋸人海報.jpg' }, 
+    { id: 14, name: '波奇塔夜燈', category: 'Merchandise', price: 1500, image: '/posters/波奇塔夜燈.jpg' },
+    { id: 15, name: '鏈鋸人桌上小物', category: 'Merchandise', price: 1000, image: '/posters/鏈鋸人桌上小物.jpg' },
+    { id: 16, name: 'FF7 娃娃', category: 'Merchandise', price: 1200, image: '/posters/FF7 娃娃.jpg' },
+    { id: 17, name: 'FF7 音樂盒', category: 'Merchandise', price: 800, image: '/posters/FF7 音樂盒.jpg' },
+    { id: 18, name: 'FF7 音樂合輯', category: 'Merchandise', price: 1000, image: '/posters/FF7 音樂合輯2.jpg' },
+    { id: 19, name: '賽菲羅斯海報', category: 'Merchandise', price: 5000, image: '/posters/賽菲羅斯海報.jpg' },
+    { id: 20, name: 'FF7明信片', category: 'Merchandise', price: 1000, image: '/posters/FF7明信片.jpg' },
+
+
+
+
     { id: 16, name: '基本套餐', category: 'Concession', price: 220, image: '/posters/基本套餐.jpg' },
     { id: 17, name: '高級套餐', category: 'Concession', price: 300, image: '/posters/高級套餐.jpg' },
     { id: 18, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },

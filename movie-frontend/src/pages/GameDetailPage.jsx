@@ -176,7 +176,7 @@ function GameDetailPage() {
       {/* ======================================================== */}
       <div className="container mx-auto px-8 lg:px-20 mt-24 mb-12 text-center">
          <h2 className="text-3xl lg:text-5xl font-bold text-white">
-           《{game.name}》值得遊玩的原因
+           立即購買《{game.name}》
          </h2>
       </div>
 
