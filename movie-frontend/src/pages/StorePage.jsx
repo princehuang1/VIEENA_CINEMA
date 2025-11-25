@@ -19,173 +19,229 @@ const staticMerchandiseItems = [
     { id: 15, name: '鏈鋸人桌上小物', category: 'Merchandise', price: 1000, image: '/posters/鏈鋸人桌上小物.jpg' },
     { id: 16, name: 'FF7 娃娃', category: 'Merchandise', price: 1200, image: '/posters/FF7 娃娃.jpg' },
     { id: 17, name: 'FF7 音樂盒', category: 'Merchandise', price: 800, image: '/posters/FF7 音樂盒.jpg' },
-    { id: 18, name: 'FF7 音樂合輯', category: 'Merchandise', price: 1000, image: '/posters/FF7 音樂合輯2.jpg' },
+    { id: 18, name: 'FF7 音樂合輯', category: 'Merchandise', price: 1600, image: '/posters/FF7 音樂合輯2.jpg' },
     { id: 19, name: '賽菲羅斯海報', category: 'Merchandise', price: 500, image: '/posters/賽菲羅斯海報.jpg' },
-    { id: 20, name: 'FF7明信片', category: 'Merchandise', price: 1000, image: '/posters/FF7明信片.jpg' },
+    { id: 20, name: 'FF7明信片組', category: 'Merchandise', price: 1000, image: '/posters/FF7明信片.jpg' },
 
-
-
-
-    { id: 16, name: '基本套餐', category: 'Concession', price: 220, image: '/posters/基本套餐.jpg' },
-    { id: 17, name: '高級套餐', category: 'Concession', price: 300, image: '/posters/高級套餐.jpg' },
-    { id: 18, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },
+    { id: 21, name: '基本套餐', category: 'Concession', price: 220, image: '/posters/基本套餐.jpg' },
+    { id: 22, name: '高級套餐', category: 'Concession', price: 300, image: '/posters/高級套餐.jpg' },
+    { id: 23, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },
 ];
 
-// 🎯 新增：橫幅新聞資料 (您可以稍後換成 API 或真實資料)
+// 🎯 橫幅新聞資料 (10筆)
 const newsData = [
     { 
         id: 1, 
-        title: '《地平線 西域禁地》：創造活靈活現的人物', 
-        desc: '《地平線 西域禁地》的世界充滿活力，有著壯麗的風景、兇猛的機器出沒，還有豐富盛盛的文化。這片大地曾是法羅機器瘟疫...',
-        image: '/posters/地平線.jpg', // 暫用遊戲圖
-        author: 'Narae Lee', 
-        role: 'Guerrilla資深社群經理',
-        date: 'Nov 01, 2023'
+        title: '《GTA6》罪惡之城的浪潮再度席捲', 
+        desc: '《GTA6》將玩家帶回充滿霓虹與危險的罪惡之城。全新角色、更加真實的城市生態與犯罪生存系統即將重塑玩家對開放世界的想像。這一次，你不只是闖蕩，你是要在城市的混亂浪潮中生存、反擊，並建立自己的傳奇。',
+        image: '/posters/GTA6.jpg', 
     },
     { 
         id: 2, 
-        title: '《地平線 西域禁地》完全版將登陸PlayStation 5主機與PC平台', 
-        desc: '《地平線 西域禁地》完全版將在10月6日登陸PlayStation 5主機！接續《Horizon ...》',
-        image: '/posters/地平線.jpg', 
-        author: 'Mathijs de Jonge', 
-        role: 'Guerrilla 遊戲總監',
-        date: 'Sep 28, 2023'
+        title: '《羊蹄山戰鬼》深山怨火下的生死輪迴', 
+        desc: '傳說在北海道羊蹄山深處，戰鬼的哀號從未停歇。《羊蹄山戰鬼》讓玩家踏入霧深林暗的禁忌山域，追尋百年前的戰亂真相。面對怨魂、古道與被遺忘的儀式，你必須在恐懼與戰鬥之間找到活下去的路。',
+        image: '/posters/羊蹄山戰鬼.jpg', 
     },
     { 
         id: 3, 
-        title: 'Guerrilla工作室迎向20週年', 
-        desc: '我們在2003年成立Guerrilla時，遊戲產業正處於很有意思的年代。PS2在三年前推出，且深受好評，大家...',
-        image: '/posters/地平線.jpg', 
-        author: 'Jan-Bart van Beek', 
-        role: 'Guerrilla工作室總監暨工作室藝術總監',
-        date: 'May 19, 2023'
+        title: '《艾爾登法環:黑夜君臨》：在暗影中誕生的王者試煉', 
+        desc: '這片土地深藏著梅瑟莫的力量、詛咒與過往真相。強大的全新 Boss、反抗命運的角色，以及更殘酷的挑戰，等待褪色者踏入黑夜、點燃自己的光。',
+        image: '/posters/黑夜君臨.jpg', 
     },
     { 
         id: 4, 
-        title: '突破極限：以PS VR2探索地平線', 
-        desc: 'Call of the Mountain 開發團隊分享他們如何利用 PS VR2 的新功能...',
-        image: '/posters/地平線.jpg', 
-        author: 'PlayStation Blog', 
-        role: '編輯團隊',
-        date: 'Feb 22, 2023'
+        title: '《Steam Machine》回歸：開啟玩家客廳的硬派 PC 革命', 
+        desc: '以 PC 強度打造的 Steam Machine，再度以更精簡的設計、更強大的效能回歸玩家視野。結合 SteamOS 與龐大遊戲庫，它將客廳娛樂提升到新高度，跨平台遊玩從未如此順暢自在。',
+        image: '/posters/steam.jpg', 
     },
     { 
         id: 5, 
-        title: '亞蘿伊的旅程：從零之曙光到西域禁地', 
-        desc: '回顧亞蘿伊如何從被放逐者成為拯救世界的英雄...',
-        image: '/posters/地平線.jpg', 
-        author: 'Guerrilla', 
-        role: '敘事團隊',
-        date: 'Jan 15, 2023'
+        title: '《惡靈古堡 9》：黑霧侵蝕下的最後倖存者', 
+        desc: '未知的感染源在孤島蔓延，曾經的組織秘密逐漸浮現。玩家必須在變異體、陰影與背叛中找到逃出生天的道路。黑霧籠罩之處，沒有任何真相能長久隱藏。',
+        image: '/posters/惡靈古堡9.jpg', 
+    },
+    { 
+        id: 6, 
+        title: '《虛實幻象》當現實裂縫中浮現另一個世界', 
+        desc: '在《虛實幻象》中，玩家將在虛擬與現實交錯的世界裡揭開真相。城市的表象逐漸扭曲，數據殘影侵入日常，讓你在判斷、探索與選擇中面對多層次的巨大幻境。你看到的，未必是真相。',
+        image: '/posters/虛實幻象.jpg', 
+    },
+    { 
+        id: 7, 
+        title: '《FF7》重製版最終章玩法將有大改動！', 
+        desc: 'Square Enix 從 2020 年開始的《Final Fantasy 7》（FF7）重製計畫，如今最終第三部曲正在開發中，讓全球無數粉絲都非常期待。而近日，巴西電玩展 Brasil Game Show 2025 上，《FF7》重製版三部曲的遊戲總監濱口直樹透露了系列最終章的一些細節。',
+        image: '/posters/FF703.jpg', 
+    },
+    { 
+        id: 8, 
+        title: '《劍星》為PlayStation最暢銷PC單機遊戲', 
+        desc: '韓國開發商 Shift Up 於 11 月 24 日公開財報（投資者報告）並在近期徵才公告中揭露，《劍星》（Stellar Blade）自推出以來刷新多項紀錄，不僅 PS5 版大獲成功，更成為 PlayStation 歷來發行最暢銷的 PC 單機遊戲，而續作《劍星 2》（代稱）極可能改採多平台首發策略。',
+        image: '/posters/劍星消息.jpg', 
+    },
+    { 
+        id: 9, 
+        title: 'Nintendo Switch 2', 
+        desc: '全新的 Switch 2 帶來更強大的性能、更清晰的畫面與更靈活的遊玩方式。從家用到外出、從單人到多人，這台主機將任天堂的創意理念推向下一個世代，帶來更純粹、流暢的遊戲魅力。',
+        image: '/posters/switch2.jpg', 
+    },
+    { 
+        id: 10, 
+        title: '《空洞騎士:絲之歌》命運之線即將織起', 
+        desc: '《空洞騎士:絲之歌》揭開了黃蜂（Hornet）的故事篇章。她將穿越陌生的國度、攀上危險的高塔，用速度與優雅擊敗潛伏在暗處的敵人。全新的世界、節奏更快的戰鬥與神秘劇情，將帶來前所未有的蜂刺之旅...',
+        image: '/posters/絲之歌.jpg', 
     },
 ];
 
 // ----------------------------------------------------------------------
-// 🎯 元件：新聞輪播橫幅 (Peek Carousel)
+// 🎯 元件：新聞輪播橫幅 (完美版：3張全顯 + 2張露邊)
 // ----------------------------------------------------------------------
 const NewsCarousel = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const handlePrev = () => {
-        setCurrentIndex((prev) => (prev === 0 ? newsData.length - 1 : prev - 1));
-    };
+    const [activeIndex, setActiveIndex] = useState(0);
+    const totalItems = newsData.length;
 
     const handleNext = () => {
-        setCurrentIndex((prev) => (prev === newsData.length - 1 ? 0 : prev + 1));
+        setActiveIndex((prev) => (prev + 1) % totalItems);
     };
 
-    // 計算 translateX: 我們希望 currentIndex 居中
-    // 假設每個卡片寬 30%，gap 2%
-    // 為了讓當前項目居中，我們需要位移： - (index * 32%) + (螢幕中間偏移)
-    // 這裡用一個簡單的算法：每次移動 33.33% (card + gap)
-    
-    return (
-        <div className="relative w-full overflow-hidden py-12">
-            
-            {/* 標題 */}
-            <h2 className="text-3xl text-white text-center mb-8">《地平線 西域禁地》 最新消息</h2>
+    const handlePrev = () => {
+        setActiveIndex((prev) => (prev - 1 + totalItems) % totalItems);
+    };
 
-            {/* 輪播軌道容器 */}
-            <div className="relative flex items-center justify-center h-[450px]">
+    const getDistance = (index) => {
+        let diff = index - activeIndex;
+        if (diff > totalItems / 2) diff -= totalItems;
+        if (diff < -totalItems / 2) diff += totalItems;
+        return diff;
+    };
+
+    return (
+        <div className="relative w-full overflow-hidden py-16 pb-24 bg-neutral-900/50">
+            
+            <h2 className="text-5xl text-white text-center mb-12 font-bold tracking-wider">
+                《最新消息》
+            </h2>
+
+            <div className="relative w-full h-[400px] flex justify-center items-center perspective-1000">
                 
-                {/* 絕對定位的軌道，控制滑動 */}
-                <div 
-                    className="flex transition-transform duration-500 ease-out absolute left-1/2"
-                    style={{ 
-                        transform: `translateX(calc(-50% - ${currentIndex * 340}px))` // 340px = 卡片寬(320) + 間距(20)
-                    }}
-                >
-                    {newsData.map((item, index) => {
-                        const isActive = index === currentIndex;
-                        return (
-                            <div 
-                                key={item.id} 
-                                className={`
-                                    w-[320px] h-[400px] mx-[10px] flex-shrink-0 rounded-xl overflow-hidden bg-neutral-800 shadow-lg transition-all duration-500
-                                    ${isActive ? 'scale-100 opacity-100' : 'scale-95 opacity-60 hover:opacity-80'}
-                                `}
-                            >
+                {newsData.map((item, index) => {
+                    const distance = getDistance(index);
+                    
+                    // 顯示範圍：中間(0) + 左右(1) + 更外側預覽(2)
+                    const isVisible = Math.abs(distance) <= 2;
+                    if (!isVisible) return null;
+
+                    // 樣式變數
+                    let xOffset = '0%';
+                    let scale = 1;
+                    let opacity = 1;
+                    let zIndex = 0;
+                    let pointerEvents = 'none';
+
+                    // 🎯 距離間距設定：102% (讓卡片稍微緊湊一點，留空間給邊緣)
+                    const spacing = 106; 
+
+                    if (distance === 0) {
+                        // === 中間 (Active) ===
+                        xOffset = '0%'; 
+                        scale = 1; 
+                        opacity = 1;
+                        zIndex = 10;
+                        pointerEvents = 'auto';
+                    } else if (distance === -1) {
+                        // === 左邊 (Active) ===
+                        xOffset = `-${spacing}%`; 
+                        scale = 1; 
+                        opacity = 1;
+                        zIndex = 10;
+                        pointerEvents = 'auto';
+                    } else if (distance === 1) {
+                        // === 右邊 (Active) ===
+                        xOffset = `${spacing}%`; 
+                        scale = 1;
+                        opacity = 1;
+                        zIndex = 10;
+                        pointerEvents = 'auto';
+                    } else if (distance === -2) {
+                        // === 左邊緣預覽 (Peek) ===
+                        // 這裡 opacity 改回 0.5，讓它顯示出來
+                        xOffset = `-${spacing * 2}%`; 
+                        scale = 0.9; // 稍微縮小以示區別
+                        opacity = 0.5; 
+                        zIndex = 0;
+                    } else if (distance === 2) {
+                        // === 右邊緣預覽 (Peek) ===
+                        xOffset = `${spacing * 2}%`; 
+                        scale = 0.9;
+                        opacity = 0.5;
+                        zIndex = 0;
+                    }
+
+                    return (
+                        <div 
+                            key={item.id}
+                            className="absolute transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                            style={{
+                                transform: `translateX(${xOffset}) scale(${scale})`,
+                                opacity: opacity,
+                                zIndex: zIndex,
+                                pointerEvents: pointerEvents,
+                                // 🎯 寬度改為 28%：這樣 3 張佔 84%，左右各留 8% 給預覽卡片露出
+                                width: '28%', 
+                                minWidth: '320px', 
+                                maxWidth: '430px', 
+                                height: '100%',
+                                left: '0', 
+                                right: '0',
+                                margin: '0 auto', 
+                            }}
+                        >
+                            <div className="w-full h-full rounded-2xl overflow-hidden bg-neutral-800 shadow-2xl border border-neutral-700/50 relative group">
                                 {/* 圖片區 */}
-                                <div className="h-48 overflow-hidden">
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                <div className="h-[60%] overflow-hidden relative">
+                                    <img 
+                                        src={item.image} 
+                                        alt={item.title} 
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                    />
+                                    {/* 只有最邊緣的預覽卡片才加深色遮罩，中間三張不加 */}
+                                    <div className={`absolute inset-0 bg-black transition-opacity duration-500 ${Math.abs(distance) <= 1 ? 'opacity-0' : 'opacity-50'}`}></div>
                                 </div>
 
                                 {/* 文字區 */}
-                                <div className="p-5 flex flex-col h-[calc(100%-12rem)] justify-between">
-                                    <div>
-                                        <h3 className="text-white font-bold text-lg mb-2 line-clamp-2">{item.title}</h3>
-                                        <p className="text-gray-400 text-sm line-clamp-3">{item.desc}</p>
-                                    </div>
+                                <div className="p-6 flex flex-col h-[40%] relative">
+                                    <h3 className="text-white font-bold text-xl mb-3 leading-tight line-clamp-2">
+                                        {item.title}
+                                    </h3>
+                                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                                        {item.desc}
+                                    </p>
                                     
-                                    {/* 底部資訊 + 按鈕 */}
-                                    <div className="flex items-center justify-between mt-4">
-                                        <div className="flex items-center">
-                                            <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center mr-2">
-                                                <span className="text-black font-bold">G</span>
-                                            </div>
-                                            <div>
-                                                <p className="text-gray-300 text-xs font-bold">{item.author}</p>
-                                                <p className="text-gray-500 text-[10px]">{item.date}</p>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* 🎯 了解更多按鈕 */}
-                                        <button className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 rounded-full transition">
-                                            了解更多
-                                        </button>
-                                    </div>
+                                    <button className="absolute bottom-4 right-4 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold py-2 px-5 rounded-full transition-colors shadow-lg">
+                                        了解更多
+                                    </button>
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
+                        </div>
+                    );
+                })}
             </div>
 
-            {/* 左箭頭 (懸浮) */}
-            <button 
-                onClick={handlePrev}
-                className="absolute left-4 lg:left-20 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-sm transition"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                </svg>
+            {/* 左箭頭 */}
+            <button onClick={handlePrev} className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-purple-600 text-white p-4 rounded-full backdrop-blur-sm border border-white/10 shadow-lg group transition-all hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
             </button>
 
-            {/* 右箭頭 (懸浮) */}
-            <button 
-                onClick={handleNext}
-                className="absolute right-4 lg:right-20 top-1/2 -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full backdrop-blur-sm transition"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
+            {/* 右箭頭 */}
+            <button onClick={handleNext} className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-20 bg-black/60 hover:bg-purple-600 text-white p-4 rounded-full backdrop-blur-sm border border-white/10 shadow-lg group transition-all hover:scale-110">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6 group-hover:translate-x-0.5 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
             </button>
+
         </div>
     );
 };
 
 // ----------------------------------------------------------------------
-// 遊戲卡片元件
+// 遊戲卡片元件 (保持不變)
 // ----------------------------------------------------------------------
 const GameItemCard = ({ item }) => (
   <Link to={`/store/game/${item.gameId}`} className="block h-full">
@@ -292,12 +348,12 @@ function StorePage() {
           )}
         </div>
         
-        {/* 🎯 只有在「遊戲商城」分類時，才顯示底部的橫幅 */}
-        {activeFilter === 'Game' && (
-            <NewsCarousel />
-        )}
-
       </main>
+
+      {/* 🎯 只有在「遊戲商城」分類時，才顯示底部的橫幅 */}
+      {activeFilter === 'Game' && (
+          <NewsCarousel />
+      )}
     </div>
   );
 }

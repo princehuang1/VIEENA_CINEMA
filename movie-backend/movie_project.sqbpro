@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000012100ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">INSERT OR REPLACE INTO Movies (
-    movieId, movieName, movieDurationMinutes, releaseDate, synopsis, 
-    director, actors, language, posterUrl, movieType, status, trailerUrl, stills
-) VALUES (
-    15, 
-    '蝙蝠俠：黑暗騎士 (The Dark Knight)', 
-    '2h 32m', 
-    '2008-07-17', 
-    '在戈登局長與地檢察官哈維·登特的協助下，蝙蝠俠順利剷除了高譚市的犯罪組織。然而，一名自稱「小丑」的神秘罪犯突然出現，策劃了一連串瘋狂的攻擊行動，不僅讓城市陷入混亂，更逼迫蝙蝠俠必須在英雄與私刑者之間做出艱難的抉擇。', 
-    'Christopher Nolan', 
-    'Christian Bale, Heath Ledger, Aaron Eckhart', 
-    '英語', 
-    '/posters/黑暗騎士.jpg', 
-    '動作, 犯罪, 劇情', 
-    'Now Playing', 
-    'https://www.youtube.com/embed/EXeTwQWrcwY', 
-    '[&quot;/posters/黑暗騎士01.jpg&quot;, &quot;/posters/黑暗騎士02.jpg&quot;, &quot;/posters/黑暗騎士03.jpg&quot;, &quot;/posters/黑暗騎士04.jpg&quot;]'
-);</sql><current_tab id="0"/></tab_sql></sqlb_project>
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="0" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011f00ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 暫時關閉外鍵檢查 (避免錯誤)
+PRAGMA foreign_keys = OFF;
+
+-- 2. 開始交換
+-- 步驟 A: 把 ID=8 先移到暫存區 (例如 -8)
+UPDATE Movies SET movieId = -8 WHERE movieId = 8;
+
+-- 步驟 B: 把 ID=15 移到 ID=8
+UPDATE Movies SET movieId = 8 WHERE movieId = 15;
+
+-- 步驟 C: 把暫存區 (-8) 移到 ID=15
+UPDATE Movies SET movieId = 15 WHERE movieId = -8;
+
+-- 3. 重新開啟外鍵檢查
+PRAGMA foreign_keys = ON;</sql><current_tab id="0"/></tab_sql></sqlb_project>
