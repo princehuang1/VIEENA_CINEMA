@@ -1,82 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // 引入 axios
+import axios from 'axios';
 import Navbar from "../components/Navbar";
 import MovieCard from "../components/MovieCard";
 
-// --- 輪播圖專用電影 (3 部) ---
-// 仍然保留這個陣列，因為輪播圖需要「特定」的 3 部電影和描述
-// (未來您可以考慮為此建立一個新的 API /api/featured-movies)
+// --- 輪播圖專用電影 (已修改為讀取本地 /posters/ 圖片) ---
 const carouselMoviesData = [
     {
-      id: 0, title: '阿凡達：水之道',
+      id: 0, 
+      title: 'G-DRAGON 2025 WORLD TOUR',
+      description: '',
+      poster: '/posters/GD.jpg', // 🎯 修改這裡
+      ticketLink: '#', 
+      trailerLink: '', 
+    },
+    {
+      id: 1, 
+      title: '阿凡達：水之道',
       description: '傑克·薩利與他在系外行星潘朵拉上新組成的家庭一起生活。當一個熟悉的威脅捲土重來,企圖完成之前未竟的事業時,傑克必須與奈蒂莉和納美人軍隊並肩作戰,保衛他們的星球。',
-      poster: 'https://assets.survivalinternational.org/pictures/489/width1800-8825fd98d7fb9accd9d1499b693fc25b.jpg',
+      poster: '/posters/Homepage01.jpg', // 🎯 修改這裡
       ticketLink: '#', 
       trailerLink: 'https://www.youtube.com/watch?v=T-8MtZ2kY98', 
     },
     {
-      id: 1, title: '沙丘：第二部',
+      id: 2, 
+      title: '沙丘：第二部',
       description: '亞崔迪家族的保羅在宿命的引導下，與契妮和弗雷曼人團結一心，誓將展開一場針對哈肯能家族的復仇，他必須在他一生所愛的兩者之間做出抉擇，並試圖阻止只有他能預見的可怕未來。',
-      poster: 'https://images.wallpapersden.com/image/download/timothee-vs-austin-butler-dune-2-movie-fight_bmdoaWiUmZqaraWkpJRobWllrWdma2U.jpg',
+      poster: '/posters/Homepage02.jpg', // 🎯 修改這裡
       ticketLink: '#', 
       trailerLink: 'https://www.youtube.com/watch?v=5b6bKqgn7y8', 
     },
     {
-      id: 2, title: '『#鏈鋸人 #蕾潔篇』',
-      description: '電次與惡魔「鏈鋸惡魔」波奇塔簽訂契約，成為鏈鋸人，過著狩獵惡魔的日子。某天,他遇見了被稱為「炸彈惡魔」的女性惡魔人蕾潔。她的出現，將顛覆電次平穩的生活...。',
-      poster: 'https://hips.hearstapps.com/hmg-prod/images/%E5%8A%87%E5%A0%B4%E7%89%88-%E9%8F%88%E9%8B%B8%E4%BA%BA-%E8%95%BE%E6%BD%94%E7%AF%87-%E7%B2%BE%E5%BD%A9%E5%8A%87%E7%85%A71-689ae0f2d8014.jpg?crop=1.00xw:0.744xh;0,0.130xh',
+      id: 3, 
+      title: '『#鏈鋸人 #蕾潔篇』',
+      description: '電次與惡魔「鏈鋸惡魔」波奇塔簽訂契約，成為鏈鋸人，過著狩獵惡魔的日子。某天,他遇見了某個女孩。她的出現，將顛覆電次平穩的生活...',
+      poster: '/posters/Homepage03.jpg', // 🎯 修改這裡
       ticketLink: '#', 
       trailerLink: 'https://www.youtube.com/watch?v=c--np1lcdgQ', 
     },
     {
-      id: 3, title: '銀翼殺手 2049',
+      id: 4, 
+      title: '銀翼殺手 2049',
       description: '在未來的荒涼世界中，銀翼殺手 K 負責追捕失控複製人。一次任務中，他意外發現足以動搖整個社會的秘密……',
-      poster: 'https://miro.medium.com/1*4QAzUOAdeXI1qBgs86lK5Q.jpeg',
+      poster: '/posters/Homepage04.jpg', // 🎯 修改這裡
       ticketLink: '#', 
       trailerLink: 'https://www.youtube.com/watch?v=QMAk8W1O3G8', 
     },
 ];
 
+// --- 最新消息資料 (已修改圖片路徑與連結) ---
+const newsItems = [
+    {
+        id: 'A',
+        title: 'BabyMonster',
+        desc: '《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽',
+        image: '/posters/Homepage-A.jpg', // 🎯 修改
+        link: 'https://reurl.cc/Yk8x9L' 
+    },
+    {
+        id: 'B',
+        title: '死侍 3',
+        desc: '《死侍與金鋼狼》重大消息 | 金剛狼在《死侍3》回歸！預告解析與獨家片段...',
+        image: '/posters/Homepage-B.jpg', // 🎯 修改
+        link: 'https://www.marieclaire.com.tw/entertainment/movie/68490/deadpool-3-ryan-reynolds-hugh-jackman' // 待補
+    },
+    {
+        id: 'C',
+        title: '英雄聯盟',
+        desc: '《英雄聯盟》最強飛昇者「不滅冥聖」薩亨登場!',
+        image: '/posters/Homepage-C.jpg', // 🎯 修改
+        link: 'https://www.ludens.com.tw/league-of-legends-zaahen-new-champion-lore-explained/' // 待補
+    },
+    {
+        id: 'D',
+        title: 'TWICE 2025',
+        desc: 'TWICE演唱會2025台灣站來了！11月高雄開唱，子瑜首度回台演出',
+        image: '/posters/Homepage-D.jpg', // 🎯 修改
+        link: 'https://www.marieclaire.com.tw/entertainment/music/86642/twice-this-is-for-world-tour' // 待補
+    },
+    {
+        id: 'E',
+        title: '黃金樹幽影',
+        desc: '《艾爾登法環 黃金樹幽影》最新boss"穿刺者-梅瑟莫"',
+        image: '/posters/Homepage-E.jpg', // 🎯 修改
+        link: 'https://www.4gamers.com.tw/news/detail/65525/elden-ring-legendary-player-let-me-solo-her-has-new-target' // 待補
+    }
+];
+
 function App() {
   const [currentSlide, setCurrentSlide] = useState(0); 
-  const slides = carouselMoviesData; // 輪播圖使用靜態資料
+  const slides = carouselMoviesData; 
 
-  // 🎯 新增 State 來儲存從 API 獲取的電影
   const [nowShowingMovies, setNowShowingMovies] = useState([]);
   const [comingSoonMovies, setComingSoonMovies] = useState([]);
-  const [loading, setLoading] = useState(true); // 新增 loading 狀態
+  const [loading, setLoading] = useState(true); 
 
-  // 🎯 使用 useEffect 在組件載入時呼叫 API
   useEffect(() => {
-    
-    // 1. 獲取「正在上映」的電影
     const fetchNowShowing = axios.get('http://localhost:4000/api/movies?status=Now Playing');
-    
-    // 2. 獲取「即將推出」的電影
     const fetchComingSoon = axios.get('http://localhost:4000/api/movies?status=Coming Soon');
 
-    // 3. 等待兩個 API 都回傳資料
     Promise.all([fetchNowShowing, fetchComingSoon])
       .then((results) => {
-        setNowShowingMovies(results[0].data); // 儲存「正在上映」的資料
-        setComingSoonMovies(results[1].data); // 儲存「即將推出」的資料
-        setLoading(false); // 資料載入完成，關閉 loading
+        setNowShowingMovies(results[0].data); 
+        setComingSoonMovies(results[1].data); 
+        setLoading(false); 
       })
       .catch((error) => {
         console.error("錯誤：無法從 API 獲取電影資料", error);
-        setLoading(false); // 即使出錯也要關閉 loading
+        setLoading(false); 
       });
+  }, []); 
 
-  }, []); // 空陣列 [] 確保這個 effect 只在組件「掛載」時執行一次
-
-  // 自動播放效果
   useEffect(() => {
     const slideInterval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 10000); // 10 秒切換一次
+    }, 10000); 
 
-    return () => clearInterval(slideInterval); // 清除計時器
-  }, [slides.length, currentSlide]); 
+    return () => clearInterval(slideInterval); 
+  }, [slides.length]); 
 
   const goToNextSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
@@ -85,16 +125,15 @@ function App() {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
   };
   const currentMovie = slides[currentSlide];
-  // --- 輪播圖功能結束 ---
 
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans">
       
       <Navbar />
 
-      <main className="container mx-auto px-20 py-8"> {/*px-20是用來調整「左右邊距」*/}
+      <main className="container mx-auto px-20 py-8"> 
         
-        {/* 輪播圖區塊 (保持不變) */}
+        {/* === 輪播圖區塊 === */}
         <section className="relative w-full h-[60vh] md:h-[70vh] rounded-xl overflow-hidden mb-12 group">
           <img
             src={currentMovie.poster}
@@ -128,32 +167,28 @@ function App() {
           <button
             onClick={goToPrevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-3 rounded-full focus:outline-none transition duration-300 z-20"
-            aria-label="Previous slide"
           >
             &lt;
           </button>
           <button
             onClick={goToNextSlide}
             className="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-3 rounded-full focus:outline-none transition duration-300 z-20"
-            aria-label="Next slide"
           >
             &gt;
           </button>
         </section>
 
-        {/* 正在上映電影 */}
+        {/* === 現正熱映 === */}
         <section className="mb-12">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">現正熱映</h2>
-            <a href="#" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
+            <a href="/movie-info" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
           </div>
           
-          {/* lg:grid-cols-5 (一排5個), gap-8 (間距縮小一點) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {loading ? (
               <p>資料載入中...</p>
             ) : (
-              // slice(0, 10) 顯示 10 部，剛好兩排 (5x2)
               nowShowingMovies.slice(0, 10).map((movie) => (
                 <MovieCard key={movie.movieId} movie={{
                   id: movie.movieId,
@@ -169,93 +204,64 @@ function App() {
           </div>
         </section>
 
-{/*  === 「最新消息」橫幅 ===  */}
+        {/* === 最新消息橫幅 (已更新圖片來源與連結) === */}
         <section className="mb-12">
-          {/* 區塊標題 */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">最新消息</h2>
             <a href="#" className="text-purple-400 hover:text-purple-600 font-medium">看全部</a>
           </div>
 
-          {/* 主要網格 (1+4 佈局) */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
-            {/* --- 左側 (大型卡片) --- */}
-            {/* 使用 relative 定位來讓文字疊加在圖片上 */}
-            <div className="relative rounded-xl overflow-hidden shadow-xl group transition-all duration-300">
+            {/* --- 左側 (大圖：Homepage-A) --- */}
+            <a 
+                href={newsItems[0].link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block relative rounded-xl overflow-hidden shadow-xl group transition-all duration-300 h-96"
+            >
               <img
-                src="https://cdn2.techbang.com/system/excerpt_images/122024/original/d8d7deb5bef6eeb7436a1d381ec20a27.jpg?1742282087" 
-                alt="FF7:remake"
-                className="w-full h-96 object-cover brightness-90 group-hover:brightness-75 transition duration-300" // 大圖高度，增加亮度調整
+                src={newsItems[0].image} 
+                alt={newsItems[0].title}
+                className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" 
               />
-              {/* 文字疊加在圖片上 */}
               <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                <h3 className="text-white text-3xl font-bold mb-2">BabyMonster</h3>
+                <h3 className="text-white text-3xl font-bold mb-2 group-hover:text-purple-400 transition-colors">{newsItems[0].title}</h3>
                 <p className="text-gray-200 text-xl">
-                  《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽
+                  {newsItems[0].desc}
                 </p>
               </div>
-            </div>
+            </a>
 
-            {/* --- 右側 (4 張小型卡片) --- */}
+            {/* --- 右側 (4張小圖：Homepage-B ~ E) --- */}
             <div className="grid grid-cols-2 grid-rows-2 gap-4">
-              
-              {/* 右側小卡片 1 */}
-              <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img 
-                src="https://m.media-amazon.com/images/M/MV5BNmE3ZTlhMTEtY2ZhNC00ODQ3LWFiOTMtOTEwOGIzMzdhNTY2XkEyXkFqcGc@._V1_QL75_UY281_CR31,0,500,281_.jpg" 
-                alt="News 2" 
-                className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">死恃 3</h4>
-                  <p className="text-gray-400 text-sm truncate">
-                  《死侍與金鋼狼》重大消息| 金剛狼在《死侍3》回歸！ · 《死侍與金鋼狼》預告解析| 漫威真正救世主降臨！ · 重大消息| CinemaCon死侍9分鐘獨家片段嘲諷Marvel客串超廉價！
-                  </p>
-                </div>
-              </div>
-
-              {/* 右側小卡片 2 */}
-              <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img 
-                src="https://pic.upmedia.mg/uploads/content/20250826/fV250826121702229122.webp" 
-                alt="News 3" 
-                className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">絲之歌</h4>
-                  <p className="text-gray-400 text-sm truncate">《空洞騎士：絲之歌》PC 版更新釋出！惱人小怪遭削弱、導入社群好評中文翻譯</p>
-                </div>
-              </div>
-
-              {/* 右側小卡片 3 */}
-              <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img src="https://kotaku.com/app/uploads/2024/02/f9fe09644379d674a4c003237359b0b6-1200x675.jpg" 
-                alt="News 4" 
-                className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">GTA6</h4>
-                  <p className="text-gray-400 text-sm truncate">《GTA6》第三支預告片要來了？Rockstar 官網改版引爆玩家期待</p>
-                </div>
-              </div>
-
-              {/* 右側小卡片 4 */}
-              <div className="relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAxEqnmoOQE9gMPTIjdzlWVEvD4BTw1zGkhg&s" 
-                alt="News 5" 
-                className="w-full h-full object-cover brightness-130 group-hover:brightness-75 transition duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                  <h4 className="text-white font-semibold text-md truncate">黃金樹幽影</h4>
-                  <p className="text-gray-400 text-sm truncate">《艾爾登法環 黃金樹幽影》最新boss"穿刺者-梅瑟莫"</p>
-                </div>
-              </div>
-              
+              {newsItems.slice(1).map((item) => (
+                  <a 
+                    key={item.id}
+                    href={item.link}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block relative rounded-xl overflow-hidden shadow-lg group transition-all duration-300"
+                  >
+                    <img 
+                        src={item.image} 
+                        alt={item.title} 
+                        className="w-full h-full object-cover brightness-90 group-hover:brightness-75 transition duration-300" 
+                    />
+                    <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                        <h4 className="text-white font-semibold text-md truncate group-hover:text-purple-400 transition-colors">{item.title}</h4>
+                        <p className="text-gray-400 text-sm truncate">
+                            {item.desc}
+                        </p>
+                    </div>
+                  </a>
+              ))}
             </div>
           </div>
         </section>
-        {/* 🎯 === 新增橫幅結束 === 🎯 */}
 
-        {/* 會員橫幅 (保持不變) */}
+        {/* === 會員橫幅 === */}
         <section className="relative h-[40vh] rounded-xl overflow-hidden mb-12 group">
-          {/* ... (會員橫幅的程式碼保持不變) ... */}
           <img
             src="https://images.unsplash.com/photo-1517604931442-7e0c8ed294c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
             alt="Movie theater interior"
@@ -278,20 +284,17 @@ function App() {
           </div>
         </section>
 
-
-        {/* 即將上映電影 */}
+        {/* === 即將推出 === */}
         <section>
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-3xl font-bold text-white">即將推出</h2>
-            <a href="#" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
+            <a href="/movie-info" className="text-purple-400 hover:text-purple-600 font-medium">查看全部</a>
           </div>
 
-          {/* 即將上映電影 5 欄佈局 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {loading ? (
               <p>資料載入中...</p>
             ) : (
-              // 如果希望顯示更多，也可以改為 slice(0, 5) 或 slice(0, 10)
               comingSoonMovies.slice(0, 5).map((movie) => (
                 <MovieCard key={movie.movieId} movie={{
                   id: movie.movieId,
@@ -308,7 +311,6 @@ function App() {
         </section>
       </main>
 
-      {/* 底部導覽 (黑紫風格) */}
       <footer className="bg-neutral-800 py-8 mt-12">
         <div className="container mx-auto text-center text-gray-400">
           &copy; 2025 VIENNA CINEMA. All rights reserved.
