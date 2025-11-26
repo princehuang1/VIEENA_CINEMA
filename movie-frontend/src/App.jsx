@@ -7,7 +7,8 @@ import ShowtimePage from './pages/ShowtimePage';
 import MovieInfoPage from './pages/MovieInfoPage';
 import BookingConfirmationPage from './pages/BookingConfirmationPage'; 
 import StorePage from "./pages/StorePage";
-import GameDetailPage from "./pages/GameDetailPage"; // 引入新頁面
+import GameDetailPage from "./pages/GameDetailPage"; 
+import TheaterPage from "./pages/TheaterPage";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       <Route path="/movie/:movieId" element={<MovieDetailPage />} />
       <Route path="/booking-confirmation/:movieId" element={<BookingConfirmationPage />} />
       <Route path="/store" element={<StorePage />} />
-      
+      <Route path="/theaters" element={<TheaterPage />} />
+
       {/* 新增遊戲詳情路由 */}
       <Route path="/store/game/:id" element={<GameDetailPage />} />
 
