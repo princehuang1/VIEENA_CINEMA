@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 function ShowtimeMovieCard({ movie }) {
   const language = "英語 / 日語 (字幕)"; 
+  // 🎯 這裡是用來示意的假時間資料
+  const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
 
   return (
     // 🎯 卡片整體高度將由左側海報決定
@@ -23,18 +25,34 @@ function ShowtimeMovieCard({ movie }) {
         {/* 上方文字區塊 */}
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">{movie.movieName}</h2> 
-          <p className="text-sm text-gray-400 mb-4">{movie.movieDurationMinutes}</p> {/* 增加這裡的 mb，讓時間跟下面資訊分開一點 */}
+          <p className="text-sm text-gray-400 mb-4">{movie.movieDurationMinutes}</p> 
           
-          {/* 🎯 修改這裡：將 space-y-0.5 改為 space-y-2，加大行距 */}
           <div className="text-sm text-gray-300 space-y-2 mb-0"> 
             <p><span className="font-semibold text-gray-400">電影種類:</span> {movie.movieType}</p>
             <p><span className="font-semibold text-gray-400">導演:</span> {movie.director || 'N/A'}</p>
             <p><span className="font-semibold text-gray-400">演員:</span> {movie.actors || 'N/A'}</p>
             <p><span className="font-semibold text-gray-400">語言:</span> {language}</p>
           </div>
+
+          {/* 🔥 新增區域：可選時間示意 (位於語言下方) */}
+          <div className="mt-4 border-t border-neutral-700 pt-3">
+             <span className="text-xs font-semibold text-gray-400 mb-2 block">今日場次:</span>
+             <div className="flex flex-wrap gap-2">
+               {mockTimes.map((time, index) => (
+                 <button 
+                   key={index}
+                   className="text-xs bg-neutral-700 hover:bg-purple-600 text-gray-200 py-1 px-3 rounded transition-colors duration-200"
+                 >
+                   {time}
+                 </button>
+               ))}
+             </div>
+          </div>
+          {/* 🔥 新增區域結束 */}
+
         </div>
         
-        {/* 按鈕區塊 */}
+        {/* 按鈕區塊 (位於時間下方) */}
         <div className="flex space-x-4 mt-4 ml-auto">
           <Link 
             to={`/movie/${movie.movieId}`}
