@@ -16,7 +16,7 @@ const staticMerchandiseItems = [
     { id: 12, name: '鏈鋸人爆米花桶', category: 'Merchandise', price: 999, image: '/posters/鏈鋸人爆米花桶.jpg' },
     { id: 13, name: '鏈鋸人海報', category: 'Merchandise', price: 300, image: '/posters/鏈鋸人海報.jpg' }, 
     { id: 14, name: '波奇塔夜燈', category: 'Merchandise', price: 1500, image: '/posters/波奇塔夜燈.jpg' },
-    { id: 15, name: '鏈鋸人桌上小物', category: 'Merchandise', price: 1000, image: '/posters/鏈鋸人桌上小物.jpg' },
+    { id: 15, name: '鏈鋸人劇場版原聲輯', category: 'Merchandise', price: 800, image: '/posters/鏈鋸人劇場版原聲輯.jpg' },
     { id: 16, name: 'FF7 娃娃', category: 'Merchandise', price: 1200, image: '/posters/FF7 娃娃.jpg' },
     { id: 17, name: 'FF7 音樂盒', category: 'Merchandise', price: 800, image: '/posters/FF7 音樂盒.jpg' },
     { id: 18, name: 'FF7 音樂合輯', category: 'Merchandise', price: 1600, image: '/posters/FF7 音樂合輯2.jpg' },
