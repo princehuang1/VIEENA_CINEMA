@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function ShowtimeMovieCard({ movie }) {
+// 🎯 接收 props: theatreId, selectedDate
+function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
   const language = "英語 / 日語 (字幕)"; 
-  // 🎯 這裡是用來示意的假時間資料
   const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
 
+  const [selectedTime, setSelectedTime] = useState(null);
+
+  const handleTicketClick = (e) => {
+    if (!selectedTime) {
+      e.preventDefault();
+      if (onError) onError(); 
+    }
+  };
+
   return (
-    // 🎯 卡片整體高度將由左側海報決定
     <div className="bg-neutral-800 rounded-xl overflow-hidden shadow-xl flex transition-all duration-300 ease-in-out hover:shadow-purple-500/30">
       
-      {/* 左側海報 */}
       <div className="w-1/3 md:w-1/4 flex-shrink-0 h-76"> 
         <img 
           src={movie.posterUrl} 
@@ -19,10 +26,8 @@ function ShowtimeMovieCard({ movie }) {
         />
       </div>
 
-      {/* 右側：電影資訊 */}
       <div className="flex-grow px-5 md:px-6 py-3 flex flex-col justify-between">
         
-        {/* 上方文字區塊 */}
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">{movie.movieName}</h2> 
           <p className="text-sm text-gray-400 mb-4">{movie.movieDurationMinutes}</p> 
@@ -34,28 +39,37 @@ function ShowtimeMovieCard({ movie }) {
             <p><span className="font-semibold text-gray-400">語言:</span> {language}</p>
           </div>
 
-          {/* 🔥 新增區域：可選時間示意 (位於語言下方) */}
           <div className="mt-4 border-t border-neutral-700 pt-3">
-             <span className="text-xs font-semibold text-gray-400 mb-2 block">今日場次:</span>
              <div className="flex flex-wrap gap-2">
                {mockTimes.map((time, index) => (
                  <button 
                    key={index}
-                   className="text-xs bg-neutral-700 hover:bg-purple-600 text-gray-200 py-1 px-3 rounded transition-colors duration-200"
+                   onClick={() => setSelectedTime(time)} 
+                   className={`
+                     text-xs py-1 px-3 rounded transition-colors duration-200
+                     ${selectedTime === time 
+                       ? 'bg-purple-600 text-white font-bold shadow-lg' 
+                       : 'bg-neutral-700 text-gray-200 hover:bg-neutral-600'
+                     }
+                   `}
                  >
                    {time}
                  </button>
                ))}
              </div>
           </div>
-          {/* 🔥 新增區域結束 */}
-
         </div>
         
-        {/* 按鈕區塊 (位於時間下方) */}
         <div className="flex space-x-4 mt-4 ml-auto">
           <Link 
             to={`/movie/${movie.movieId}`}
+            // 🎯 關鍵修改：將父層的資料一併打包送出
+            state={{ 
+                selectedTime: selectedTime,
+                theatreId: theatreId,
+                selectedDate: selectedDate 
+            }}
+            onClick={handleTicketClick} 
             className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 text-sm"
           >
             取得門票
