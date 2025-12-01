@@ -1,190 +1,125 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
-import SeatSelector from '../components/SeatSelector';
 
 function BookingConfirmationPage() {
   const navigate = useNavigate();
-  const { movieId } = useParams();
   const location = useLocation();
 
-  // 1. 接收從上一頁 (MovieDetailPage) 傳來的資料
-  // 如果沒有資料 (例如直接輸入網址進入)，則使用預設空值以防報錯
+  // 接收來自 SeatSelectPage 的完整資料
   const bookingData = location.state || {
-    tickets: [], // { name, price, count }
-    meals: [],   // { name, price, count }
-    theatre: { name: '未選擇影城' },
-    date: { dayName: '', dayNum: '' },
-    time: ''
+    tickets: [], 
+    meals: [], 
+    theater: { name: '未選擇' },
+    date: '',
+    time: '',
+    selectedSeats: [],
+    totalPrice: 0,
+    movie: { movieName: '未知電影', posterUrl: '' }
   };
 
-  const [movie, setMovie] = useState(null);
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const { movie, theater, date, time, tickets, meals, selectedSeats, totalPrice } = bookingData;
 
-  // 2. 抓取電影資料 (為了顯示片名)
-  useEffect(() => {
-    axios.get(`http://localhost:4000/api/movies/${movieId}`)
-      .then(res => setMovie(res.data))
-      .catch(err => console.error("無法抓取電影資料", err));
-  }, [movieId]);
-
-  // 3. 計算總金額 (票價 + 餐點)
-  const calculateTotal = () => {
-    const ticketsTotal = bookingData.tickets.reduce((sum, item) => sum + (item.price * item.count), 0);
-    const mealsTotal = bookingData.meals.reduce((sum, item) => sum + (item.price * item.count), 0);
-    return ticketsTotal + mealsTotal;
+  const handlePayment = () => {
+    alert("訂單已送出！進入付款流程...");
+    // 這裡未來可以接付款 API
   };
 
-  // 4. 計算總票數 (用來檢查座位數是否正確)
-  const totalTicketsCount = bookingData.tickets.reduce((sum, item) => sum + item.count, 0);
-
-  // 按鈕邏輯：取消
-  const handleCancel = () => {
-    if (isConfirmed) {
-      setIsConfirmed(false); // 如果已確認，取消則回到選位狀態
-    } else {
-      navigate(-1); // 返回上一頁
-    }
-  };
-
-  // 按鈕邏輯：確認 / 付款
-  const handleConfirm = () => {
-    // 檢查座位數是否等於票數 (如果上一頁有選票的話)
-    if (totalTicketsCount > 0 && selectedSeats.length !== totalTicketsCount) {
-      alert(`您購買了 ${totalTicketsCount} 張票，請選擇 ${totalTicketsCount} 個座位。`);
-      return;
-    }
-    if (selectedSeats.length === 0 && totalTicketsCount === 0) {
-        // 如果完全沒選票也沒選位(極端情況)，至少要選一個位子
-         if (selectedSeats.length === 0) {
-            alert("請至少選擇一個座位");
-            return;
-         }
-    }
-
-
-    if (!isConfirmed) {
-      setIsConfirmed(true); // 第一次點擊：鎖定並顯示明細
-    } else {
-      alert("訂單已送出！進入付款流程..."); // 第二次點擊：付款
-      // navigate('/payment', { state: { ...bookingData, seats: selectedSeats, total: calculateTotal() } });
-    }
-  };
-
-  // 如果沒有從上一頁傳來資料，顯示提示 (開發除錯用)
   if (!location.state) {
-    console.warn("警告：此頁面沒有接收到 bookingData，可能是直接輸入網址進入的。");
+    return (
+        <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center flex-col">
+            <h2 className="text-2xl mb-4">無訂單資料</h2>
+            <button onClick={() => navigate('/')} className="text-purple-400 underline">回首頁</button>
+        </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans flex flex-col">
       <Navbar />
       
-      <main className="flex-grow container mx-auto px-20 py-8 flex flex-col items-center justify-center">
+      <main className="flex-grow container mx-auto px-6 md:px-20 py-12 flex flex-col items-center">
         
-        <h1 className="text-4xl font-bold text-white mb-2">選擇座位</h1>
-        {movie && <p className="text-gray-400 mb-8">{movie.movieName} | {bookingData.theatre.name}</p>}
+        <h1 className="text-4xl font-bold text-white mb-8">訂單確認</h1>
         
-        {/* 座位選擇器 */}
-        <div className={`w-full max-w-4xl transition-all duration-500 ${isConfirmed ? 'opacity-80 pointer-events-none' : ''}`}>
-          <SeatSelector 
-             selectedSeats={selectedSeats}
-             onSeatSelect={setSelectedSeats}
-          />
-        </div>
-
-        {/* 🎯 訂單資訊區塊 (確認後顯示) */}
-        {isConfirmed && (
-          <div className="w-full max-w-4xl mt-8 bg-neutral-800 p-8 rounded-xl shadow-lg border border-purple-500/30 animate-fade-in-up">
-            <h2 className="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-4">訂單確認</h2>
+        <div className="w-full max-w-5xl bg-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-neutral-700">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              
-              {/* 左側：明細列表 */}
-              <div className="space-y-4">
-                {/* 顯示影城與時間 */}
-                <div className="pb-2 border-b border-gray-700">
-                    <p className="text-purple-400 font-semibold">場次資訊</p>
-                    <p className="text-gray-300">{bookingData.theatre.name}</p>
-                    <p className="text-gray-300">{bookingData.date.dayNum}日 ({bookingData.date.dayName})</p>
-                </div>
-
-                {/* 顯示票種 */}
-                {bookingData.tickets.length > 0 && (
-                    <div>
-                        <p className="text-purple-400 font-semibold">電影票</p>
-                        {bookingData.tickets.map((t, i) => (
-                            t.count > 0 && (
-                                <div key={i} className="flex justify-between text-gray-300">
-                                    <span>{t.name} x{t.count}</span>
-                                    <span>$ {t.price * t.count}</span>
-                                </div>
-                            )
-                        ))}
-                    </div>
-                )}
-
-                {/* 顯示餐點 */}
-                {bookingData.meals.length > 0 && (
-                    <div>
-                        <p className="text-purple-400 font-semibold">餐飲</p>
-                        {bookingData.meals.map((m, i) => (
-                             m.count > 0 && (
-                                <div key={i} className="flex justify-between text-gray-300">
-                                    <span>{m.name} x{m.count}</span>
-                                    <span>$ {m.price * m.count}</span>
-                                </div>
-                            )
-                        ))}
-                    </div>
-                )}
-              </div>
-
-              {/* 右側：座位與總計 */}
-              <div className="flex flex-col justify-between">
-                <div>
-                  <h3 className="text-purple-400 font-semibold mb-2">已選座位</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSeats.length > 0 ? (
-                        selectedSeats.map(seat => (
-                        <span key={seat} className="bg-purple-900 text-purple-100 px-3 py-1 rounded-md text-sm font-bold">
-                            {seat}
-                        </span>
-                        ))
-                    ) : (
-                        <span className="text-gray-500">未選擇</span>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="mt-8 pt-4 border-t border-gray-700 flex justify-between items-end">
-                  <span className="text-gray-400">總金額</span>
-                  <span className="text-4xl font-bold text-white">$ {calculateTotal()}</span>
-                </div>
-              </div>
+            {/* 左側：電影海報 */}
+            <div className="w-full md:w-1/3 bg-black relative">
+                <img 
+                    src={movie?.posterUrl || 'https://via.placeholder.com/400x600'} 
+                    alt={movie?.movieName} 
+                    className="w-full h-full object-cover opacity-80"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-800 via-transparent to-transparent md:bg-gradient-to-r"></div>
             </div>
-          </div>
-        )}
 
-        {/* 底部按鈕區塊 */}
-        <div className="w-full max-w-4xl flex justify-between items-center mt-12 pb-12">
-            {/* 左下角：取消按鈕 */}
-            <button 
-                onClick={handleCancel}
-                className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-10 rounded-full transition duration-300 text-lg"
-            >
-                {isConfirmed ? "修改座位" : "取消"}
-            </button>
+            {/* 右側：訂單詳情 */}
+            <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between">
+                <div>
+                    <h2 className="text-3xl font-extrabold text-white mb-2">{movie?.movieName}</h2>
+                    <p className="text-purple-400 font-medium text-lg mb-6">{theater.name}</p>
 
-            {/* 右下角：確認/付款按鈕 */}
-            <button 
-                onClick={handleConfirm}
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-10 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-500/50"
-            >
-                {isConfirmed ? "進行付款" : "確認"}
-            </button>
+                    <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8 text-sm md:text-base">
+                        <div>
+                            <p className="text-gray-500 mb-1">日期</p>
+                            <p className="text-white font-bold text-xl">{date}</p>
+                        </div>
+                        <div>
+                            <p className="text-gray-500 mb-1">時間</p>
+                            <p className="text-white font-bold text-xl">{time}</p>
+                        </div>
+                        <div className="col-span-2">
+                            <p className="text-gray-500 mb-1">座位</p>
+                            <div className="flex flex-wrap gap-2">
+                                {selectedSeats.map(seat => (
+                                    <span key={seat} className="bg-purple-900/50 text-purple-200 border border-purple-500/30 px-3 py-1 rounded-lg font-bold">
+                                        {seat}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-gray-700 py-6 space-y-3">
+                        <p className="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">購買明細</p>
+                        {tickets.map((t, i) => (
+                            <div key={`t-${i}`} className="flex justify-between text-gray-300">
+                                <span>{t.name} <span className="text-gray-500">x{t.count}</span></span>
+                                <span>$ {t.price * t.count}</span>
+                            </div>
+                        ))}
+                        {meals.map((m, i) => (
+                            <div key={`m-${i}`} className="flex justify-between text-gray-300">
+                                <span>{m.name} <span className="text-gray-500">x{m.count}</span></span>
+                                <span>$ {m.price * m.count}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div>
+                        <p className="text-gray-400 text-sm">總金額</p>
+                        <p className="text-4xl font-bold text-white">$ {totalPrice}</p>
+                    </div>
+                    
+                    <div className="flex gap-4 w-full md:w-auto">
+                        <button 
+                            onClick={() => navigate(-1)}
+                            className="flex-1 md:flex-none px-6 py-3 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-700 transition font-bold"
+                        >
+                            上一步
+                        </button>
+                        <button 
+                            onClick={handlePayment}
+                            className="flex-1 md:flex-none px-8 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-purple-500/30 transition font-bold"
+                        >
+                            前往付款
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
       </main>
@@ -193,4 +128,3 @@ function BookingConfirmationPage() {
 }
 
 export default BookingConfirmationPage;
-
