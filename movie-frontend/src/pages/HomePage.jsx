@@ -100,15 +100,20 @@ function HomePage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef(null);
 
-  // 1. 自動播放
+  // 1. 自動播放 (已修正 Bug)
   useEffect(() => {
+    // 🎯 關鍵修正：如果正在轉場中 (isTransitioning 為 true)，就不要設定計時器
+    // 等到轉場結束 (onTransitionEnd -> isTransitioning 變 false) 後，
+    // 這個 useEffect 會再次觸發，那時候再開始 8 秒倒數。
+    if (isTransitioning) return;
+
     resetTimeout();
     timeoutRef.current = setTimeout(() => {
         handleNext();
-    }, 10000); // 10秒
+    }, 8000); 
 
     return () => resetTimeout();
-  }, [currentIndex]); // 每次 index 改變就重置計時器
+  }, [currentIndex, isTransitioning]); // 🎯 加入 isTransitioning 作為依賴
 
   const resetTimeout = () => {
     if (timeoutRef.current) {
@@ -175,13 +180,11 @@ function HomePage() {
             className="flex w-full h-full"
             style={{ 
                 transform: `translateX(-${currentIndex * 100}%)`,
-                transition: isTransitioning ? 'transform 0.7s ease-in-out' : 'none' // 只有切換時才有動畫，瞬間跳轉時沒有
+                transition: isTransitioning ? 'transform 0.7s ease-in-out' : 'none' 
             }}
             onTransitionEnd={handleTransitionEnd}
           >
             {extendedSlides.map((movie, index) => (
-              // 使用 index 作為 key 會有重複 key 的警告，但在這個特定且少量的 UI 案例中，為了讓 React 識別這是同一個結構以保持動畫流暢，這是可接受的妥協。
-              // 更嚴謹的做法是給每個複製項目一個 unique key，例如 `duplicate-${movie.id}`
               <div key={`${movie.id}-${index}`} className="min-w-full h-full relative flex-shrink-0">
                 <img
                   src={movie.poster}

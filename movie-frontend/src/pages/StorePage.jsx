@@ -28,67 +28,77 @@ const staticMerchandiseItems = [
     { id: 23, name: '豪華套餐', category: 'Concession', price: 500, image: '/posters/豪華套餐.jpg' },
 ];
 
-// 🎯 橫幅新聞資料 (10筆)
+// 🎯 橫幅新聞資料 (10筆) - 已更新連結
 const newsData = [
     { 
         id: 1, 
         title: '《GTA6》罪惡之城的浪潮再度席捲', 
         desc: '《GTA6》將玩家帶回充滿霓虹與危險的罪惡之城。全新角色、更加真實的城市生態與犯罪生存系統即將重塑玩家對開放世界的想像。這一次，你不只是闖蕩，你是要在城市的混亂浪潮中生存、反擊，並建立自己的傳奇。',
         image: '/posters/GTA6.jpg', 
+        link: 'https://www.4gamers.com.tw/news/detail/71567/gta6-delayed-to-2026'
     },
     { 
         id: 2, 
         title: '《Steam Machine》回歸：開啟玩家客廳的硬派 PC 革命', 
         desc: '以 PC 強度打造的 Steam Machine，再度以更精簡的設計、更強大的效能回歸玩家視野。結合 SteamOS 與龐大遊戲庫，它將客廳娛樂提升到新高度，跨平台遊玩從未如此順暢自在。',
         image: '/posters/steam.jpg', 
+        link: 'https://www.supermoto8.com/articles/16511'
     },
     { 
         id: 3, 
         title: '《艾爾登法環:黑夜君臨》：在暗影中誕生的王者試煉', 
         desc: '這片土地深藏著梅瑟莫的力量、詛咒與過往真相。強大的全新 Boss、反抗命運的角色，以及更殘酷的挑戰，等待褪色者踏入黑夜、點燃自己的光。',
         image: '/posters/黑夜君臨.jpg', 
+        link: 'https://gnn.gamer.com.tw/detail.php?sn=296393'
     },
     { 
         id: 4, 
         title: '《羊蹄山戰鬼》深山怨火下的生死輪迴', 
         desc: '傳說在北海道羊蹄山深處，戰鬼的哀號從未停歇。《羊蹄山戰鬼》讓玩家踏入霧深林暗的禁忌山域，追尋百年前的戰亂真相。面對怨魂、古道與被遺忘的儀式，你必須在恐懼與戰鬥之間找到活下去的路。',
         image: '/posters/羊蹄山戰鬼.jpg', 
+        link: 'https://gnn.gamer.com.tw/detail.php?sn=286563'
     },
     { 
         id: 5, 
         title: '《惡靈古堡 9》：黑霧侵蝕下的最後倖存者', 
         desc: '未知的感染源在孤島蔓延，曾經的組織秘密逐漸浮現。玩家必須在變異體、陰影與背叛中找到逃出生天的道路。黑霧籠罩之處，沒有任何真相能長久隱藏。',
         image: '/posters/惡靈古堡9.jpg', 
+        link: 'https://gnn.gamer.com.tw/detail.php?sn=294797'
     },
     { 
         id: 6, 
         title: '《虛實幻象》當現實裂縫中浮現另一個世界', 
         desc: '在《虛實幻象》中，玩家將在虛擬與現實交錯的世界裡揭開真相。城市的表象逐漸扭曲，數據殘影侵入日常，讓你在判斷、探索與選擇中面對多層次的巨大幻境。你看到的，未必是真相。',
         image: '/posters/虛實幻象.jpg', 
+        link: 'https://blog.zh-hant.playstation.com/2025/06/05/20250605-pragmata/'
     },
     { 
         id: 7, 
         title: '《FF7》重製版最終章玩法將有大改動！', 
         desc: 'Square Enix 從 2020 年開始的《Final Fantasy 7》（FF7）重製計畫，如今最終第三部曲正在開發中，讓全球無數粉絲都非常期待。而近日，巴西電玩展 Brasil Game Show 2025 上，《FF7》重製版三部曲的遊戲總監濱口直樹透露了系列最終章的一些細節。',
         image: '/posters/FF703.jpg', 
+        link: 'https://www.4gamers.com.tw/news/detail/53744/square-enix-confirms-final-fantasy-vii-remake-will-be-a-trilogy'
     },
     { 
         id: 8, 
         title: '《劍星》為PlayStation最暢銷PC單機遊戲', 
         desc: '韓國開發商 Shift Up 於 11 月 24 日公開財報（投資者報告）並在近期徵才公告中揭露，《劍星》（Stellar Blade）自推出以來刷新多項紀錄，不僅 PS5 版大獲成功，更成為 PlayStation 歷來發行最暢銷的 PC 單機遊戲，而續作《劍星 2》（代稱）極可能改採多平台首發策略。',
         image: '/posters/劍星消息.jpg', 
+        link: 'https://www.4gamers.com.tw/news/detail/75449/shift-up-stellar-blade-playstation-best-selling-pc-stellar-blade-2-multiplatform'
     },
     { 
         id: 9, 
         title: 'Nintendo Switch 2', 
         desc: '全新的 Switch 2 帶來更強大的性能、更清晰的畫面與更靈活的遊玩方式。從家用到外出、從單人到多人，這台主機將任天堂的創意理念推向下一個世代，帶來更純粹、流暢的遊戲魅力。',
         image: '/posters/switch2.jpg', 
+        link: 'https://gnn.gamer.com.tw/detail.php?sn=279653'
     },
     { 
         id: 10, 
         title: '《空洞騎士:絲之歌》命運之線即將織起', 
         desc: '《空洞騎士:絲之歌》揭開了黃蜂（Hornet）的故事篇章。她將穿越陌生的國度、攀上危險的高塔，用速度與優雅擊敗潛伏在暗處的敵人。全新的世界、節奏更快的戰鬥與神秘劇情，將帶來前所未有的蜂刺之旅...',
         image: '/posters/絲之歌.jpg', 
+        link: 'https://gnn.gamer.com.tw/detail.php?sn=283580'
     },
 ];
 
@@ -137,7 +147,7 @@ const NewsCarousel = () => {
                     let zIndex = 0;
                     let pointerEvents = 'none';
 
-                    // 🎯 距離間距設定：102% (讓卡片稍微緊湊一點，留空間給邊緣)
+                    // 🎯 距離間距設定：106% (讓卡片稍微緊湊一點，留空間給邊緣)
                     const spacing = 106; 
 
                     if (distance === 0) {
@@ -216,9 +226,15 @@ const NewsCarousel = () => {
                                         {item.desc}
                                     </p>
                                     
-                                    <button className="absolute bottom-4 right-4 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold py-2 px-5 rounded-full transition-colors shadow-lg">
+                                    {/* 🎯 修改：將 button 改為 a 連結 */}
+                                    <a 
+                                        href={item.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="absolute bottom-4 right-4 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold py-2 px-5 rounded-full transition-colors shadow-lg flex items-center justify-center cursor-pointer"
+                                    >
                                         了解更多
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -350,7 +366,7 @@ function StorePage() {
         
       </main>
 
-      {/* 🎯 只有在「遊戲商城」分類時，才顯示底部的橫幅 */}
+      {/*  只有在「遊戲商城」分類時，才顯示底部的橫幅 */}
       {activeFilter === 'Game' && (
           <NewsCarousel />
       )}

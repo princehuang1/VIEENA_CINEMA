@@ -5,7 +5,10 @@ import Navbar from '../components/Navbar';
 // 假資料
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const seatsPerRow = 10;
-const takenSeats = ['A3', 'A4', 'B5', 'B6', 'C9', 'D4', 'E8', 'E9', 'F1', 'F10']; 
+
+// 🎯 固定 5 個假資料位置 (所有電影適用)
+const takenSeats = ['A3', 'C6', 'E2', 'F8', 'G5']; 
+
 const rowLabels = ['1', '2', '3', '4', '5', '6', '7', '8']; 
 
 function SeatSelectPage() {
@@ -30,6 +33,7 @@ function SeatSelectPage() {
   const requiredSeatsCount = bookingData.tickets.reduce((sum, t) => sum + t.count, 0);
 
   const handleSeatClick = (seatId) => {
+    // 如果是被佔用的座位，直接忽略
     if (takenSeats.includes(seatId)) return;
 
     if (selectedSeats.includes(seatId)) {
@@ -51,7 +55,7 @@ function SeatSelectPage() {
       return;
     }
 
-    // 前往確認頁面，帶上所有資料 + 選好的位子
+    // 前往確認頁面
     navigate(`/booking-confirmation/${movieId}`, {
       state: {
         ...bookingData,
@@ -85,7 +89,7 @@ function SeatSelectPage() {
           <div className="flex justify-center gap-6">
             {/* 左側排號 */}
             <div className="flex flex-col space-y-2 justify-center mr-2">
-              {rows.map((r, i) => (
+              {rows.map((r) => (
                 <div key={`left-${r}`} className="h-8 flex items-center justify-center text-gray-500 text-xs">
                   {r}
                 </div>
@@ -101,9 +105,13 @@ function SeatSelectPage() {
                     const seatId = `${row}${seatNum}`;
                     
                     let seatClass = 'bg-neutral-600 hover:bg-purple-500 cursor-pointer';
+                    
+                    // 🎯 樣式判斷邏輯
                     if (takenSeats.includes(seatId)) {
-                        seatClass = 'bg-red-900/50 cursor-not-allowed';
+                        // 已被選：較亮的紅色 (bg-red-600)，且不可點擊
+                        seatClass = 'bg-red-600 cursor-not-allowed shadow-inner';
                     } else if (selectedSeats.includes(seatId)) {
+                        // 使用者目前選擇：紫色
                         seatClass = 'bg-purple-600 shadow-lg scale-110';
                     }
 
@@ -115,7 +123,8 @@ function SeatSelectPage() {
                         className={`w-8 h-8 rounded-t-lg rounded-b-md transition-all duration-200 ${seatClass} text-white text-[10px] font-bold flex items-center justify-center`}
                         title={seatId}
                       >
-                        {takenSeats.includes(seatId) ? 'X' : seatNum}
+                        {/* 🎯 始終顯示座位號碼，不顯示 X */}
+                        {seatNum}
                       </button>
                     );
                   })}
@@ -123,9 +132,9 @@ function SeatSelectPage() {
               ))}
             </div>
              
-             {/* 右側排號 (與左側對稱) */}
+             {/* 右側排號 */}
              <div className="flex flex-col space-y-2 justify-center ml-2">
-              {rows.map((r, i) => (
+              {rows.map((r) => (
                 <div key={`right-${r}`} className="h-8 flex items-center justify-center text-gray-500 text-xs">
                   {r}
                 </div>
@@ -137,7 +146,8 @@ function SeatSelectPage() {
           <div className="flex justify-center space-x-8 mt-10 pt-6 border-t border-neutral-700">
             <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-neutral-600"></div><span className="text-xs text-gray-400">可選</span></div>
             <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-purple-600"></div><span className="text-xs text-gray-400">已選</span></div>
-            <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-red-900/50"></div><span className="text-xs text-gray-400">已售出</span></div>
+            {/* 更新圖例顏色 */}
+            <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-red-600"></div><span className="text-xs text-gray-400">已售出</span></div>
           </div>
         </div>
 

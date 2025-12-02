@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 function BookingConfirmationPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 接收來自 SeatSelectPage 的完整資料
   const bookingData = location.state || {
     tickets: [], 
     meals: [], 
@@ -22,7 +21,6 @@ function BookingConfirmationPage() {
 
   const handlePayment = () => {
     alert("訂單已送出！進入付款流程...");
-    // 這裡未來可以接付款 API
   };
 
   if (!location.state) {
@@ -46,12 +44,12 @@ function BookingConfirmationPage() {
             
             {/* 左側：電影海報 */}
             <div className="w-full md:w-1/3 bg-black relative">
+                {/* 🎯 修改：移除了左側的漸層陰影，圖片保持原樣 */}
                 <img 
                     src={movie?.posterUrl || 'https://via.placeholder.com/400x600'} 
                     alt={movie?.movieName} 
-                    className="w-full h-full object-cover opacity-80"
+                    className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-800 via-transparent to-transparent md:bg-gradient-to-r"></div>
             </div>
 
             {/* 右側：訂單詳情 */}
@@ -89,6 +87,7 @@ function BookingConfirmationPage() {
                                 <span>$ {t.price * t.count}</span>
                             </div>
                         ))}
+                        {/* 🎯 新增：顯示餐飲明細 */}
                         {meals.map((m, i) => (
                             <div key={`m-${i}`} className="flex justify-between text-gray-300">
                                 <span>{m.name} <span className="text-gray-500">x{m.count}</span></span>

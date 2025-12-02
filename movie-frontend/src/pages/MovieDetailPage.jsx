@@ -5,14 +5,18 @@ import Navbar from '../components/Navbar';
 import MealSelector from "../components/MealSelector";
 
 // --- 資料區 ---
+
+// 影城資料
 const theatresData = [
   { id: 1, name: '台北信義影城' },
   { id: 2, name: '台北中山影城' },
   { id: 3, name: '新北板橋影城' },
 ];
 
+// 假資料：模擬該電影的場次時間
 const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
 
+// 票種資料
 const ticketTypesData = [
   { id: 1, name: '學生票', price: 250, desc: '需出示學生證' },
   { id: 2, name: '全票', price: 300, desc: '一般觀眾適用' }, 
@@ -21,6 +25,7 @@ const ticketTypesData = [
   { id: 5, name: '尊爵不凡套票', price: 1300, desc: '電影票x1、海報x1、特典x1、明信片組x1、豪華套餐x1', style: 'gold' },
 ];
 
+// 輔助函數：根據 style 屬性回傳背景類別
 const getBgClass = (style) => {
   switch (style) {
     case 'gold': return 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-yellow-100 shadow-yellow-800/10';
@@ -30,6 +35,7 @@ const getBgClass = (style) => {
   }
 };
 
+// 輔助函數：根據 style 屬性回傳文字顏色類別
 const getTextClass = (style) => {
     switch (style) {
       case 'gold': return 'text-yellow-100';
@@ -48,15 +54,27 @@ const getSubTextClass = (style) => {
     }
 };
 
+// 🎯 輔助函數：根據電影資料產生媒體清單
 const getMediaForMovie = (movie) => {
   if (!movie) return [];
   const mediaList = [];
   const trailerSrc = movie.trailerUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
   mediaList.push({ type: 'video', src: trailerSrc });
+
   let images = [];
-  try { if (movie.stills) images = JSON.parse(movie.stills); } catch (e) { console.error("解析劇照失敗", e); }
-  if (images.length > 0) images.forEach(imgSrc => mediaList.push({ type: 'image', src: imgSrc }));
-  else for (let i = 0; i < 4; i++) mediaList.push({ type: 'image', src: movie.posterUrl });
+  try {
+    if (movie.stills) images = JSON.parse(movie.stills);
+  } catch (e) {
+    console.error("解析劇照 JSON 失敗:", e);
+  }
+
+  if (images.length > 0) {
+    images.forEach(imgSrc => mediaList.push({ type: 'image', src: imgSrc }));
+  } else {
+    for (let i = 0; i < 4; i++) {
+      mediaList.push({ type: 'image', src: movie.posterUrl });
+    }
+  }
   return mediaList;
 };
 
@@ -65,26 +83,38 @@ function MovieDetailPage() {
   const navigate = useNavigate();
   const location = useLocation(); 
 
+  // --- 初始化 State ---
   const initialTheatreId = location.state?.theatreId || theatresData[0].id;
   const initialTime = location.state?.selectedTime || null;
   const initialDateStr = location.state?.selectedDate; 
   const initialDateObj = initialDateStr ? new Date(initialDateStr) : new Date();
 
+  // --- Component State ---
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [imageError, setImageError] = useState(false);
 
+  // 選擇器 State
   const [selectedTheatre, setSelectedTheatre] = useState(initialTheatreId);
   const [selectedTime, setSelectedTime] = useState(initialTime);
-  const [ticketCounts, setTicketCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+
+  // 票數 State
+  const [ticketCounts, setTicketCounts] = useState({
+    1: 0, 2: 0, 3: 0, 4: 0, 5: 0
+  });
   
+  // 餐飲 State
+  const [selectedMeals, setSelectedMeals] = useState([]);
+
+  // 輪播 State
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [mediaData, setMediaData] = useState([]); 
   const itemsPerView = 3;
 
   const defaultPosterUrl = 'https://via.placeholder.com/600x900?text=Image+Not+Found';
 
+  // --- 日期選擇器邏輯 ---
   const today = new Date();
   const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const maxAllowedDate = new Date(todayZero);
@@ -99,7 +129,11 @@ function MovieDetailPage() {
   const monthOptions = [];
   for (let i = 0; i < 2; i++) {
     const d = new Date(today.getFullYear(), today.getMonth() + i, 1);
-    monthOptions.push({ year: d.getFullYear(), month: d.getMonth(), label: `${d.getFullYear()}年 ${d.getMonth() + 1}月` });
+    monthOptions.push({
+      year: d.getFullYear(),
+      month: d.getMonth(),
+      label: `${d.getFullYear()}年 ${d.getMonth() + 1}月`
+    });
   }
 
   const handleMonthChange = (e) => {
@@ -127,19 +161,37 @@ function MovieDetailPage() {
   };
 
   const isSelected = (day) => {
-    return ( selectedDateObject.getDate() === day && selectedDateObject.getMonth() === viewMonth && selectedDateObject.getFullYear() === viewYear );
+    return (
+      selectedDateObject.getDate() === day &&
+      selectedDateObject.getMonth() === viewMonth &&
+      selectedDateObject.getFullYear() === viewYear
+    );
   };
   
   const formattedSelectedDate = `${selectedDateObject.getFullYear()}/${selectedDateObject.getMonth() + 1}/${selectedDateObject.getDate()}`;
 
+  // --- CSS 變數 (票券造型) ---
   const notchSize = '16px'; 
   const notchHalfHeight = '10px'; 
-  const ticketClipPath = `polygon(0% 0%, 100% 0%, 100% calc(50% - ${notchHalfHeight}), calc(100% - ${notchSize}) 50%, 100% calc(50% + ${notchHalfHeight}), 100% 100%, 0% 100%, 0% calc(50% + ${notchHalfHeight}), ${notchSize} 50%, 0% calc(50% - ${notchHalfHeight}))`;
+  const ticketClipPath = `polygon(
+    0% 0%, 
+    100% 0%, 
+    100% calc(50% - ${notchHalfHeight}), 
+    calc(100% - ${notchSize}) 50%, 
+    100% calc(50% + ${notchHalfHeight}), 
+    100% 100%, 
+    0% 100%, 
+    0% calc(50% + ${notchHalfHeight}), 
+    ${notchSize} 50%, 
+    0% calc(50% - ${notchHalfHeight}) 
+  )`;
 
+  // --- Fetch Data ---
   useEffect(() => {
     setImageError(false);
     setLoading(true);
     setCurrentMediaIndex(0);
+
     axios.get(`http://localhost:4000/api/movies/${movieId}`)
       .then(response => {
         const fetchedMovie = response.data;
@@ -148,14 +200,18 @@ function MovieDetailPage() {
         setLoading(false);
       })
       .catch(err => {
-        console.error("抓取失敗:", err);
+        console.error("抓取單一電影資料失敗:", err);
         setError("無法載入電影資料");
         setLoading(false);
       });
   }, [movieId]);
 
+  // --- Handlers ---
   const handleTicketChange = (id, delta) => {
-    setTicketCounts(prev => ({ ...prev, [id]: Math.max(0, prev[id] + delta) }));
+    setTicketCounts(prevCounts => ({
+      ...prevCounts,
+      [id]: Math.max(0, prev[id] + delta)
+    }));
   };
 
   const totalTickets = Object.values(ticketCounts).reduce((a, b) => a + b, 0);
@@ -171,33 +227,46 @@ function MovieDetailPage() {
       return;
     }
 
-    // 🎯 資料打包：將票數 ID 對照表轉換為陣列，方便後續頁面顯示
-    const selectedTickets = ticketTypesData.map(type => ({
-        ...type,
-        count: ticketCounts[type.id] || 0
-    })).filter(t => t.count > 0);
+    // 計算總價
+    let ticketsPrice = 0;
+    const selectedTickets = ticketTypesData.map(type => {
+      const count = ticketCounts[type.id] || 0;
+      if (count > 0) {
+        ticketsPrice += count * type.price;
+        return { ...type, count };
+      }
+      return null;
+    }).filter(Boolean);
+
+    const mealsPrice = selectedMeals.reduce((sum, m) => sum + (m.price * m.count), 0);
+    const totalPrice = ticketsPrice + mealsPrice;
 
     const selectedTheatreObj = theatresData.find(t => t.id === selectedTheatre);
 
-    // 計算總金額
-    const ticketsPrice = selectedTickets.reduce((sum, t) => sum + (t.price * t.count), 0);
-
-    // 🎯 導向「選位頁面」，並傳遞所有已選資料
     navigate(`/seat-selection/${movieId}`, {
       state: {
         movie,
         theater: selectedTheatreObj,
         date: formattedSelectedDate,
         time: selectedTime,
-        tickets: selectedTickets, // 傳遞陣列格式
-        meals: [], // 暫時為空，若 MealSelector 有資料需在此整合
-        totalPrice: ticketsPrice, // 暫時只算票價，餐飲若有需累加
+        tickets: selectedTickets,
+        meals: selectedMeals,
+        totalPrice,
       }
     });
   };
 
-  const nextSlide = () => { if (currentMediaIndex < mediaData.length - itemsPerView) setCurrentMediaIndex(prev => prev + 1); };
-  const prevSlide = () => { if (currentMediaIndex > 0) setCurrentMediaIndex(prev => prev - 1); };
+  const nextSlide = () => {
+    if (currentMediaIndex < mediaData.length - itemsPerView) {
+      setCurrentMediaIndex(prev => prev + 1);
+    }
+  };
+
+  const prevSlide = () => {
+    if (currentMediaIndex > 0) {
+      setCurrentMediaIndex(prev => prev - 1);
+    }
+  };
 
   if (loading) return <div className="min-h-screen bg-neutral-900"><Navbar /><p className="text-center text-gray-300 mt-10">載入中...</p></div>;
   if (error || !movie) return <div className="min-h-screen bg-neutral-900"><Navbar /><p className="text-center text-red-500 mt-10">{error || "找不到電影"}</p></div>;
@@ -207,6 +276,7 @@ function MovieDetailPage() {
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans pb-20">
       <Navbar />
+      
       <section className="relative w-full h-[50vh] bg-cover bg-center" style={{ backgroundImage: `url(${posterToShow})` }}>
         <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
         <button onClick={() => navigate(-1)} className="absolute top-8 left-8 z-30 flex items-center gap-2 bg-black/40 hover:bg-purple-600 text-white px-5 py-2.5 rounded-full backdrop-blur-md transition-all duration-300 border border-white/10 group hover:scale-105">
@@ -217,24 +287,34 @@ function MovieDetailPage() {
 
       <main className="container mx-auto px-6 md:px-20 py-8 -mt-[20vh] relative z-10">
         <div className="flex flex-col md:flex-row gap-10">
+          
+          {/* 左側海報 */}
           <div className="w-full md:w-1/3">
             <img src={posterToShow} alt={movie.movieName} className="rounded-xl shadow-2xl w-full border border-neutral-700" onError={() => setImageError(true)} />
           </div>
 
+          {/* 右側資訊與選擇 */}
           <div className="w-full md:w-2/3 space-y-8">
+            
+            {/* 1. 電影基本資訊 */}
             <div>
               <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6">{movie.movieName}</h1>
+              
               <h2 className="text-2xl font-bold text-white mt-4 mb-4">劇情簡介</h2>
               <p className="text-lg text-gray-300 mb-6">{movie.synopsis || "暫無簡介"}</p>
+              
+              {/* 🎯 修改：資訊欄位加入上映日期 */}
               <div className="bg-neutral-800/50 p-4 rounded-lg border border-neutral-700 space-y-2 text-sm">
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">片長:</span>{movie.movieDurationMinutes}</p>
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">類型:</span>{movie.movieType}</p>
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">導演:</span>{movie.director || 'N/A'}</p>
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">演員:</span>{movie.actors || 'N/A'}</p>
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">語言:</span>{movie.language || '未知'}</p>
+                 <p className="text-gray-300"><span className="font-bold text-white mr-2">上映日期:</span>{movie.releaseDate || 'N/A'}</p>
               </div>
             </div>
 
+            {/* 2. 多媒體輪播 */}
             <div className="relative group">
               <div className="overflow-hidden rounded-xl">
                 <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentMediaIndex * (100 / itemsPerView)}%)` }}>
@@ -257,8 +337,13 @@ function MovieDetailPage() {
 
             <hr className="border-gray-700" />
 
+            {/* 3. 場次、日期、時間選擇 (月曆模式) */}
             <div>
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center"><span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>選擇場次與時間</h2>
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
+                <span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>
+                選擇場次與時間
+              </h2>
+              
               <div className="bg-neutral-800 p-6 rounded-xl border border-neutral-700">
                 <div className="flex flex-col lg:flex-row gap-6 mb-6">
                     <div className="w-full lg:w-1/2">
@@ -306,6 +391,7 @@ function MovieDetailPage() {
 
             <hr className="border-gray-700" />
 
+            {/* 4. 票種與張數選擇 */}
             <div>
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center"><span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>選擇票種與張數</h2>
               <div className="space-y-4">
@@ -332,9 +418,12 @@ function MovieDetailPage() {
 
             <hr className="border-gray-700" />
 
+            {/* 5. 餐飲加購 */}
             <div>
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center"><span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>加購餐飲</h2>
-              <MealSelector />
+              {/* 🎯 傳遞 setSelectedMeals */}
+              <MealSelector onMealChange={setSelectedMeals} />
+              
               <div className="flex flex-col items-end pt-8">
                 <button onClick={handleConfirm} disabled={totalTickets === 0 || !selectedTime} className={`font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg ${totalTickets > 0 && selectedTime ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}>選位</button>
                 {(totalTickets === 0 || !selectedTime) && <p className="text-sm text-red-400 mt-3 animate-pulse">* 請選擇「場次時間」並至少選擇「一張票」才能繼續</p>}

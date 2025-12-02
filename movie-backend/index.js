@@ -1,3 +1,4 @@
+// 要連資料庫的東西這邊都要寫
 // 1. 引入我們需要的套件
 const express = require("express"); // Express 框架
 const sqlite3 = require("sqlite3"); // SQLite 資料庫驅動
@@ -136,6 +137,18 @@ app.get("/api/games/:id", (req, res) => {
     } else {
       res.status(404).json({ error: "Game not found" });
     }
+  });
+});
+
+// 取得所有餐飲
+app.get("/api/concessions", (req, res) => {
+  const sql = "SELECT * FROM Concessions";
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
   });
 });
 
