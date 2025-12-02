@@ -40,23 +40,14 @@ function BookingConfirmationPage() {
         
         <h1 className="text-4xl font-bold text-white mb-8">訂單確認</h1>
         
-        <div className="w-full max-w-5xl bg-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-neutral-700">
-            
-            {/* 左側：電影海報 */}
-            <div className="w-full md:w-1/3 bg-black relative">
-                {/* 🎯 修改：移除了左側的漸層陰影，圖片保持原樣 */}
-                <img 
-                    src={movie?.posterUrl || 'https://via.placeholder.com/400x600'} 
-                    alt={movie?.movieName} 
-                    className="w-full h-full object-cover"
-                />
-            </div>
-
-            {/* 右側：訂單詳情 */}
-            <div className="w-full md:w-2/3 p-8 md:p-12 flex flex-col justify-between">
+        {/* 訂單資訊卡片 */}
+        <div className="w-full max-w-3xl bg-neutral-800 rounded-2xl overflow-hidden shadow-2xl border border-neutral-700">
+            <div className="w-full p-8 md:p-12 flex flex-col justify-between">
                 <div>
-                    <h2 className="text-3xl font-extrabold text-white mb-2">{movie?.movieName}</h2>
-                    <p className="text-purple-400 font-medium text-lg mb-6">{theater.name}</p>
+                    <div className="border-b border-gray-700 pb-6 mb-6">
+                        <h2 className="text-3xl font-extrabold text-white mb-2">{movie?.movieName}</h2>
+                        <p className="text-purple-400 font-medium text-lg">{theater.name}</p>
+                    </div>
 
                     <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8 text-sm md:text-base">
                         <div>
@@ -79,17 +70,16 @@ function BookingConfirmationPage() {
                         </div>
                     </div>
 
-                    <div className="border-t border-gray-700 py-6 space-y-3">
+                    <div className="bg-neutral-700/30 rounded-xl p-6 space-y-3">
                         <p className="text-gray-400 text-sm font-bold uppercase tracking-wider mb-2">購買明細</p>
                         {tickets.map((t, i) => (
-                            <div key={`t-${i}`} className="flex justify-between text-gray-300">
+                            <div key={`t-${i}`} className="flex justify-between text-gray-300 border-b border-gray-700/50 pb-2 last:border-0 last:pb-0">
                                 <span>{t.name} <span className="text-gray-500">x{t.count}</span></span>
                                 <span>$ {t.price * t.count}</span>
                             </div>
                         ))}
-                        {/* 🎯 新增：顯示餐飲明細 */}
                         {meals.map((m, i) => (
-                            <div key={`m-${i}`} className="flex justify-between text-gray-300">
+                            <div key={`m-${i}`} className="flex justify-between text-gray-300 border-b border-gray-700/50 pb-2 last:border-0 last:pb-0">
                                 <span>{m.name} <span className="text-gray-500">x{m.count}</span></span>
                                 <span>$ {m.price * m.count}</span>
                             </div>
@@ -97,28 +87,35 @@ function BookingConfirmationPage() {
                     </div>
                 </div>
 
-                <div className="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div>
-                        <p className="text-gray-400 text-sm">總金額</p>
-                        <p className="text-4xl font-bold text-white">$ {totalPrice}</p>
-                    </div>
-                    
-                    <div className="flex gap-4 w-full md:w-auto">
-                        <button 
-                            onClick={() => navigate(-1)}
-                            className="flex-1 md:flex-none px-6 py-3 rounded-full border border-gray-600 text-gray-300 hover:bg-gray-700 transition font-bold"
-                        >
-                            上一步
-                        </button>
-                        <button 
-                            onClick={handlePayment}
-                            className="flex-1 md:flex-none px-8 py-3 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-lg hover:shadow-purple-500/30 transition font-bold"
-                        >
-                            前往付款
-                        </button>
-                    </div>
+                {/* 總金額留在卡片內，作為總結 */}
+                <div className="mt-8 pt-6 border-t border-gray-700 flex justify-between items-center">
+                    <p className="text-gray-400 text-sm font-bold uppercase tracking-wider">總金額</p>
+                    <p className="text-5xl font-bold text-white tracking-tight">$ {totalPrice}</p>
                 </div>
             </div>
+        </div>
+
+        {/* 🎯 修改：底部按鈕區塊 (移出卡片，與 SeatSelectPage 樣式一致) */}
+        <div className="w-full max-w-3xl flex justify-between items-center mt-12 pb-12">
+            <button 
+                onClick={() => navigate(-1)}
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-10 rounded-full transition duration-300 text-lg flex items-center gap-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+                上一步
+            </button>
+
+            <button 
+                onClick={handlePayment}
+                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-500/50 flex items-center gap-2 transform hover:-translate-y-1"
+            >
+                前往付款
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                </svg>
+            </button>
         </div>
 
       </main>

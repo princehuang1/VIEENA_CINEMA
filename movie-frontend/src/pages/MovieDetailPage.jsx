@@ -208,9 +208,10 @@ function MovieDetailPage() {
 
   // --- Handlers ---
   const handleTicketChange = (id, delta) => {
-    setTicketCounts(prevCounts => ({
+    setTicketCounts(prevCounts => ({ // 🎯 修正：變數名稱 prevCounts
       ...prevCounts,
-      [id]: Math.max(0, prev[id] + delta)
+      // 🎯 修正：使用 prevCounts[id] 而不是 prev[id]
+      [id]: Math.max(0, (prevCounts[id] || 0) + delta) 
     }));
   };
 
@@ -303,7 +304,7 @@ function MovieDetailPage() {
               <h2 className="text-2xl font-bold text-white mt-4 mb-4">劇情簡介</h2>
               <p className="text-lg text-gray-300 mb-6">{movie.synopsis || "暫無簡介"}</p>
               
-              {/* 🎯 修改：資訊欄位加入上映日期 */}
+              {/* 資訊欄位 */}
               <div className="bg-neutral-800/50 p-4 rounded-lg border border-neutral-700 space-y-2 text-sm">
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">片長:</span>{movie.movieDurationMinutes}</p>
                  <p className="text-gray-300"><span className="font-bold text-white mr-2">類型:</span>{movie.movieType}</p>
