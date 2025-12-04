@@ -17,8 +17,6 @@ function ShowtimePage() {
   
   // --- 搜尋相關狀態 ---
   const [searchTerm, setSearchTerm] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // 控制下拉選單顯示
-  const searchRef = useRef(null); // 用來偵測點擊範圍
 
   const handleSelectionError = () => {
     setAlertMessage("請先選擇時間");
@@ -28,8 +26,9 @@ function ShowtimePage() {
   };
 
   const [selectedTheatre, setSelectedTheatre] = useState(theatresData[0].id);
+  const [selectedTime, setSelectedTime] = useState(null);
 
-  // --- 日期選擇器邏輯 (保持不變) ---
+  // --- 日期選擇器邏輯 ---
   const today = new Date();
   const todayZero = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   const maxAllowedDate = new Date(todayZero); 
@@ -97,20 +96,18 @@ function ShowtimePage() {
       });
   }, []);
 
-  // --- 點擊外部關閉搜尋選單 ---
+  // --- 點擊日曆外部關閉下拉選單 ---
   useEffect(() => {
     function handleClickOutside(event) {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setIsSearchOpen(false);
+      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
+        setShowCalendar(false);
       }
     }
-    // 綁定監聽器
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      // 解除監聽器
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [searchRef]);
+  }, [calendarRef]);
 
   // --- 過濾邏輯 ---
   const filteredMovies = movies.filter(movie => {
@@ -118,11 +115,6 @@ function ShowtimePage() {
     const title = movie.title || movie.name || movie.movieName || ""; 
     return title.toLowerCase().includes(searchTerm.toLowerCase());
   });
-
-  const handleSelectMovie = (movieName) => {
-    setSearchTerm(movieName);
-    setIsSearchOpen(false);
-  };
 
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans relative">
@@ -189,7 +181,6 @@ function ShowtimePage() {
 
             {showCalendar && (
               <div className="absolute top-full left-0 mt-2 w-full z-50 bg-neutral-800 border border-neutral-600 rounded-lg shadow-2xl p-4 animate-fade-in-down">
-                {/* (日曆內容保持不變，省略以節省篇幅) */}
                 <div className="mb-4">
                   <select 
                     className="w-full bg-neutral-900 border border-neutral-600 rounded px-3 py-2 text-white focus:ring-1 focus:ring-purple-500"
@@ -239,76 +230,33 @@ function ShowtimePage() {
             )}
           </div>
 
-          {/* 3. 搜尋電影 (下拉式選單修正版) */}
-          <div className="w-full lg:w-1/3 relative" ref={searchRef}>
+          {/* 3. 搜尋電影 */}
+          <div className="w-full lg:w-1/3">
             <label htmlFor="movie-search" className="block text-sm font-medium text-purple-400 mb-3 uppercase tracking-wider flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               3. 搜尋電影
             </label>
-            <div className="relative">
-                <input 
-                  id="movie-search"
-                  type="text"
-                  placeholder="選擇電影名稱..."
-                  value={searchTerm}
-                  onFocus={() => setIsSearchOpen(true)} // 點擊輸入框時打開選單
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setIsSearchOpen(true);
-                  }}
-                  className="w-full bg-neutral-900 border border-neutral-600 rounded-lg py-3 pl-10 pr-10 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-gray-500 transition-shadow"
-                  autoComplete="off"
-                />
-                
-                {/* 左側搜尋圖示 */}
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-
-                {/* 右側箭頭/清除圖示 */}
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
-                  {searchTerm ? (
-                    <button onClick={() => { setSearchTerm(''); setIsSearchOpen(true); }} className="text-gray-500 hover:text-white">
-                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  ) : (
-                    <div className="pointer-events-none text-gray-500">
-                      <svg className={`h-5 w-5 transition-transform ${isSearchOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-
-                {/* 下拉選單結果 */}
-                {isSearchOpen && (
-                  <ul className="absolute z-50 w-full bg-neutral-800 border border-neutral-600 rounded-lg mt-1 max-h-60 overflow-y-auto shadow-2xl animate-fade-in-down">
-                    {filteredMovies.length > 0 ? (
-                      filteredMovies.map((movie) => (
-                        <li 
-                          key={movie.movieId}
-                          onClick={() => handleSelectMovie(movie.movieName || movie.title)}
-                          className="px-4 py-3 hover:bg-neutral-700 cursor-pointer text-gray-200 border-b border-neutral-700 last:border-0 flex items-center justify-between"
-                        >
-                          <span className="font-medium">{movie.movieName || movie.title}</span>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="px-4 py-3 text-gray-500 text-center cursor-default">
-                        查無此電影
-                      </li>
-                    )}
-                  </ul>
-                )}
-            </div>
+            
+            <select
+              id="movie-search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-neutral-900 border border-neutral-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-shadow appearance-none cursor-pointer"
+              style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 0.5rem center`, backgroundRepeat: `no-repeat`, backgroundSize: `1.5em 1.5em` }}
+            >
+              <option value="">全部電影</option>
+              {movies.map(movie => (
+                <option key={movie.movieId} value={movie.movieName || movie.title}>
+                  {movie.movieName || movie.title}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+
+        {/* --- 修正：已移除原本在這裡的「時段:」標籤 --- */}
 
         {/* --- 電影列表 --- */}
         <div className="space-y-6 max-w-5xl mx-auto">

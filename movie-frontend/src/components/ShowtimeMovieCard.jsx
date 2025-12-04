@@ -14,6 +14,20 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
     }
   };
 
+  // 1. 取得資料庫原始連結
+  const rawTrailerUrl = movie.trailerUrl;
+
+  // 2. 轉換連結函式：將 /embed/ 轉為 /watch?v=
+  const getWatchUrl = (url) => {
+    if (!url) return null;
+    if (url.includes('/embed/')) {
+      return url.replace('/embed/', '/watch?v=');
+    }
+    return url;
+  };
+
+  const watchUrl = getWatchUrl(rawTrailerUrl);
+
   return (
     <div className="bg-neutral-800 rounded-xl overflow-hidden shadow-xl flex transition-all duration-300 ease-in-out hover:shadow-purple-500/30">
       
@@ -30,7 +44,6 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
         <div>
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{movie.movieName}</h2> 
           
-          {/* 修改處：將片長移入詳細資訊區塊，置於第一位 */}
           <div className="text-sm text-gray-300 space-y-2 mb-0"> 
             <p><span className="font-semibold text-gray-400">片長:</span> {movie.movieDurationMinutes}</p>
             <p><span className="font-semibold text-gray-400">電影種類:</span> {movie.movieType}</p>
@@ -40,6 +53,8 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
           </div>
 
           <div className="mt-4 border-t border-neutral-700 pt-3">
+             <p className="text-gray-400 text-sm font-semibold mb-2">時段:</p>
+             
              <div className="flex flex-wrap gap-2">
                {mockTimes.map((time, index) => (
                  <button 
@@ -69,13 +84,27 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
                 selectedDate: selectedDate 
             }}
             onClick={handleTicketClick} 
-            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 text-sm"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 text-sm flex items-center justify-center"
           >
             取得門票
           </Link>
-          <button className="bg-transparent border border-gray-400 text-gray-200 hover:border-white hover:text-white font-bold py-2 px-6 rounded-full transition duration-300 text-sm">
+          
+          {/* 3. 使用轉換後的 watchUrl */}
+          <a
+            href={watchUrl}
+            target="_blank" 
+            rel="noopener noreferrer"
+            className={`
+              bg-transparent border border-gray-400 text-gray-200 
+              hover:border-white hover:text-white 
+              font-bold py-2 px-6 rounded-full transition duration-300 text-sm 
+              flex items-center justify-center no-underline
+              ${!watchUrl ? 'opacity-50 cursor-not-allowed' : ''} 
+            `}
+            onClick={(e) => !watchUrl && e.preventDefault()}
+          >
             觀看預告片
-          </button>
+          </a>
         </div>
       </div>
     </div>

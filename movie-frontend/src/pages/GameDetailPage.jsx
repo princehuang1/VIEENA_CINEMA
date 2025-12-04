@@ -129,7 +129,7 @@ function GameDetailPage() {
                     <p className="text-gray-300 text-lg lg:text-xl mb-6 flex items-center gap-3 drop-shadow-md">KONAMI DIGITAL ENTERTAINMENT<span className="text-xs border border-gray-400 px-2 py-0.5 rounded bg-black/20 backdrop-blur-sm">PS5</span></p>
                     <div className="mb-8"><p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-md">NT$ {game.price}</p></div>
                     <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-600/40 flex-grow sm:flex-grow-0 text-center">加入購物籃</button>
+                        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-600/40 flex-grow sm:flex-grow-0 text-center">立即購買</button>
                         <button className="p-4 rounded-full border border-gray-500 hover:border-white hover:bg-white/10 transition backdrop-blur-sm w-fit"><svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></button>
                     </div>
                     <p className="text-gray-200 text-lg mb-8 leading-relaxed drop-shadow-md max-w-xl hidden md:block">探索未知的恐懼與美麗。這款遊戲將帶領玩家進入一個充滿謎團的世界，擁有令人驚嘆的視覺效果與深刻的故事劇情。<br />現在預購即可獲得獨家特典服裝與數位原聲帶。</p>
