@@ -10,7 +10,8 @@ import GameDetailPage from "./pages/GameDetailPage";
 import TheaterPage from "./pages/TheaterPage";
 import SeatSelectPage from "./pages/SeatSelectPage"; 
 import BookingConfirmationPage from './pages/BookingConfirmationPage'; 
-import PaymentPage from './pages/PaymentPage'; // 引入 PaymentPage
+import PaymentPage from './pages/PaymentPage';
+import TicketMealPage from './pages/TicketMealPage'; // 引入 TicketMealPage
 
 function App() {
   return (
@@ -20,11 +21,13 @@ function App() {
       <Route path="/movie-info" element={<MovieInfoPage />} />
       <Route path="/movie/:movieId" element={<MovieDetailPage />} />
       
+      {/* 2. 新增路由：選擇票種與餐點 */}
+      <Route path="/ticket-meal/:movieId" element={<TicketMealPage />} />
+
       <Route path="/seat-selection/:movieId" element={<SeatSelectPage />} />
       
       <Route path="/booking-confirmation/:movieId" element={<BookingConfirmationPage />} />
       
-      {/* 2. 新增路由 */}
       <Route path="/payment/:movieId" element={<PaymentPage />} />
 
       <Route path="/store" element={<StorePage />} />

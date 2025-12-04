@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// 🎯 接收 props: theatreId, selectedDate
 function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
   const language = "英語 / 日語 (字幕)"; 
   const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
@@ -29,10 +28,11 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
       <div className="flex-grow px-5 md:px-6 py-3 flex flex-col justify-between">
         
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">{movie.movieName}</h2> 
-          <p className="text-sm text-gray-400 mb-4">{movie.movieDurationMinutes}</p> 
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">{movie.movieName}</h2> 
           
+          {/* 修改處：將片長移入詳細資訊區塊，置於第一位 */}
           <div className="text-sm text-gray-300 space-y-2 mb-0"> 
+            <p><span className="font-semibold text-gray-400">片長:</span> {movie.movieDurationMinutes}</p>
             <p><span className="font-semibold text-gray-400">電影種類:</span> {movie.movieType}</p>
             <p><span className="font-semibold text-gray-400">導演:</span> {movie.director || 'N/A'}</p>
             <p><span className="font-semibold text-gray-400">演員:</span> {movie.actors || 'N/A'}</p>
@@ -63,7 +63,6 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
         <div className="flex space-x-4 mt-4 ml-auto">
           <Link 
             to={`/movie/${movie.movieId}`}
-            // 🎯 關鍵修改：將父層的資料一併打包送出
             state={{ 
                 selectedTime: selectedTime,
                 theatreId: theatreId,

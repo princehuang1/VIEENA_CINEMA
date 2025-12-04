@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
-import MealSelector from "../components/MealSelector";
+// 移除 MealSelector import
 
 // --- 資料區 ---
 
@@ -16,43 +16,7 @@ const theatresData = [
 // 假資料：模擬該電影的場次時間
 const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
 
-// 票種資料
-const ticketTypesData = [
-  { id: 1, name: '學生票', price: 250, desc: '需出示學生證' },
-  { id: 2, name: '全票', price: 300, desc: '一般觀眾適用' }, 
-  { id: 3, name: '優選收藏套票', price: 500, desc: '電影票x1、海報x1', style: 'bronze' },
-  { id: 4, name: '豪華典藏套票', price: 800, desc: '電影票x1、海報x1、特典x1', style: 'silver' },
-  { id: 5, name: '尊爵不凡套票', price: 1300, desc: '電影票x1、海報x1、特典x1、明信片組x1、豪華套餐x1', style: 'gold' },
-];
-
-// 輔助函數：根據 style 屬性回傳背景類別
-const getBgClass = (style) => {
-  switch (style) {
-    case 'gold': return 'bg-gradient-to-r from-yellow-600 to-yellow-800 text-yellow-100 shadow-yellow-800/10';
-    case 'silver': return 'bg-gradient-to-r from-gray-400 to-gray-600 text-white shadow-gray-400/40';
-    case 'bronze': return 'bg-gradient-to-r from-[#b07e4c] to-[#855328] text-yellow-100 shadow-amber-500/20';
-    default: return 'bg-neutral-700 text-white shadow-purple-500/20';
-  }
-};
-
-// 輔助函數：根據 style 屬性回傳文字顏色類別
-const getTextClass = (style) => {
-    switch (style) {
-      case 'gold': return 'text-yellow-100';
-      case 'silver': return 'text-gray-100';
-      case 'bronze': return 'text-orange-100'; 
-      default: return 'text-white';
-    }
-};
-
-const getSubTextClass = (style) => {
-    switch (style) {
-      case 'gold': return 'text-yellow-200';
-      case 'silver': return 'text-gray-200';
-      case 'bronze': return 'text-orange-200';
-      default: return 'text-gray-400';
-    }
-};
+// 移除 ticketTypesData 與 helper functions (getBgClass 等)，已移至 TicketMealPage
 
 // 🎯 輔助函數：根據電影資料產生媒體清單
 const getMediaForMovie = (movie) => {
@@ -99,13 +63,7 @@ function MovieDetailPage() {
   const [selectedTheatre, setSelectedTheatre] = useState(initialTheatreId);
   const [selectedTime, setSelectedTime] = useState(initialTime);
 
-  // 票數 State
-  const [ticketCounts, setTicketCounts] = useState({
-    1: 0, 2: 0, 3: 0, 4: 0, 5: 0
-  });
-  
-  // 餐飲 State
-  const [selectedMeals, setSelectedMeals] = useState([]);
+  // 移除 ticketCounts 與 selectedMeals State
 
   // 輪播 State
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -170,22 +128,6 @@ function MovieDetailPage() {
   
   const formattedSelectedDate = `${selectedDateObject.getFullYear()}/${selectedDateObject.getMonth() + 1}/${selectedDateObject.getDate()}`;
 
-  // --- CSS 變數 (票券造型) ---
-  const notchSize = '16px'; 
-  const notchHalfHeight = '10px'; 
-  const ticketClipPath = `polygon(
-    0% 0%, 
-    100% 0%, 
-    100% calc(50% - ${notchHalfHeight}), 
-    calc(100% - ${notchSize}) 50%, 
-    100% calc(50% + ${notchHalfHeight}), 
-    100% 100%, 
-    0% 100%, 
-    0% calc(50% + ${notchHalfHeight}), 
-    ${notchSize} 50%, 
-    0% calc(50% - ${notchHalfHeight}) 
-  )`;
-
   // --- Fetch Data ---
   useEffect(() => {
     setImageError(false);
@@ -207,52 +149,22 @@ function MovieDetailPage() {
   }, [movieId]);
 
   // --- Handlers ---
-  const handleTicketChange = (id, delta) => {
-    setTicketCounts(prevCounts => ({ // 🎯 修正：變數名稱 prevCounts
-      ...prevCounts,
-      // 🎯 修正：使用 prevCounts[id] 而不是 prev[id]
-      [id]: Math.max(0, (prevCounts[id] || 0) + delta) 
-    }));
-  };
-
-  const totalTickets = Object.values(ticketCounts).reduce((a, b) => a + b, 0);
-
   const handleConfirm = () => {
     if (!selectedTime) {
       alert("請先選擇場次時間！");
       window.scrollTo({ top: 600, behavior: 'smooth' });
       return;
     }
-    if (totalTickets === 0) {
-      alert("請至少選擇一張票！");
-      return;
-    }
-
-    // 計算總價
-    let ticketsPrice = 0;
-    const selectedTickets = ticketTypesData.map(type => {
-      const count = ticketCounts[type.id] || 0;
-      if (count > 0) {
-        ticketsPrice += count * type.price;
-        return { ...type, count };
-      }
-      return null;
-    }).filter(Boolean);
-
-    const mealsPrice = selectedMeals.reduce((sum, m) => sum + (m.price * m.count), 0);
-    const totalPrice = ticketsPrice + mealsPrice;
 
     const selectedTheatreObj = theatresData.find(t => t.id === selectedTheatre);
 
-    navigate(`/seat-selection/${movieId}`, {
+    // 🎯 修改：導向 TicketMealPage
+    navigate(`/ticket-meal/${movieId}`, {
       state: {
         movie,
         theater: selectedTheatreObj,
         date: formattedSelectedDate,
         time: selectedTime,
-        tickets: selectedTickets,
-        meals: selectedMeals,
-        totalPrice,
       }
     });
   };
@@ -338,7 +250,7 @@ function MovieDetailPage() {
 
             <hr className="border-gray-700" />
 
-            {/* 3. 場次、日期、時間選擇 (月曆模式) */}
+            {/* 3. 場次、日期、時間選擇 */}
             <div>
               <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
                 <span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>
@@ -390,47 +302,14 @@ function MovieDetailPage() {
               </div>
             </div>
 
-            <hr className="border-gray-700" />
-
-            {/* 4. 票種與張數選擇 */}
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center"><span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>選擇票種與張數</h2>
-              <div className="space-y-4">
-                {ticketTypesData.map(ticket => (
-                  <div key={ticket.id} className={`relative flex flex-col sm:flex-row justify-between items-center py-4 px-6 sm:px-8 shadow-md transition-all duration-300 hover:scale-[1.01] ${getBgClass(ticket.style)}`} style={{ clipPath: ticketClipPath }}>
-                    <div className="text-center sm:text-left mb-3 sm:mb-0">
-                      <h4 className={`text-xl font-bold mb-1 ${getTextClass(ticket.style)}`}>{ticket.name}</h4>
-                      <div className="flex items-center justify-center sm:justify-start gap-3">
-                          <p className={`text-base font-bold ${getSubTextClass(ticket.style)}`}>$ {ticket.price}</p>
-                          <span className={`text-xs opacity-60 ${getSubTextClass(ticket.style)}`}>|</span>
-                          <p className={`text-xs ${getSubTextClass(ticket.style)} opacity-90`}>{ticket.desc}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-4 bg-black/20 p-2 rounded-full">
-                      <button onClick={() => handleTicketChange(ticket.id, -1)} className="w-8 h-8 rounded-full bg-purple-600 text-white text-lg font-bold flex items-center justify-center hover:bg-purple-700 transition relative z-10 shadow-lg">-</button>
-                      <span className={`text-xl font-bold w-8 text-center ${getTextClass(ticket.style)}`}>{ticketCounts[ticket.id] || 0}</span>
-                      <button onClick={() => handleTicketChange(ticket.id, 1)} className="w-8 h-8 rounded-full bg-purple-600 text-white text-lg font-bold flex items-center justify-center hover:bg-purple-700 transition relative z-10 shadow-lg">+</button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 text-right"><span className="text-gray-400 mr-3">總張數:</span><span className="text-3xl font-bold text-purple-400">{totalTickets} 張</span></div>
+            {/* 下一步按鈕 */}
+            <div className="flex flex-col items-end pt-8">
+               <button onClick={handleConfirm} disabled={!selectedTime} className={`font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg ${selectedTime ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}>
+                 下一步：選擇票種
+               </button>
+               {!selectedTime && <p className="text-sm text-red-400 mt-3 animate-pulse">* 請選擇「場次時間」才能繼續</p>}
             </div>
-
-            <hr className="border-gray-700" />
-
-            {/* 5. 餐飲加購 */}
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center"><span className="w-2 h-8 bg-purple-600 mr-3 rounded-full"></span>加購餐飲</h2>
-              {/* 🎯 傳遞 setSelectedMeals */}
-              <MealSelector onMealChange={setSelectedMeals} />
-              
-              <div className="flex flex-col items-end pt-8">
-                <button onClick={handleConfirm} disabled={totalTickets === 0 || !selectedTime} className={`font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg ${totalTickets > 0 && selectedTime ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}>選位</button>
-                {(totalTickets === 0 || !selectedTime) && <p className="text-sm text-red-400 mt-3 animate-pulse">* 請選擇「場次時間」並至少選擇「一張票」才能繼續</p>}
-              </div>
-            </div>
-            
+           
           </div>
         </div>
       </main>

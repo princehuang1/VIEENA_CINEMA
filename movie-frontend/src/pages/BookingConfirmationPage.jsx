@@ -45,7 +45,7 @@ function BookingConfirmationPage() {
         <h1 className="text-3xl font-bold text-white mb-8">確認訂單</h1>
         
         {/* 簡化後的卡片：模仿 PaymentPage 的摘要風格 */}
-        <div className="w-full max-w-md bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
+        <div className="w-full max-w-3xl bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
             
             {/* 電影與影城 */}
             <div className="border-b border-gray-700 pb-6 mb-6">
