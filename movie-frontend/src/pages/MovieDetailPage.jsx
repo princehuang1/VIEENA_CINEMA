@@ -39,7 +39,6 @@ const getMediaForMovie = (movie) => {
   if (images.length > 0) {
     images.forEach(imgSrc => mediaList.push({ type: 'image', src: imgSrc }));
   } else {
-    // 若無劇照，塞海報充數
     for (let i = 0; i < 4; i++) {
       mediaList.push({ type: 'image', src: movie.posterUrl });
     }
@@ -63,14 +62,15 @@ function MovieDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // 選擇器 State
+  // 警示訊息 State
+  const [alertMessage, setAlertMessage] = useState(null);
+
   const [selectedTheatre, setSelectedTheatre] = useState(initialTheatreId);
   const [selectedTime, setSelectedTime] = useState(initialTime);
 
-  // 輪播 State
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [mediaData, setMediaData] = useState([]);
-  const itemsPerView = 3; 
+  const itemsPerView = 3;
 
   // --- 日期選擇器邏輯 ---
   const today = new Date();
@@ -145,7 +145,6 @@ function MovieDetailPage() {
       });
   }, [movieId]);
 
-  // --- 點擊日曆外部關閉 ---
   useEffect(() => {
     function handleClickOutside(event) {
       if (calendarRef.current && !calendarRef.current.contains(event.target)) {
@@ -158,10 +157,14 @@ function MovieDetailPage() {
     };
   }, [calendarRef]);
 
-  // --- Handlers ---
   const handleConfirm = () => {
     if (!selectedTime) {
-      alert("請先選擇場次時間！");
+      // 設定警示訊息，3秒後消失
+      setAlertMessage("請先選擇場次時間！");
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 捲動到底部讓使用者看到
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 3000);
       return;
     }
     const selectedTheatreObj = theatresData.find(t => t.id === selectedTheatre);
@@ -191,8 +194,18 @@ function MovieDetailPage() {
   if (error || !movie) return <div className="min-h-screen bg-neutral-900"><Navbar /><p className="text-center text-red-500 mt-10">{error || "找不到電影"}</p></div>;
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans pb-20 overflow-x-hidden flex flex-col">
-      {/* Navbar Z-index high */}
+    <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans pb-20 overflow-x-hidden flex flex-col relative">
+      
+      {/* 頂部警示訊息 (如果 alertMessage 有值才會顯示) */}
+      {alertMessage && (
+        <div className="fixed top-0 left-0 w-full bg-red-600 text-white text-center py-4 z-[9999] font-bold shadow-lg animate-fade-in-down flex items-center justify-center gap-2">
+           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+           </svg>
+           {alertMessage}
+        </div>
+      )}
+
       <div className="relative z-50">
         <Navbar />
       </div>
@@ -200,23 +213,10 @@ function MovieDetailPage() {
       {/* ======================================================== */}
       {/* 1. 頂部 Hero 區塊 */}
       {/* ======================================================== */}
-      {/* 修改點 1: 減少上方的 padding。
-          原本: pt-10
-          修改後: pt-2 (減少與 Navbar 的距離)
-      */}
       <div className="relative w-full pt-8 pb-0">
         
-        {/* 內容區塊 */}
-        {/* 修改點 2: 減少內容容器的 padding-top。
-            原本: pt-12
-            修改後: pt-6
-        */}
         <div className="container mx-auto px-8 lg:px-20 relative z-10 w-full pt-6 pb-10">
             
-            {/* 修改點 3: 返回按鈕位置上移。
-                原本: top-12
-                修改後: top-6
-            */}
             <button 
                 onClick={() => navigate(-1)} 
                 className="absolute top-6 left-8 lg:left-20 text-gray-300 hover:text-white transition flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10 z-20"
@@ -227,32 +227,21 @@ function MovieDetailPage() {
 
             <div className="flex flex-col-reverse lg:flex-row items-start gap-12 lg:gap-20">
                 
-                {/* 修改點 4: 減少左側內容的 margin-top，讓文字也往上。
-                    原本: mt-24
-                    修改後: mt-16
-                */}
                 <div className="w-full lg:w-3/5 text-left mt-16">
                     <h1 className="text-4xl lg:text-7xl font-extrabold text-white mb-4 drop-shadow-2xl leading-tight">
                         {movie.movieName}
                     </h1>
                     
-                    {/* Meta Tags */}
                     <div className="flex flex-wrap items-center gap-3 text-gray-300 text-sm md:text-base font-medium mb-8">
                         <span className="border border-white/30 px-3 py-1 rounded bg-black/30 backdrop-blur-sm">{movie.movieType}</span>
                         <span className="flex items-center gap-1"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {movie.movieDurationMinutes}</span>
                         <span>{movie.language || '英語'}</span>
                     </div>
 
-                    {/* 劇情簡介 */}
                     <p className="text-gray-200 text-lg leading-relaxed drop-shadow-md max-w-2xl mb-10">
                         {movie.synopsis || "暫無簡介"}
                     </p>
 
-                    {/* 詳細資訊 */}
-                    {/* 修改點 5: 給予明顯的灰色背景，並移除原本過於透明的設定。
-                        原本: bg-black/20
-                        修改後: bg-neutral-800
-                    */}
                     <div className="space-y-4 max-w-lg text-gray-300 bg-neutral-800 p-6 rounded-xl border border-white/5 shadow-lg">
                         <div className="flex items-start gap-4">
                             <span className="text-purple-400 font-bold min-w-[4rem]">導演</span>
@@ -269,7 +258,6 @@ function MovieDetailPage() {
                     </div>
                 </div>
 
-                {/* 右側：電影海報 */}
                 <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
                     <div className="relative w-[300px] lg:w-[400px] aspect-[2/3] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-neutral-700/50 group transform hover:scale-[1.02] transition-transform duration-500">
                         <img 
@@ -287,12 +275,8 @@ function MovieDetailPage() {
       {/* ======================================================== */}
       {/* 2. 中間：影音大橫幅 */}
       {/* ======================================================== */}
-      {/* 修改點 6: 移除背後的容器樣式，讓內容融入背景。
-          移除了原本內層 div 的 shadow-2xl, border, bg-black 等 class。
-      */}
       <div className="container mx-auto px-4 lg:px-8 mt-12 mb-20 max-w-[90%] relative group">
          <div className="relative overflow-hidden rounded-xl"> 
-            {/* 這裡原本有 bg-black 和 border，現在已移除，僅保留容器結構 */}
             <div className="overflow-hidden rounded-2xl"> 
                 <div 
                     className="flex transition-transform duration-500 ease-in-out" 
@@ -300,7 +284,6 @@ function MovieDetailPage() {
                 >
                     {mediaData.map((item, index) => (
                         <div key={index} className="min-w-[33.333%] px-3 box-border">
-                            {/* 影片/圖片卡片本身保持深色底，但外部容器背景已移除 */}
                             <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-neutral-900 shadow-lg cursor-pointer group/item hover:border hover:border-purple-500/50 transition-all">
                                 {item.type === 'video' ? (
                                     <iframe 
@@ -325,7 +308,6 @@ function MovieDetailPage() {
             </div>
          </div>
 
-         {/* 輪播控制按鈕 */}
          {currentMediaIndex > 0 && (
             <button onClick={prevSlide} className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-30 bg-purple-600 hover:bg-purple-500 text-white rounded-full p-4 shadow-2xl transition-all transform hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
          )}
@@ -344,7 +326,6 @@ function MovieDetailPage() {
         </h2>
 
         <div className="bg-neutral-800 p-8 rounded-xl border border-neutral-700 shadow-xl">
-            {/* 影城與日期 並排 */}
             <div className="flex flex-col lg:flex-row gap-8 mb-8">
                 {/* 影城選擇 */}
                 <div className="w-full lg:w-1/2">
@@ -409,13 +390,12 @@ function MovieDetailPage() {
                 </div>
             </div>
 
-            {/* 確認按鈕 */}
+            {/* 確認按鈕 (已修正樣式問題) */}
             <div className="mt-10 flex justify-end border-t border-gray-700 pt-6">
                 <button 
                     onClick={handleConfirm} 
-                    disabled={!selectedTime} 
                     className={`w-full md:w-auto font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center justify-center gap-2
-                        {selectedTime 
+                        ${selectedTime 
                             ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white hover:shadow-purple-500/50 transform hover:-translate-y-1' 
                             : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}
                 >

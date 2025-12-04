@@ -69,16 +69,17 @@ function PaymentPage() {
       <main className="flex-grow container mx-auto px-6 md:px-20 py-12 flex flex-col items-center">
         <h1 className="text-3xl font-bold text-white mb-8">結帳付款</h1>
 
-        <div className="w-full max-w-4xl flex flex-col md:flex-row gap-8">
+        {/* 修改容器寬度，移除右側欄位後，讓表單置中 */}
+        <div className="w-full max-w-2xl">
           
-          {/* 左側：付款表單 */}
-          <div className="w-full md:w-2/3 bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
+          <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center">
               <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
               信用卡資訊
             </h2>
 
-            <form onSubmit={handlePay} className="space-y-6">
+            {/* 加入 autoComplete="off" 以嘗試隱藏瀏覽器的安全警告 */}
+            <form onSubmit={handlePay} className="space-y-6" autoComplete="off">
               
               <div>
                 <label className="block text-gray-400 text-sm mb-2">信用卡號碼</label>
@@ -89,6 +90,7 @@ function PaymentPage() {
                   value={formData.cardNumber}
                   onChange={handleChange}
                   maxLength={19}
+                  autoComplete="off"
                   className={`w-full bg-neutral-900 border ${errors.cardNumber ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
                 />
                 {errors.cardNumber && <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>}
@@ -102,6 +104,7 @@ function PaymentPage() {
                   placeholder="請輸入持卡人姓名"
                   value={formData.cardName}
                   onChange={handleChange}
+                  autoComplete="off"
                   className={`w-full bg-neutral-900 border ${errors.cardName ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
                 />
                 {errors.cardName && <p className="text-red-500 text-xs mt-1">{errors.cardName}</p>}
@@ -117,6 +120,7 @@ function PaymentPage() {
                     value={formData.expiry}
                     onChange={handleChange}
                     maxLength={5}
+                    autoComplete="off"
                     className={`w-full bg-neutral-900 border ${errors.expiry ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
                   />
                   {errors.expiry && <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>}
@@ -131,13 +135,13 @@ function PaymentPage() {
                     value={formData.cvv}
                     onChange={handleChange}
                     maxLength={4}
+                    autoComplete="off"
                     className={`w-full bg-neutral-900 border ${errors.cvv ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
                   />
                   {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
                 </div>
               </div>
 
-              {/* 🎯 修改：按鈕區塊 (包含返回與確認) */}
               <div className="flex gap-4 mt-8 pt-4">
                   <button 
                     type="button"
@@ -171,39 +175,6 @@ function PaymentPage() {
               </div>
 
             </form>
-          </div>
-
-          {/* 右側：訂單摘要 */}
-          <div className="w-full md:w-1/3">
-            <div className="bg-neutral-800 p-6 rounded-2xl shadow-xl border border-neutral-700 sticky top-24">
-              <h3 className="text-gray-400 text-sm font-bold uppercase tracking-wider mb-4">訂單摘要</h3>
-              
-              <div className="space-y-4 border-b border-gray-700 pb-6 mb-6">
-                <div>
-                  <p className="text-xs text-gray-500">電影</p>
-                  <p className="text-xl font-bold text-white">{bookingData.movie.movieName}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">影城</p>
-                  <p className="text-white">{bookingData.theater.name}</p>
-                </div>
-                <div className="flex justify-between">
-                  <div>
-                    <p className="text-xs text-gray-500">日期</p>
-                    <p className="text-white">{bookingData.date}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-gray-500">時間</p>
-                    <p className="text-white">{bookingData.time}</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span className="text-gray-300">應付金額</span>
-                <span className="text-3xl font-bold text-purple-400">$ {bookingData.totalPrice}</span>
-              </div>
-            </div>
           </div>
 
         </div>
