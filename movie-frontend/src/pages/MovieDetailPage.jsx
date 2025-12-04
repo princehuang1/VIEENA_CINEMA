@@ -200,15 +200,26 @@ function MovieDetailPage() {
       {/* ======================================================== */}
       {/* 1. 頂部 Hero 區塊 */}
       {/* ======================================================== */}
-      <div className="relative w-full pt-10 pb-0">
+      {/* 修改點 1: 減少上方的 padding。
+          原本: pt-10
+          修改後: pt-2 (減少與 Navbar 的距離)
+      */}
+      <div className="relative w-full pt-8 pb-0">
         
         {/* 內容區塊 */}
-        <div className="container mx-auto px-8 lg:px-20 relative z-10 w-full pt-12 pb-10">
+        {/* 修改點 2: 減少內容容器的 padding-top。
+            原本: pt-12
+            修改後: pt-6
+        */}
+        <div className="container mx-auto px-8 lg:px-20 relative z-10 w-full pt-6 pb-10">
             
-            {/* 返回按鈕：絕對定位在左上角，對齊海報頂部 */}
+            {/* 修改點 3: 返回按鈕位置上移。
+                原本: top-12
+                修改後: top-6
+            */}
             <button 
                 onClick={() => navigate(-1)} 
-                className="absolute top-12 left-8 lg:left-20 text-gray-300 hover:text-white transition flex items-center gap-2 /30 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10 z-20"
+                className="absolute top-6 left-8 lg:left-20 text-gray-300 hover:text-white transition flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10 z-20"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                 返回
@@ -216,8 +227,11 @@ function MovieDetailPage() {
 
             <div className="flex flex-col-reverse lg:flex-row items-start gap-12 lg:gap-20">
                 
-                {/* 左側：電影資訊 (加入 mt-24 讓它往下移，避開海報與返回按鈕的高度) */}
-                <div className="w-full lg:w-3/5 text-left mt-24">
+                {/* 修改點 4: 減少左側內容的 margin-top，讓文字也往上。
+                    原本: mt-24
+                    修改後: mt-16
+                */}
+                <div className="w-full lg:w-3/5 text-left mt-16">
                     <h1 className="text-4xl lg:text-7xl font-extrabold text-white mb-4 drop-shadow-2xl leading-tight">
                         {movie.movieName}
                     </h1>
@@ -235,7 +249,11 @@ function MovieDetailPage() {
                     </p>
 
                     {/* 詳細資訊 */}
-                    <div className="space-y-4 max-w-lg text-gray-300 bg-black/20 p-6 rounded-xl backdrop-blur-sm border border-white/5">
+                    {/* 修改點 5: 給予明顯的灰色背景，並移除原本過於透明的設定。
+                        原本: bg-black/20
+                        修改後: bg-neutral-800
+                    */}
+                    <div className="space-y-4 max-w-lg text-gray-300 bg-neutral-800 p-6 rounded-xl border border-white/5 shadow-lg">
                         <div className="flex items-start gap-4">
                             <span className="text-purple-400 font-bold min-w-[4rem]">導演</span>
                             <span className="text-white">{movie.director || 'N/A'}</span>
@@ -252,7 +270,6 @@ function MovieDetailPage() {
                 </div>
 
                 {/* 右側：電影海報 */}
-                {/* 移除所有 margin-top，讓它自然對齊頂部 (與返回按鈕同高) */}
                 <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
                     <div className="relative w-[300px] lg:w-[400px] aspect-[2/3] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-neutral-700/50 group transform hover:scale-[1.02] transition-transform duration-500">
                         <img 
@@ -268,18 +285,22 @@ function MovieDetailPage() {
       </div>
 
       {/* ======================================================== */}
-      {/* 2. 中間：影音大橫幅 (調整為 GameDetailPage 風格) */}
+      {/* 2. 中間：影音大橫幅 */}
       {/* ======================================================== */}
-      {/* 修改：max-w-[90%] (原本是95%), mt-12 (增加間距，不再重疊), px-8 */}
+      {/* 修改點 6: 移除背後的容器樣式，讓內容融入背景。
+          移除了原本內層 div 的 shadow-2xl, border, bg-black 等 class。
+      */}
       <div className="container mx-auto px-4 lg:px-8 mt-12 mb-20 max-w-[90%] relative group">
          <div className="relative overflow-hidden rounded-xl"> 
-            <div className="overflow-hidden rounded-2xl shadow-2xl border border-neutral-700/30 bg-black"> 
+            {/* 這裡原本有 bg-black 和 border，現在已移除，僅保留容器結構 */}
+            <div className="overflow-hidden rounded-2xl"> 
                 <div 
                     className="flex transition-transform duration-500 ease-in-out" 
                     style={{ transform: `translateX(-${currentMediaIndex * (100 / itemsPerView)}%)` }}
                 >
                     {mediaData.map((item, index) => (
                         <div key={index} className="min-w-[33.333%] px-3 box-border">
+                            {/* 影片/圖片卡片本身保持深色底，但外部容器背景已移除 */}
                             <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-neutral-900 shadow-lg cursor-pointer group/item hover:border hover:border-purple-500/50 transition-all">
                                 {item.type === 'video' ? (
                                     <iframe 
@@ -394,7 +415,7 @@ function MovieDetailPage() {
                     onClick={handleConfirm} 
                     disabled={!selectedTime} 
                     className={`w-full md:w-auto font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center justify-center gap-2
-                        ${selectedTime 
+                        {selectedTime 
                             ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white hover:shadow-purple-500/50 transform hover:-translate-y-1' 
                             : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}
                 >
