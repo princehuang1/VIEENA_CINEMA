@@ -54,19 +54,26 @@ function BookingConfirmationPage() {
             <div className="border-b border-gray-700 pb-6 mb-6">
                 <p className="text-xs text-gray-500 mb-1">{isStore ? '商品名稱' : '電影'}</p>
                 <h2 className="text-2xl font-bold text-white mb-2">{movie?.movieName}</h2>
-                <p className="text-purple-400 text-sm">{theater.name}</p>
+                {/* 修改：如果是商城訂單，統一顯示 '商城'，否則顯示影城名稱 */}
+                <p className="text-purple-400 text-sm">
+                    {isStore ? '商城' : theater.name}
+                </p>
             </div>
 
-            {/* 2. 資訊區塊：日期與時間 */}
+            {/* 2. 資訊區塊：日期 (商城隱藏時間) */}
             <div className="flex justify-between border-b border-gray-700 pb-6 mb-6">
                 <div>
                     <p className="text-xs text-gray-500 mb-1">{isStore ? '訂購日期' : '日期'}</p>
                     <p className="text-white font-bold">{date}</p>
                 </div>
-                <div className="text-right">
-                    <p className="text-xs text-gray-500 mb-1">{isStore ? '訂購時間' : '時間'}</p>
-                    <p className="text-white font-bold text-xl">{time}</p>
-                </div>
+                
+                {/* 修改：只有非商城 (電影) 訂單才顯示時間 */}
+                {!isStore && (
+                    <div className="text-right">
+                        <p className="text-xs text-gray-500 mb-1">時間</p>
+                        <p className="text-white font-bold text-xl">{time}</p>
+                    </div>
+                )}
             </div>
 
             {/* 3. 座位區塊：只有非商城訂單才顯示 */}
