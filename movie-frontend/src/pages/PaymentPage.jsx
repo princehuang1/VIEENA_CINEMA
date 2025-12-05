@@ -6,6 +6,8 @@ function PaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const isMember = false; 
+
   const bookingData = location.state || {
     totalPrice: 0,
     movie: { movieName: '未知電影' },
@@ -15,6 +17,8 @@ function PaymentPage() {
   };
 
   const [formData, setFormData] = useState({
+    guestName: '',
+    guestEmail: '',
     cardNumber: '',
     cardName: '',
     expiry: '',
@@ -32,10 +36,24 @@ function PaymentPage() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (formData.cardNumber.length < 10) newErrors.cardNumber = '卡號長度不足';
-    if (formData.cardName.length < 2) newErrors.cardName = '請輸入完整姓名';
-    if (formData.expiry.length < 4) newErrors.expiry = '格式錯誤 (MM/YY)';
-    if (formData.cvv.length < 3) newErrors.cvv = '請輸入 3 碼安全碼';
+
+    // 1. 驗證購買人資訊 (修改：只要有輸入即可，不檢查格式)
+    if (!isMember) {
+      if (!formData.guestName || formData.guestName.trim().length === 0) {
+        newErrors.guestName = '請輸入購買人姓名';
+      }
+      
+      if (!formData.guestEmail || formData.guestEmail.trim().length === 0) {
+        newErrors.guestEmail = '請輸入電子信箱';
+      }
+    }
+
+    // 2. 驗證信用卡資訊 (保持基本的長度檢查，以免太假，但移除了部分嚴格限制)
+    if (formData.cardNumber.length < 10) newErrors.cardNumber = '請輸入卡號';
+    if (formData.cardName.length < 1) newErrors.cardName = '請輸入持卡人姓名';
+    if (formData.expiry.length < 4) newErrors.expiry = '請輸入到期日';
+    if (formData.cvv.length < 3) newErrors.cvv = '請輸入安全碼';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -44,10 +62,13 @@ function PaymentPage() {
     e.preventDefault();
     if (validateForm()) {
       setIsProcessing(true);
+      
+      // 模擬 API 呼叫時間
       setTimeout(() => {
         setIsProcessing(false);
-        alert(`付款成功！總金額 $${bookingData.totalPrice}\n感謝您的購買，您的訂單已確認。`);
-        navigate('/'); 
+        // 這裡不再跳 alert，直接跳轉到 DonePage
+        // 注意：請確保您的 Route 設定中有 /done 這個路徑指向 DonePage
+        navigate('/done'); 
       }, 1500);
     }
   };
@@ -69,80 +90,123 @@ function PaymentPage() {
       <main className="flex-grow container mx-auto px-6 md:px-20 py-12 flex flex-col items-center">
         <h1 className="text-3xl font-bold text-white mb-8">結帳付款</h1>
 
-        {/* 修改容器寬度，移除右側欄位後，讓表單置中 */}
         <div className="w-full max-w-2xl">
           
           <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
-            <h2 className="text-xl font-bold text-white mb-6 flex items-center">
-              <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
-              信用卡資訊
-            </h2>
-
-            {/* 加入 autoComplete="off" 以嘗試隱藏瀏覽器的安全警告 */}
-            <form onSubmit={handlePay} className="space-y-6" autoComplete="off">
+            {/* 加入 autoComplete="off" 減少瀏覽器自動填入和安全提示 */}
+            <form onSubmit={handlePay} className="space-y-8" autoComplete="off">
               
-              <div>
-                <label className="block text-gray-400 text-sm mb-2">信用卡號碼</label>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  placeholder="0000 0000 0000 0000"
-                  value={formData.cardNumber}
-                  onChange={handleChange}
-                  maxLength={19}
-                  autoComplete="off"
-                  className={`w-full bg-neutral-900 border ${errors.cardNumber ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
-                />
-                {errors.cardNumber && <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>}
-              </div>
-
-              <div>
-                <label className="block text-gray-400 text-sm mb-2">持卡人姓名</label>
-                <input
-                  type="text"
-                  name="cardName"
-                  placeholder="請輸入持卡人姓名"
-                  value={formData.cardName}
-                  onChange={handleChange}
-                  autoComplete="off"
-                  className={`w-full bg-neutral-900 border ${errors.cardName ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
-                />
-                {errors.cardName && <p className="text-red-500 text-xs mt-1">{errors.cardName}</p>}
-              </div>
-
-              <div className="flex gap-4">
-                <div className="w-1/2">
-                  <label className="block text-gray-400 text-sm mb-2">到期日 (MM/YY)</label>
-                  <input
-                    type="text"
-                    name="expiry"
-                    placeholder="MM/YY"
-                    value={formData.expiry}
-                    onChange={handleChange}
-                    maxLength={5}
-                    autoComplete="off"
-                    className={`w-full bg-neutral-900 border ${errors.expiry ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
-                  />
-                  {errors.expiry && <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>}
+              {/* ========================================================= */}
+              {/* 區塊 1: 購買人資訊 */}
+              {/* ========================================================= */}
+              {!isMember && (
+                <div className="border-b border-neutral-700 pb-8 animate-fade-in">
+                  <h2 className="text-xl font-bold text-white mb-6 flex items-center">
+                    <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
+                    購買人資訊
+                  </h2>
+                  <div className="space-y-6">
+                    <div>
+                      {/* 修改標籤名稱 */}
+                      <label className="block text-gray-400 text-sm mb-2">購買人姓名 <span className="text-red-500">*</span></label>
+                      <input
+                        type="text"
+                        name="guestName"
+                        placeholder="請輸入購買人姓名"
+                        value={formData.guestName}
+                        onChange={handleChange}
+                        className={`w-full bg-neutral-900 border ${errors.guestName ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                      />
+                      {errors.guestName && <p className="text-red-500 text-xs mt-1">{errors.guestName}</p>}
+                    </div>
+                    <div>
+                      {/* 修改標籤名稱 */}
+                      <label className="block text-gray-400 text-sm mb-2">電子信箱 (接收票券用) <span className="text-red-500">*</span></label>
+                      <input
+                        type="text" 
+                        name="guestEmail"
+                        placeholder="example@email.com"
+                        value={formData.guestEmail}
+                        onChange={handleChange}
+                        className={`w-full bg-neutral-900 border ${errors.guestEmail ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                      />
+                      {errors.guestEmail && <p className="text-red-500 text-xs mt-1">{errors.guestEmail}</p>}
+                    </div>
+                  </div>
                 </div>
+              )}
 
-                <div className="w-1/2">
-                  <label className="block text-gray-400 text-sm mb-2">安全碼 (CVV)</label>
-                  <input
-                    type="text"
-                    name="cvv"
-                    placeholder="123"
-                    value={formData.cvv}
-                    onChange={handleChange}
-                    maxLength={4}
-                    autoComplete="off"
-                    className={`w-full bg-neutral-900 border ${errors.cvv ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
-                  />
-                  {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
+              {/* ========================================================= */}
+              {/* 區塊 2: 信用卡資訊 */}
+              {/* ========================================================= */}
+              <div>
+                <h2 className="text-xl font-bold text-white mb-6 flex items-center">
+                  <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
+                  信用卡資訊
+                </h2>
+
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">信用卡號碼</label>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      placeholder="0000 0000 0000 0000"
+                      value={formData.cardNumber}
+                      onChange={handleChange}
+                      maxLength={19}
+                      className={`w-full bg-neutral-900 border ${errors.cardNumber ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                    />
+                    {errors.cardNumber && <p className="text-red-500 text-xs mt-1">{errors.cardNumber}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">持卡人姓名</label>
+                    <input
+                      type="text"
+                      name="cardName"
+                      placeholder="與卡片正面相同"
+                      value={formData.cardName}
+                      onChange={handleChange}
+                      className={`w-full bg-neutral-900 border ${errors.cardName ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                    />
+                    {errors.cardName && <p className="text-red-500 text-xs mt-1">{errors.cardName}</p>}
+                  </div>
+
+                  <div className="flex gap-4">
+                    <div className="w-1/2">
+                      <label className="block text-gray-400 text-sm mb-2">到期日 (MM/YY)</label>
+                      <input
+                        type="text"
+                        name="expiry"
+                        placeholder="MM/YY"
+                        value={formData.expiry}
+                        onChange={handleChange}
+                        maxLength={5}
+                        className={`w-full bg-neutral-900 border ${errors.expiry ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                      />
+                      {errors.expiry && <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>}
+                    </div>
+
+                    <div className="w-1/2">
+                      <label className="block text-gray-400 text-sm mb-2">安全碼 (CVV)</label>
+                      <input
+                        type="text"
+                        name="cvv"
+                        placeholder="123"
+                        value={formData.cvv}
+                        onChange={handleChange}
+                        maxLength={4}
+                        className={`w-full bg-neutral-900 border ${errors.cvv ? 'border-red-500' : 'border-neutral-600'} rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all`}
+                      />
+                      {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex gap-4 mt-8 pt-4">
+              {/* 按鈕區 */}
+              <div className="flex gap-4 mt-8 pt-4 border-t border-neutral-700">
                   <button 
                     type="button"
                     onClick={() => navigate(-1)}

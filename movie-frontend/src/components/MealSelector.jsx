@@ -11,7 +11,13 @@ function MealSelector({ onMealChange }) {
   useEffect(() => {
     axios.get('http://localhost:4000/api/concessions')
       .then(res => {
-        setConcessionData(res.data);
+        // 🎯 這裡進行篩選：只保留 category 為 'Concession' 或 null (舊資料) 的項目
+        // 🎯 並且 **不進行排序**，直接依照資料庫順序顯示
+        const mealsOnly = res.data.filter(item => 
+            !item.category || item.category === 'Concession'
+        );
+
+        setConcessionData(mealsOnly);
         setLoading(false);
       })
       .catch(err => {
@@ -65,7 +71,7 @@ function MealSelector({ onMealChange }) {
               <p className="text-sm text-purple-300 font-bold">$ {item.price}</p>
             </div>
             
-            {/* 3. 計數器 (🎯 已修改樣式：加入灰底背景與票券一致) */}
+            {/* 3. 計數器 */}
             <div className="flex items-center space-x-4 flex-shrink-0 bg-black/20 p-2 rounded-full">
               <button 
                 onClick={() => handleCountChange(item.id, -1)}

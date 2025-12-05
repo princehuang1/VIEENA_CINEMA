@@ -11,7 +11,8 @@ import TheaterPage from "./pages/TheaterPage";
 import SeatSelectPage from "./pages/SeatSelectPage"; 
 import BookingConfirmationPage from './pages/BookingConfirmationPage'; 
 import PaymentPage from './pages/PaymentPage';
-import TicketMealPage from './pages/TicketMealPage'; // 引入 TicketMealPage
+import TicketMealPage from './pages/TicketMealPage'; 
+import DonePage from './pages/DonePage'; // 1. 引入 DonePage
 
 function App() {
   return (
@@ -21,7 +22,6 @@ function App() {
       <Route path="/movie-info" element={<MovieInfoPage />} />
       <Route path="/movie/:movieId" element={<MovieDetailPage />} />
       
-      {/* 2. 新增路由：選擇票種與餐點 */}
       <Route path="/ticket-meal/:movieId" element={<TicketMealPage />} />
 
       <Route path="/seat-selection/:movieId" element={<SeatSelectPage />} />
@@ -29,6 +29,9 @@ function App() {
       <Route path="/booking-confirmation/:movieId" element={<BookingConfirmationPage />} />
       
       <Route path="/payment/:movieId" element={<PaymentPage />} />
+
+      {/* 2. 新增 DonePage 路由 */}
+      <Route path="/done" element={<DonePage />} />
 
       <Route path="/store" element={<StorePage />} />
       <Route path="/theaters" element={<TheaterPage />} />
