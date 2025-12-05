@@ -65,18 +65,35 @@ function GameDetailPage() {
   // 🎯 解析特色內容
   const getFeatureList = () => {
     try {
-        // 如果資料庫有資料 (不管是 2 筆還是 3 筆)，直接使用
         if (game.features) {
             return JSON.parse(game.features);
         }
     } catch (e) {
         console.error("JSON Parse Error (Features):", e);
     }
-    // 資料庫沒資料時的預設值：給 2 筆
     return [
         { title: '深入冒險世界', desc: '探索前所未見的奇幻景觀，揭開隱藏在歷史背後的真相。', image: game.image },
         { title: '極致戰鬥體驗', desc: '感受流暢且具深度的戰鬥系統，挑戰強大的敵人與首領。', image: game.image }
     ];
+  };
+
+  // 🔥 修改這裡：處理購買邏輯，跳轉到訂單確認頁
+  const handleBuyGame = () => {
+    if (!game) return;
+
+    const bookingData = {
+        movie: { movieName: game.name }, // 借用欄位
+        theater: { name: '數位遊戲商城' },
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        selectedSeats: [], // 無座位
+        tickets: [],
+        meals: [{ name: `${game.name} (數位版)`, price: game.price, count: 1 }], // 將遊戲視為商品
+        totalPrice: game.price,
+        isStore: true // 標記為商城訂單
+    };
+
+    navigate(`/booking-confirmation/game-${game.gameId}`, { state: bookingData });
   };
 
   // --- Loading / Error ---
@@ -129,7 +146,13 @@ function GameDetailPage() {
                     <p className="text-gray-300 text-lg lg:text-xl mb-6 flex items-center gap-3 drop-shadow-md">KONAMI DIGITAL ENTERTAINMENT<span className="text-xs border border-gray-400 px-2 py-0.5 rounded bg-black/20 backdrop-blur-sm">PS5</span></p>
                     <div className="mb-8"><p className="text-4xl lg:text-5xl font-bold text-white drop-shadow-md">NT$ {game.price}</p></div>
                     <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                        <button className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-600/40 flex-grow sm:flex-grow-0 text-center">立即購買</button>
+                        {/* 🔥 綁定 handleBuyGame 事件 */}
+                        <button 
+                            onClick={handleBuyGame}
+                            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-12 rounded-full transition duration-300 text-lg shadow-lg hover:shadow-purple-600/40 flex-grow sm:flex-grow-0 text-center"
+                        >
+                            立即購買
+                        </button>
                         <button className="p-4 rounded-full border border-gray-500 hover:border-white hover:bg-white/10 transition backdrop-blur-sm w-fit"><svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg></button>
                     </div>
                     <p className="text-gray-200 text-lg mb-8 leading-relaxed drop-shadow-md max-w-xl hidden md:block">探索未知的恐懼與美麗。這款遊戲將帶領玩家進入一個充滿謎團的世界，擁有令人驚嘆的視覺效果與深刻的故事劇情。<br />現在預購即可獲得獨家特典服裝與數位原聲帶。</p>
@@ -185,11 +208,9 @@ function GameDetailPage() {
       {/* ======================================================== */}
       <div className="container mx-auto px-8 lg:px-20 pb-24 space-y-24">
         
-        {/* 自動依據資料庫筆數渲染，不論是 2 筆或 3 筆都會正確顯示 */}
         {featureData.map((feature, index) => (
             <div 
                 key={index} 
-                // 偶數: 左文右圖, 奇數: 左圖右文
                 className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-16`}
             >
                 {/* 文字區 */}
