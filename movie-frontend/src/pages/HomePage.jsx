@@ -8,35 +8,35 @@ import MovieCard from "../components/MovieCard";
 const carouselMoviesData = [
     {
       id: 3, 
-      title: '蜘蛛人：穿越蜘蛛宇宙',
+      title: '蜘蛛人：穿越蜘蛛宇宙', // Index 0
       description: '邁爾斯·莫拉萊斯回歸，展開一場史詩般的冒險，穿梭於無數平行宇宙，遇見各式各樣的蜘蛛人夥伴。',
       poster: '/posters/蜘蛛.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=shW9i6k8cB0', 
     },
     {
       id: 12, 
-      title: '阿凡達：水之道',
+      title: '阿凡達：水之道', // Index 1
       description: '傑克·薩利與他在系外行星潘朵拉上新組成的家庭一起生活。當一個熟悉的威脅捲土重來,傑克必須與奈蒂莉和納美人軍隊並肩作戰,保衛他們的星球。',
       poster: '/posters/Homepage01.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=T-8MtZ2kY98', 
     },
     {
       id: 1, 
-      title: '沙丘：第二部',
+      title: '沙丘：第二部', // Index 2
       description: '在命運的召喚下，保羅踏入沙漠最深處。沙漠的傳說正在甦醒，而真正的試煉才正要開始...',
       poster: '/posters/Homepage02.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=5b6bKqgn7y8', 
     },
     {
       id: 2, 
-      title: '『#鏈鋸人 #蕾潔篇』',
+      title: '『#鏈鋸人 #蕾潔篇』', // Index 3
       description: '電次與惡魔「鏈鋸惡魔」波奇塔簽訂契約，成為鏈鋸人，過著狩獵惡魔的日子。某天,他遇見了某個女孩。她的出現，將顛覆電次平穩的生活...',
       poster: '/posters/Homepage03.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=c--np1lcdgQ', 
     },
     {
       id: 8, 
-      title: '美女與野獸',
+      title: '美女與野獸', // Index 4
       description: '在一座被遺忘的魔法城堡裡，一名少女意外踏入了命運的交會，在前方等待她的將是隱藏著奇特的魔法與未解的秘密...',
       poster: '/posters/Homepage04.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=F3iNnze3yi0', 
@@ -47,10 +47,10 @@ const carouselMoviesData = [
 const newsItems = [
     {
         id: 'A',
-        title: 'BabyMonster',
-        desc: '《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽',
-        image: '/posters/Homepage-A.jpg', 
-        link: 'https://reurl.cc/Yk8x9L' 
+        title: '《阿凡達：火與燼》',
+        desc: '首支預告釋出：新納美人族曝光！劇情大綱、上映日期、電影片長一次看',
+        image: '/posters/avatar火與燼.jpg', 
+        link: 'https://www.vogue.com.tw/article/avatar-fire-and-ash' 
     },
     {
         id: 'B',
@@ -61,17 +61,17 @@ const newsItems = [
     },
     {
         id: 'C',
-        title: '英雄聯盟',
-        desc: '《英雄聯盟》最強飛昇者「不滅冥聖」薩亨登場!',
-        image: '/posters/Homepage-C.jpg', 
-        link: 'https://www.ludens.com.tw/league-of-legends-zaahen-new-champion-lore-explained/' 
-    },
-    {
-        id: 'D',
         title: 'TWICE 2025',
         desc: 'TWICE演唱會2025台灣站來了！11月高雄開唱，子瑜首度回台演出',
         image: '/posters/Homepage-D.jpg', 
         link: 'https://www.marieclaire.com.tw/entertainment/music/86642/twice-this-is-for-world-tour' 
+    },
+    {
+        id: 'D',
+        title: 'BabyMonster',
+        desc: '《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽',
+        image: '/posters/Homepage-A.jpg', 
+        link: 'https://reurl.cc/Yk8x9L' 
     },
     {
         id: 'E',
@@ -96,15 +96,23 @@ function HomePage() {
     carouselMoviesData[0]
   ];
   
-  const [currentIndex, setCurrentIndex] = useState(1);
+  // 🔥 [修改處] 只從「蜘蛛人」(Index 0) 或「沙丘」(Index 2) 隨機選一個
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    // 定義想要隨機出現的電影索引 (對應 carouselMoviesData 陣列的位置)
+    const specificIndices = [0, 2]; 
+    
+    // 從這兩個數字中隨機挑一個
+    const randomIndex = specificIndices[Math.floor(Math.random() * specificIndices.length)];
+    
+    // 一樣要 +1，因為 extendedSlides 陣列的最前面多補了一張圖
+    return randomIndex + 1;
+  });
+
   const [isTransitioning, setIsTransitioning] = useState(false);
   const timeoutRef = useRef(null);
 
-  // 1. 自動播放 (已修正 Bug)
+  // 1. 自動播放
   useEffect(() => {
-    // 🎯 關鍵修正：如果正在轉場中 (isTransitioning 為 true)，就不要設定計時器
-    // 等到轉場結束 (onTransitionEnd -> isTransitioning 變 false) 後，
-    // 這個 useEffect 會再次觸發，那時候再開始 8 秒倒數。
     if (isTransitioning) return;
 
     resetTimeout();
@@ -113,7 +121,7 @@ function HomePage() {
     }, 8000); 
 
     return () => resetTimeout();
-  }, [currentIndex, isTransitioning]); // 🎯 加入 isTransitioning 作為依賴
+  }, [currentIndex, isTransitioning]);
 
   const resetTimeout = () => {
     if (timeoutRef.current) {

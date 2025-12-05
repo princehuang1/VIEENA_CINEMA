@@ -61,9 +61,6 @@ function MovieDetailPage() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // 警示訊息 State
-  const [alertMessage, setAlertMessage] = useState(null);
 
   const [selectedTheatre, setSelectedTheatre] = useState(initialTheatreId);
   const [selectedTime, setSelectedTime] = useState(initialTime);
@@ -158,15 +155,8 @@ function MovieDetailPage() {
   }, [calendarRef]);
 
   const handleConfirm = () => {
-    if (!selectedTime) {
-      // 設定警示訊息，3秒後消失
-      setAlertMessage("請先選擇場次時間！");
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); // 捲動到底部讓使用者看到
-      setTimeout(() => {
-        setAlertMessage(null);
-      }, 3000);
-      return;
-    }
+    if (!selectedTime) return;
+
     const selectedTheatreObj = theatresData.find(t => t.id === selectedTheatre);
     navigate(`/ticket-meal/${movieId}`, {
       state: {
@@ -196,27 +186,13 @@ function MovieDetailPage() {
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans pb-20 overflow-x-hidden flex flex-col relative">
       
-      {/* 頂部警示訊息 (如果 alertMessage 有值才會顯示) */}
-      {alertMessage && (
-        <div className="fixed top-0 left-0 w-full bg-red-600 text-white text-center py-4 z-[9999] font-bold shadow-lg animate-fade-in-down flex items-center justify-center gap-2">
-           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-           </svg>
-           {alertMessage}
-        </div>
-      )}
-
       <div className="relative z-50">
         <Navbar />
       </div>
 
-      {/* ======================================================== */}
-      {/* 1. 頂部 Hero 區塊 */}
-      {/* ======================================================== */}
+      {/* Hero 區塊 */}
       <div className="relative w-full pt-8 pb-0">
-        
         <div className="container mx-auto px-8 lg:px-20 relative z-10 w-full pt-6 pb-10">
-            
             <button 
                 onClick={() => navigate(-1)} 
                 className="absolute top-6 left-8 lg:left-20 text-gray-300 hover:text-white transition flex items-center gap-2 bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10 z-20"
@@ -226,22 +202,18 @@ function MovieDetailPage() {
             </button>
 
             <div className="flex flex-col-reverse lg:flex-row items-start gap-12 lg:gap-20">
-                
                 <div className="w-full lg:w-3/5 text-left mt-16">
                     <h1 className="text-4xl lg:text-7xl font-extrabold text-white mb-4 drop-shadow-2xl leading-tight">
                         {movie.movieName}
                     </h1>
-                    
                     <div className="flex flex-wrap items-center gap-3 text-gray-300 text-sm md:text-base font-medium mb-8">
                         <span className="border border-white/30 px-3 py-1 rounded bg-black/30 backdrop-blur-sm">{movie.movieType}</span>
                         <span className="flex items-center gap-1"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> {movie.movieDurationMinutes}</span>
                         <span>{movie.language || '英語'}</span>
                     </div>
-
                     <p className="text-gray-200 text-lg leading-relaxed drop-shadow-md max-w-2xl mb-10">
                         {movie.synopsis || "暫無簡介"}
                     </p>
-
                     <div className="space-y-4 max-w-lg text-gray-300 bg-neutral-800 p-6 rounded-xl border border-white/5 shadow-lg">
                         <div className="flex items-start gap-4">
                             <span className="text-purple-400 font-bold min-w-[4rem]">導演</span>
@@ -257,14 +229,9 @@ function MovieDetailPage() {
                         </div>
                     </div>
                 </div>
-
                 <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
                     <div className="relative w-[300px] lg:w-[400px] aspect-[2/3] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-neutral-700/50 group transform hover:scale-[1.02] transition-transform duration-500">
-                        <img 
-                            src={movie.posterUrl} 
-                            alt={movie.movieName} 
-                            className="w-full h-full object-cover" 
-                        />
+                        <img src={movie.posterUrl} alt={movie.movieName} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-xl pointer-events-none"></div>
                     </div>
                 </div>
@@ -272,9 +239,7 @@ function MovieDetailPage() {
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* 2. 中間：影音大橫幅 */}
-      {/* ======================================================== */}
+      {/* 影音橫幅 */}
       <div className="container mx-auto px-4 lg:px-8 mt-12 mb-20 max-w-[90%] relative group">
          <div className="relative overflow-hidden rounded-xl"> 
             <div className="overflow-hidden rounded-2xl"> 
@@ -286,20 +251,9 @@ function MovieDetailPage() {
                         <div key={index} className="min-w-[33.333%] px-3 box-border">
                             <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-neutral-900 shadow-lg cursor-pointer group/item hover:border hover:border-purple-500/50 transition-all">
                                 {item.type === 'video' ? (
-                                    <iframe 
-                                        src={item.src} 
-                                        title="Trailer" 
-                                        className="w-full h-full pointer-events-auto" 
-                                        frameBorder="0" 
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                        allowFullScreen
-                                    ></iframe>
+                                    <iframe src={item.src} title="Trailer" className="w-full h-full pointer-events-auto" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
                                 ) : (
-                                    <img 
-                                        src={item.src} 
-                                        alt={`Still ${index}`} 
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" 
-                                    />
+                                    <img src={item.src} alt={`Still ${index}`} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" />
                                 )}
                             </div>
                         </div>
@@ -307,7 +261,6 @@ function MovieDetailPage() {
                 </div>
             </div>
          </div>
-
          {currentMediaIndex > 0 && (
             <button onClick={prevSlide} className="absolute left-[-20px] top-1/2 -translate-y-1/2 z-30 bg-purple-600 hover:bg-purple-500 text-white rounded-full p-4 shadow-2xl transition-all transform hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
          )}
@@ -316,9 +269,7 @@ function MovieDetailPage() {
          )}
       </div>
 
-      {/* ======================================================== */}
-      {/* 3. 底部：場次預訂 */}
-      {/* ======================================================== */}
+      {/* 場次預訂 */}
       <section className="container mx-auto px-6 md:px-20 mb-20">
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
             <span className="w-1.5 h-8 bg-purple-600 rounded-full"></span>
@@ -390,18 +341,25 @@ function MovieDetailPage() {
                 </div>
             </div>
 
-            {/* 確認按鈕 (已修正樣式問題) */}
-            <div className="mt-10 flex justify-end border-t border-gray-700 pt-6">
-                <button 
-                    onClick={handleConfirm} 
-                    className={`w-full md:w-auto font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center justify-center gap-2
-                        ${selectedTime 
-                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white hover:shadow-purple-500/50 transform hover:-translate-y-1' 
-                            : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}
-                >
-                    前往購票
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                </button>
+            {/* 🔥 修改處：確認按鈕與錯誤訊息區塊 */}
+            {/* 外層維持 items-end (讓整個區塊靠畫面右邊) */}
+            {/* 內層改成 items-start (讓文字跟按鈕的左邊對齊) */}
+            <div className="mt-10 flex flex-col items-end border-t border-gray-700 pt-6">
+                <div className="flex flex-col items-start w-full md:w-auto">
+                    <button 
+                        onClick={handleConfirm} 
+                        disabled={!selectedTime} 
+                        className={`w-full md:w-auto font-bold py-4 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center justify-center gap-2
+                            ${selectedTime 
+                                ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' 
+                                : 'bg-neutral-700 text-gray-500 cursor-not-allowed'}`}
+                    >
+                        前往購票
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                    </button>
+                    {/* 錯誤訊息會自動靠左對齊按鈕 */}
+                    {!selectedTime && <p className="text-sm text-red-400 mt-2 animate-pulse">* 請先選擇時段</p>}
+                </div>
             </div>
         </div>
       </section>

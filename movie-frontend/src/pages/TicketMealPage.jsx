@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MealSelector from "../components/MealSelector";
@@ -68,6 +68,11 @@ function TicketMealPage() {
   const [ticketCounts, setTicketCounts] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
   const [selectedMeals, setSelectedMeals] = useState([]);
 
+  // 每次進入此頁面，自動捲動到最上方
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // --- Handlers ---
   const handleTicketChange = (id, delta) => {
     setTicketCounts(prevCounts => ({
@@ -120,7 +125,6 @@ function TicketMealPage() {
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans pb-20">
       <Navbar />
       
-      {/* 🎯 修改：將 max-w 設定為 3xl，讓頁面變窄，更集中 */}
       <main className="container mx-auto px-6 py-12 max-w-4xl">
         
         <h1 className="text-3xl font-bold text-white mb-2 text-center">選擇票種與餐點</h1>
@@ -137,7 +141,6 @@ function TicketMealPage() {
                     選擇票種
                 </h2>
                 
-                {/* 🎯 修改：移除 grid，改用 space-y-4 讓票券垂直堆疊 */}
                 <div className="space-y-4">
                     {ticketTypesData.map(ticket => (
                         <div 
@@ -178,8 +181,8 @@ function TicketMealPage() {
                 <MealSelector onMealChange={setSelectedMeals} />
             </section>
 
-            {/* 3. 底部按鈕 */}
-            <div className="flex justify-between items-center mt-8 pt-8 border-t border-gray-700">
+            {/* 3. 底部按鈕區塊 */}
+            <div className="flex justify-between items-start mt-8 pt-8 border-t border-gray-700">
                 <button 
                     onClick={() => navigate(-1)}
                     className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full transition duration-300 text-lg flex items-center gap-2"
@@ -188,20 +191,24 @@ function TicketMealPage() {
                     上一步
                 </button>
 
-                <button 
-                    onClick={handleNextStep} 
-                    disabled={totalTickets === 0} 
-                    className={`font-bold py-3 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center gap-2
-                        ${totalTickets > 0 
-                            ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' 
-                            : 'bg-neutral-700 text-gray-500 cursor-not-allowed'
-                        }`}
-                >
-                    前往選位
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-                </button>
+                {/* 🔥 修改處：右側區塊改成 items-start (靠左對齊) */}
+                <div className="flex flex-col items-start">
+                    <button 
+                        onClick={handleNextStep} 
+                        disabled={totalTickets === 0} 
+                        className={`font-bold py-3 px-12 rounded-full transition duration-300 text-xl shadow-lg flex items-center gap-2
+                            ${totalTickets > 0 
+                                ? 'bg-purple-600 hover:bg-purple-700 text-white hover:shadow-purple-500/50 cursor-pointer transform hover:-translate-y-1' 
+                                : 'bg-neutral-700 text-gray-500 cursor-not-allowed'
+                            }`}
+                    >
+                        前往選位
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    </button>
+                    {/* 錯誤訊息會自動靠左對齊按鈕 */}
+                    {totalTickets === 0 && <p className="text-sm text-red-400 mt-2 animate-pulse">* 請至少選擇一張票才能繼續</p>}
+                </div>
             </div>
-            {totalTickets === 0 && <p className="text-sm text-red-400 text-right mt-2 animate-pulse">* 請至少選擇一張票才能繼續</p>}
 
         </div>
       </main>
