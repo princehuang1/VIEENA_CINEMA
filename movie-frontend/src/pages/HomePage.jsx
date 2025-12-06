@@ -46,7 +46,7 @@ const carouselMoviesData = [
       title: '奧本海默', // Index 5
       description: '在戰雲低垂的年代，他走入科學的深邃邊界。每一次推演、每一個火光，都在逼他直面人性的裂縫——而那道光芒，終將改變世界。',
       poster: '/posters/Homepage07.jpg', 
-      trailerLink: 'https://www.youtube.com/watch?v=F3iNnze3yi0', 
+      trailerLink: 'https://www.youtube.com/watch?v=uYPbbksJxIg', 
     },
 ];
 
@@ -103,12 +103,13 @@ function HomePage() {
     carouselMoviesData[0]
   ];
   
-  // 🔥 [修改處] 只從「蜘蛛人」(Index 0) 或「沙丘」(Index 2) 隨機選一個
+  // 🔥 [修改處] 只從「蜘蛛人」(Index 0)、「沙丘」(Index 2) 或「奧本海默」(Index 5) 隨機選一個
   const [currentIndex, setCurrentIndex] = useState(() => {
     // 定義想要隨機出現的電影索引 (對應 carouselMoviesData 陣列的位置)
-    const specificIndices = [0, 2]; 
+    // 0: 蜘蛛人, 2: 沙丘, 5: 奧本海默
+    const specificIndices = [0, 2, 5]; 
     
-    // 從這兩個數字中隨機挑一個
+    // 從這三個數字中隨機挑一個
     const randomIndex = specificIndices[Math.floor(Math.random() * specificIndices.length)];
     
     // 一樣要 +1，因為 extendedSlides 陣列的最前面多補了一張圖
