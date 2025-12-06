@@ -42,17 +42,10 @@ const carouselMoviesData = [
       trailerLink: 'https://www.youtube.com/watch?v=F3iNnze3yi0', 
     },
     {
-      id: 9, 
-      title: '奧本海默', // Index 4
-      description: '在一座被遺忘的魔法城堡裡，一名少女意外踏入了命運的交會，在前方等待她的將是隱藏著奇特的魔法與未解的秘密...',
+      id: 7, 
+      title: '奧本海默', // Index 5
+      description: '在戰雲低垂的年代，他走入科學的深邃邊界。每一次推演、每一個火光，都在逼他直面人性的裂縫——而那道光芒，終將改變世界。',
       poster: '/posters/Homepage07.jpg', 
-      trailerLink: 'https://www.youtube.com/watch?v=F3iNnze3yi0', 
-    },
-    {
-      id: 10, 
-      title: '銀翼殺手2049', // Index 4
-      description: '在一座被遺忘的魔法城堡裡，一名少女意外踏入了命運的交會，在前方等待她的將是隱藏著奇特的魔法與未解的秘密...',
-      poster: '/posters/Homepage08.jpg', 
       trailerLink: 'https://www.youtube.com/watch?v=F3iNnze3yi0', 
     },
 ];
