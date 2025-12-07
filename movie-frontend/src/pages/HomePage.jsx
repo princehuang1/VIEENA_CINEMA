@@ -103,11 +103,9 @@ function HomePage() {
     carouselMoviesData[0]
   ];
   
-  // 🔥 [修改處] 只從「蜘蛛人」(Index 0)、「沙丘」(Index 2) 或「奧本海默」(Index 5) 隨機選一個
+  // 蜘蛛人(Index 0)、「沙丘」(Index 2) 隨機選一個
   const [currentIndex, setCurrentIndex] = useState(() => {
-    // 定義想要隨機出現的電影索引 (對應 carouselMoviesData 陣列的位置)
-    // 0: 蜘蛛人, 2: 沙丘, 5: 奧本海默
-    const specificIndices = [0, 2, 5]; 
+    const specificIndices = [0, 2]; 
     
     // 從這三個數字中隨機挑一個
     const randomIndex = specificIndices[Math.floor(Math.random() * specificIndices.length)];
