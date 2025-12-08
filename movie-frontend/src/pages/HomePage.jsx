@@ -75,15 +75,15 @@ const newsItems = [
     },
     {
         id: 'D',
-        title: 'BabyMonster',
+        title: 'BabyMonster 2025',
         desc: '《BabyMonster》2025年台北演唱會確定！林口體育館開唱、票價、售票時間、VIP 福利一覽',
         image: '/posters/Homepage-A.jpg', 
         link: 'https://reurl.cc/Yk8x9L' 
     },
     {
         id: 'E',
-        title: '黃金樹幽影',
-        desc: '《艾爾登法環 黃金樹幽影》最新boss"穿刺者-梅瑟莫"',
+        title: '《艾爾登法環 黃金樹幽影》',
+        desc: '人氣遊戲大作《艾爾登法環 Elden Ring》首部 DLC「黃金樹幽影」首支預告正式來襲，最新boss"穿刺者-梅瑟莫"，',
         image: '/posters/Homepage-E.jpg', 
         link: 'https://www.4gamers.com.tw/news/detail/65525/elden-ring-legendary-player-let-me-solo-her-has-new-target' 
     }
