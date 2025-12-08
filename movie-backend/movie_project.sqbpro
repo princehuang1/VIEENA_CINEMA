@@ -1,70 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2733"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000012100ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 新增製作商與描述欄位 (如果尚未存在)
-ALTER TABLE Games ADD COLUMN manufacturer TEXT;
-ALTER TABLE Games ADD COLUMN description TEXT;
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011f00ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 刪除舊的 Users 表 (如果存在)
+DROP TABLE IF EXISTS Users;
 
--- 2. 更新現有遊戲資料
--- 1. 對馬戰鬼
-UPDATE Games 
-SET manufacturer = 'Sony Interactive Entertainment',
-    description = '在戰火席捲的孤島上，風、雨與大地記錄著每一道傷痕。踏上武者之路，於榮譽與生存之間做出選擇。森林、平原、古老村落的每一處景色，皆映照著旅人的靈魂。'
-WHERE name LIKE '%對馬戰鬼%';
+-- 2. 建立新的 Users 表 (簡化版)
+CREATE TABLE &quot;Users&quot; (
+    &quot;userId&quot; INTEGER PRIMARY KEY AUTOINCREMENT,
+    &quot;userName&quot; TEXT NOT NULL,
+    &quot;userEmail&quot; TEXT NOT NULL UNIQUE,
+    &quot;userPassword&quot; TEXT NOT NULL, -- 存明文密碼
+    &quot;userPhone&quot; TEXT,
+    &quot;createdAt&quot; TEXT -- 存 YYYY-MM-DD
+);
 
--- 2. SILENT HILL f
-UPDATE Games 
-SET manufacturer = 'KONAMI DIGITAL ENTERTAINMENT',
-    description = '探索未知的恐懼與美麗。這款遊戲將帶領玩家進入一個充滿謎團的世界，擁有令人驚嘆的視覺效果與深刻的故事劇情。'
-WHERE name LIKE '%SILENT HILL f%';
-
--- 3. FF7 Rebirth
-UPDATE Games 
-SET manufacturer = 'Square Enix',
-    description = '在大地的盡頭尋找命運的真相。離開鋼鐵城市後，旅程不再侷限於一座都市，而是走向一個廣闊且生動的世界。夥伴間的羈絆讓每段旅程更具重量，回憶與未來交錯，編織出一段重新塑造的史詩。'
-WHERE name LIKE '%FF7 Rebirth%';
-
--- 4. 地平線西域禁地
-UPDATE Games 
-SET manufacturer = 'Sony Interactive Entertainment',
-    description = '踏入由自然重生的邊境，金屬與野性交織出壯麗景觀。巨型機械獸游走在廢墟間，古文明的秘密埋藏於山谷與深海之中。這趟旅程將揭露過去的錯誤，也決定未來的走向。'
-WHERE name LIKE '%地平線%';
-
--- 5. 劍星
-UPDATE Games 
-SET manufacturer = 'SHIFT UP',
-    description = '世界被塵埃與殘骸吞沒，只剩機械與人類意志交織的脆弱平衡。
-華麗的動作美學貫穿整個旅程，在危險與希望之間，以武器與意志劃出自己的道路。'
-WHERE name LIKE '%劍星%';
-
--- 6. 惡靈古堡4
-UPDATE Games 
-SET manufacturer = 'Capcom',
-    description = '陰影籠罩的村落中，詭異的氣息無處不在。每一個房間、每一扇門後，都可能潛伏著未知的威脅。透過緊湊節奏與沉浸式環境設計，生存的壓力在每一次呼吸間拉滿。'
-WHERE name LIKE '%惡靈古堡4%';
-
--- 7. FF16
-UPDATE Games 
-SET manufacturer = 'Square Enix',
-    description = '故事在戰火與神祇交織的世界展開。力量的象徵被重新解讀，王國間的爭鬥逐漸揭露真相。
-這是一段以犧牲與信念為核心的旅程，角色之間的羈絆將成為通往明日的火種。'
-WHERE name LIKE '%FF16%';
-
--- 8. Cyberpunk 2077
-UPDATE Games 
-SET manufacturer = 'CD Projekt Red',
-    description = '霓虹覆蓋的大都會中，金屬與慾望塑造出獨一無二的未來。
-你將在黑市、街區、高樓間穿梭，對抗不義、追逐自由，在人性的裂縫中尋找存在的意義。'
-WHERE name LIKE '%Cyberpunk 2077%';
-
--- 9. 空洞騎士
-UPDATE Games 
-SET manufacturer = 'Team Cherry',
-    description = '在被遺忘的地底王國中，寂靜與黑暗孕育著古老的記憶。
-旅人將穿過崩落的廳堂與蜿蜒的隧道，在孤獨之中對抗未知的影子。
-每個角落都承載著故事，而你將是重新點亮這片世界的火光。'
-WHERE name LIKE '%空洞騎士%';
-
--- 10. 艾爾登法環
-UPDATE Games 
-SET manufacturer = 'FromSoftware',
-    description = '荒原、廢墟與無盡黑影構築出神話般的廣闊世界。
-挑戰古老力量的旅程彷彿試煉，每次戰鬥都刻劃著自己的傳說。'
-WHERE name LIKE '%艾爾登法環%';</sql><current_tab id="0"/></tab_sql></sqlb_project>
+-- 3. 修改 Bookings 表，新增欄位來存商品明細
+-- 如果你的 Bookings 表已經存在資料，請小心執行，或直接刪除重建
+-- 這裡我們選擇「新增欄位」的方式，讓舊資料不會壞掉
+ALTER TABLE Bookings ADD COLUMN items TEXT; -- 用來存 JSON 字串 (例如票券資訊或商品資訊)
+ALTER TABLE Bookings ADD COLUMN type TEXT;  -- 用來區分 'Movie' 或 'Store'</sql><current_tab id="0"/></tab_sql></sqlb_project>

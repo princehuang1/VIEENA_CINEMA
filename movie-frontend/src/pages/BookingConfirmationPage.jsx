@@ -67,10 +67,10 @@ function BookingConfirmationPage() {
                     <p className="text-white font-bold">{date}</p>
                 </div>
                 
-                {/* 修改：只有非商城 (電影) 訂單才顯示時間 */}
+                {/* 修改：只有非商城 (電影) 訂單才顯示時段 */}
                 {!isStore && (
                     <div className="text-right">
-                        <p className="text-xs text-gray-500 mb-1">時間</p>
+                        <p className="text-xs text-gray-500 mb-1">時段</p>
                         <p className="text-white font-bold text-xl">{time}</p>
                     </div>
                 )}

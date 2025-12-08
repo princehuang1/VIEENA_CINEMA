@@ -30,16 +30,10 @@ function TheaterPage() {
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans">
       <Navbar />
 
-      <main className="container mx-auto px-6 md:px-20 py-12">
-        
-        {/* 頁面標題 - 修正：移至左側 */}
-        <div className="mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4 tracking-wider">
-                影城介紹
-            </h1>
-            {/* 紫色底線：移除 mx-auto 讓它靠左 */}
-            <div className="h-1 w-20 bg-purple-600 rounded-full"></div>
-        </div>
+      <main className="container mx-auto px-20 py-8">
+        <h1 className="text-4xl font-bold text-white mb-8">
+            影城介紹
+        </h1>
 
         {/* 影城列表 (垂直堆疊) */}
         <div className="flex flex-col space-y-12">

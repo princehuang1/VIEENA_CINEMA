@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios'; // 記得引入 axios
 import Navbar from '../components/Navbar';
 
 function PaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isMember = false; 
+  // 1. 判斷是否為會員 (從 LocalStorage 讀取)
+  const storedUser = localStorage.getItem('user');
+  const currentUser = storedUser ? JSON.parse(storedUser) : null;
+  const isMember = !!currentUser; // 如果有 currentUser 則為 true
 
+  // 接收上一頁傳來的訂單資料
   const bookingData = location.state || {
     totalPrice: 0,
     movie: { movieName: '未知電影' },
     theater: { name: '' },
     date: '',
-    time: ''
+    time: '',
+    tickets: [],
+    meals: [],
+    isStore: false
   };
 
   const [formData, setFormData] = useState({
@@ -34,21 +42,21 @@ function PaymentPage() {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  // 表單驗證邏輯
   const validateForm = () => {
     const newErrors = {};
 
-    // 1. 驗證購買人資訊 (修改：只要有輸入即可，不檢查格式)
+    // 1. 如果「不是」會員，才需要驗證購買人資訊
     if (!isMember) {
       if (!formData.guestName || formData.guestName.trim().length === 0) {
         newErrors.guestName = '請輸入購買人姓名';
       }
-      
       if (!formData.guestEmail || formData.guestEmail.trim().length === 0) {
         newErrors.guestEmail = '請輸入電子信箱';
       }
     }
 
-    // 2. 驗證信用卡資訊 (保持基本的長度檢查，以免太假，但移除了部分嚴格限制)
+    // 2. 驗證信用卡資訊 (簡易版)
     if (formData.cardNumber.length < 10) newErrors.cardNumber = '請輸入卡號';
     if (formData.cardName.length < 1) newErrors.cardName = '請輸入持卡人姓名';
     if (formData.expiry.length < 4) newErrors.expiry = '請輸入到期日';
@@ -58,21 +66,46 @@ function PaymentPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePay = (e) => {
+  // 🔥 核心：付款處理與資料庫寫入
+  const handlePay = async (e) => {
     e.preventDefault();
+    
     if (validateForm()) {
       setIsProcessing(true);
       
-      // 模擬 API 呼叫時間
+      // --- 如果是會員，將訂單存入資料庫 ---
+      if (isMember && currentUser) {
+        
+        // 準備要傳給後端的 payload
+        const orderPayload = {
+            userId: currentUser.userId,
+            showtimeId: 0, // 簡化處理，先設為 0
+            totalPrice: bookingData.totalPrice,
+            // 將整個 bookingData 傳給後端，後端會轉成 JSON 字串存入 items 欄位
+            items: bookingData, 
+            type: bookingData.isStore ? 'Store' : 'Movie'
+        };
+
+        try {
+            // 呼叫後端 API
+            await axios.post('http://localhost:4000/api/orders', orderPayload);
+            console.log("訂單已成功儲存至資料庫");
+        } catch (err) {
+            console.error("訂單儲存失敗:", err);
+            // 即使存檔失敗，為了 Demo 流暢度，我們通常還是讓它跳轉到成功頁面，或者也可以在這裡 return 阻擋
+        }
+      }
+      // ------------------------------------------------
+
+      // 模擬金流處理時間 (1.5秒)
       setTimeout(() => {
         setIsProcessing(false);
-        // 這裡不再跳 alert，直接跳轉到 DonePage
-        // 注意：請確保您的 Route 設定中有 /done 這個路徑指向 DonePage
         navigate('/done'); 
       }, 1500);
     }
   };
 
+  // 防呆：如果沒有訂單資料，顯示錯誤
   if (!location.state) {
     return (
         <div className="min-h-screen bg-neutral-900 text-white flex items-center justify-center flex-col">
@@ -93,13 +126,13 @@ function PaymentPage() {
         <div className="w-full max-w-2xl">
           
           <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl border border-neutral-700">
-            {/* 加入 autoComplete="off" 減少瀏覽器自動填入和安全提示 */}
+            {/* autoComplete="off" 減少瀏覽器自動填入干擾 */}
             <form onSubmit={handlePay} className="space-y-8" autoComplete="off">
               
               {/* ========================================================= */}
-              {/* 區塊 1: 購買人資訊 */}
+              {/* 區塊 1: 購買人資訊 (僅非會員顯示) */}
               {/* ========================================================= */}
-              {!isMember && (
+              {!isMember ? (
                 <div className="border-b border-neutral-700 pb-8 animate-fade-in">
                   <h2 className="text-xl font-bold text-white mb-6 flex items-center">
                     <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
@@ -107,7 +140,6 @@ function PaymentPage() {
                   </h2>
                   <div className="space-y-6">
                     <div>
-                      {/* 修改標籤名稱 */}
                       <label className="block text-gray-400 text-sm mb-2">購買人姓名 <span className="text-red-500">*</span></label>
                       <input
                         type="text"
@@ -120,7 +152,6 @@ function PaymentPage() {
                       {errors.guestName && <p className="text-red-500 text-xs mt-1">{errors.guestName}</p>}
                     </div>
                     <div>
-                      {/* 修改標籤名稱 */}
                       <label className="block text-gray-400 text-sm mb-2">電子信箱 (接收票券用) <span className="text-red-500">*</span></label>
                       <input
                         type="text" 
@@ -133,6 +164,17 @@ function PaymentPage() {
                       {errors.guestEmail && <p className="text-red-500 text-xs mt-1">{errors.guestEmail}</p>}
                     </div>
                   </div>
+                </div>
+              ) : (
+                // 如果是會員，顯示簡單的歡迎訊息取代輸入框
+                <div className="border-b border-neutral-700 pb-6 mb-6">
+                    <h2 className="text-xl font-bold text-white flex items-center">
+                        <span className="w-2 h-6 bg-purple-600 mr-3 rounded-full"></span>
+                        會員結帳
+                    </h2>
+                    <p className="text-gray-400 mt-2 ml-5">
+                        將使用您的會員資料：<span className="text-purple-400 font-bold">{currentUser.userName} ({currentUser.userEmail})</span>
+                    </p>
                 </div>
               )}
 

@@ -12,7 +12,10 @@ import SeatSelectPage from "./pages/SeatSelectPage";
 import BookingConfirmationPage from './pages/BookingConfirmationPage'; 
 import PaymentPage from './pages/PaymentPage';
 import TicketMealPage from './pages/TicketMealPage'; 
-import DonePage from './pages/DonePage'; // 1. 引入 DonePage
+import DonePage from './pages/DonePage'; 
+import SignUpPage from './pages/SignUpPage';
+import SignInPage from './pages/SignInPage';
+import UserPage from './pages/UserPage';
 
 function App() {
   return (
@@ -21,21 +24,17 @@ function App() {
       <Route path="/showtimes" element={<ShowtimePage />} />
       <Route path="/movie-info" element={<MovieInfoPage />} />
       <Route path="/movie/:movieId" element={<MovieDetailPage />} />
-      
       <Route path="/ticket-meal/:movieId" element={<TicketMealPage />} />
-
       <Route path="/seat-selection/:movieId" element={<SeatSelectPage />} />
-      
       <Route path="/booking-confirmation/:movieId" element={<BookingConfirmationPage />} />
-      
       <Route path="/payment/:movieId" element={<PaymentPage />} />
-
-      {/* 2. 新增 DonePage 路由 */}
       <Route path="/done" element={<DonePage />} />
-
       <Route path="/store" element={<StorePage />} />
       <Route path="/theaters" element={<TheaterPage />} />
       <Route path="/store/game/:id" element={<GameDetailPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/signin" element={<SignInPage />} />
+      <Route path="/user" element={<UserPage />} />
     </Routes>
   );
 }

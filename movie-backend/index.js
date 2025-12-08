@@ -152,7 +152,107 @@ app.get("/api/concessions", (req, res) => {
   });
 });
 
-// 7. 啟動伺服器
+// --- 會員系統與訂單 API ---
+
+// 8. [POST] 註冊 API
+app.post("/api/register", (req, res) => {
+  const { name, email, phone, password } = req.body;
+  
+  // 取得當前日期 YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
+
+  const sql = `INSERT INTO Users (userName, userEmail, userPhone, userPassword, createdAt) VALUES (?, ?, ?, ?, ?)`;
+  
+  db.run(sql, [name, email, phone, password, today], function(err) {
+    if (err) {
+      if (err.message.includes("UNIQUE")) {
+        return res.status(400).json({ error: "此 Email 已經被註冊過了" });
+      }
+      return res.status(500).json({ error: err.message });
+    }
+    // 註冊成功，回傳使用者資料 (不含密碼)
+    res.json({ 
+      userId: this.lastID, 
+      userName: name, 
+      userEmail: email, 
+      userPhone: phone,
+      createdAt: today 
+    });
+  });
+});
+
+// 9. [POST] 登入 API
+app.post("/api/login", (req, res) => {
+  const { email, password } = req.body;
+  const sql = "SELECT * FROM Users WHERE userEmail = ? AND userPassword = ?";
+
+  db.get(sql, [email, password], (err, row) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (row) {
+      // 登入成功
+      const { userPassword, ...userWithoutPass } = row; // 移除密碼不回傳
+      res.json(userWithoutPass);
+    } else {
+      res.status(401).json({ error: "帳號或密碼錯誤" });
+    }
+  });
+});
+
+// 10. [POST] 重設密碼 API (Demo用)
+app.post("/api/reset-password", (req, res) => {
+  const { email, newPassword } = req.body;
+  // 先檢查帳號是否存在
+  db.get("SELECT * FROM Users WHERE userEmail = ?", [email], (err, row) => {
+    if (!row) return res.status(404).json({ error: "找不到此帳號" });
+
+    // 更新密碼
+    const sql = "UPDATE Users SET userPassword = ? WHERE userEmail = ?";
+    db.run(sql, [newPassword, email], function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ success: true, message: "密碼重設成功" });
+    });
+  });
+});
+
+// 11. [POST] 建立訂單 API (修改版：支援存入 Users)
+app.post("/api/orders", (req, res) => {
+  const { userId, showtimeId, totalPrice, items, type } = req.body;
+  // items 是一個物件或陣列，我們轉成 JSON 字串存入資料庫
+  const itemsJson = JSON.stringify(items);
+  const status = "Confirmed";
+
+  // 注意：如果是商城購買，showtimeId 可能為 0 或 null，資料庫要允許
+  const sql = `
+    INSERT INTO Bookings (userId, showtimeId, totalPrice, bookingStatus, items, type) 
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.run(sql, [userId, showtimeId || 0, totalPrice, status, itemsJson, type], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ success: true, bookingId: this.lastID });
+  });
+});
+
+// 12. [GET] 取得某會員的所有訂單
+app.get("/api/users/:userId/orders", (req, res) => {
+  const userId = req.params.userId;
+  const sql = "SELECT * FROM Bookings WHERE userId = ? ORDER BY bookingId DESC";
+
+  db.all(sql, [userId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    
+    // 將 items JSON 字串轉回物件
+    const orders = rows.map(row => ({
+      ...row,
+      items: row.items ? JSON.parse(row.items) : null
+    }));
+    res.json(orders);
+  });
+});
+
+// 13. 啟動伺服器
 app.listen(PORT, () => {
   console.log(`後端伺服器 (API) 正在 http://localhost:${PORT} 上運行...`);
 });

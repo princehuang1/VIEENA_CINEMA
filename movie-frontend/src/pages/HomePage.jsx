@@ -82,8 +82,8 @@ const newsItems = [
     },
     {
         id: 'E',
-        title: '《艾爾登法環 黃金樹幽影》',
-        desc: '人氣遊戲大作《艾爾登法環 Elden Ring》首部 DLC「黃金樹幽影」首支預告正式來襲，最新boss"穿刺者-梅瑟莫"，',
+        title: '《艾爾登法環：黃金樹幽影》',
+        desc: '首部 DLC「黃金樹幽影」首支預告正式來襲最新boss"穿刺者-梅瑟莫登場"',
         image: '/posters/Homepage-E.jpg', 
         link: 'https://www.4gamers.com.tw/news/detail/65525/elden-ring-legendary-player-let-me-solo-her-has-new-target' 
     }

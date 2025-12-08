@@ -28,7 +28,7 @@ const newsData = [
     },
     { 
         id: 3, 
-        title: '《艾爾登法環:黑夜君臨》：在暗影中誕生的王者試煉', 
+        title: '《艾爾登法環:黑夜君臨》在暗影中誕生的王者試煉', 
         desc: '這片土地深藏著梅瑟莫的力量、詛咒與過往真相。強大的全新 Boss、反抗命運的角色，以及更殘酷的挑戰，等待褪色者踏入黑夜、點燃自己的光。',
         image: '/posters/黑夜君臨.jpg', 
         link: 'https://gnn.gamer.com.tw/detail.php?sn=296393'
@@ -42,7 +42,7 @@ const newsData = [
     },
     { 
         id: 5, 
-        title: '《惡靈古堡 9》：黑霧侵蝕下的最後倖存者', 
+        title: '《惡靈古堡 9》黑霧侵蝕下的最後倖存者', 
         desc: '未知的感染源在孤島蔓延，曾經的組織秘密逐漸浮現。玩家必須在變異體、陰影與背叛中找到逃出生天的道路。黑霧籠罩之處，沒有任何真相能長久隱藏。',
         image: '/posters/惡靈古堡9.jpg', 
         link: 'https://gnn.gamer.com.tw/detail.php?sn=294797'
