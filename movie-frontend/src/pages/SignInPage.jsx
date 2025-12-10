@@ -5,21 +5,18 @@ import Navbar from '../components/Navbar';
 
 function SignInPage() {
   const navigate = useNavigate();
-  const [isForgotPassword, setIsForgotPassword] = useState(false); // 切換模式
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   
-  // 登入 Form
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  // 重設密碼 Form
   const [resetData, setResetData] = useState({ email: '', newPassword: '' });
   
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // 處理一般登入
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4000/api/login', loginData);
-      localStorage.setItem('user', JSON.stringify(res.data)); // 存入 LocalStorage
+      localStorage.setItem('user', JSON.stringify(res.data));
       alert('登入成功！');
       navigate('/');
     } catch (err) {
@@ -27,14 +24,13 @@ function SignInPage() {
     }
   };
 
-  // 處理重設密碼
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4000/api/reset-password', resetData);
       setMessage({ type: 'success', text: res.data.message });
       setTimeout(() => {
-        setIsForgotPassword(false); // 成功後切換回登入
+        setIsForgotPassword(false);
         setMessage({ type: '', text: '' });
       }, 1500);
     } catch (err) {
@@ -45,6 +41,20 @@ function SignInPage() {
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans">
       <Navbar />
+      
+      {/* 🔥 CSS Hack: 強制覆蓋 Autofill 背景色 (與註冊頁相同) */}
+      <style>{`
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #171717 inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+            caret-color: white;
+        }
+      `}</style>
+
       <div className="container mx-auto px-6 py-12 flex justify-center">
         <div className="w-full max-w-md bg-neutral-800 p-8 rounded-xl shadow-lg border border-neutral-700">
           
@@ -60,14 +70,20 @@ function SignInPage() {
 
           {!isForgotPassword ? (
             // === 登入表單 ===
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4" autoComplete="off">
+              {/* 隱藏欄位騙過瀏覽器 */}
+              <input type="text" style={{display: 'none'}} />
+              <input type="password" style={{display: 'none'}} />
+
               <div>
                 <label className="block text-gray-400 text-sm mb-1">電子信箱</label>
+                {/* 🔥 修改重點：type="email" 改為 type="text" */}
                 <input 
-                  type="email" 
+                  type="text" 
                   value={loginData.email}
                   onChange={(e) => setLoginData({...loginData, email: e.target.value})}
                   className="w-full bg-neutral-900 border border-neutral-600 rounded px-4 py-2 text-white focus:border-purple-500 outline-none" 
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -77,6 +93,7 @@ function SignInPage() {
                   value={loginData.password}
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                   className="w-full bg-neutral-900 border border-neutral-600 rounded px-4 py-2 text-white focus:border-purple-500 outline-none" 
+                  autoComplete="new-password"
                 />
               </div>
               <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded mt-4 transition">
@@ -90,15 +107,17 @@ function SignInPage() {
             </form>
           ) : (
             // === 忘記密碼表單 ===
-            <form onSubmit={handleResetPassword} className="space-y-4">
+            <form onSubmit={handleResetPassword} className="space-y-4" autoComplete="off">
               <p className="text-gray-400 text-sm mb-4">請輸入您註冊的帳號(Email)以設定新密碼。</p>
               <div>
                 <label className="block text-gray-400 text-sm mb-1">原有帳號 (Email)</label>
+                {/* 🔥 修改重點：type="email" 改為 type="text" */}
                 <input 
-                  type="email" 
+                  type="text" 
                   value={resetData.email}
                   onChange={(e) => setResetData({...resetData, email: e.target.value})}
                   className="w-full bg-neutral-900 border border-neutral-600 rounded px-4 py-2 text-white focus:border-purple-500 outline-none" 
+                  autoComplete="off"
                 />
               </div>
               <div>
@@ -108,6 +127,7 @@ function SignInPage() {
                   value={resetData.newPassword}
                   onChange={(e) => setResetData({...resetData, newPassword: e.target.value})}
                   className="w-full bg-neutral-900 border border-neutral-600 rounded px-4 py-2 text-white focus:border-purple-500 outline-none" 
+                  autoComplete="new-password"
                 />
               </div>
               <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded mt-4 transition">
