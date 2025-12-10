@@ -252,7 +252,45 @@ app.get("/api/users/:userId/orders", (req, res) => {
   });
 });
 
-// 13. 啟動伺服器
+// 13. [PUT] 修改會員資料 (含儲存信用卡)
+app.put("/api/users/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const { userName, userPhone, savedCard } = req.body;
+  
+  // 動態更新：如果有傳該欄位才更新
+  // 為了 Demo 簡單，我們這裡假設使用者會傳要更新的欄位
+  // 若要新增信用卡欄位，請先去資料庫執行: ALTER TABLE Users ADD COLUMN savedCard TEXT;
+  // 或者如果不想動資料庫結構，也可以暫時只更新 name 跟 phone
+  
+  const sql = "UPDATE Users SET userName = ?, userPhone = ?, savedCard = ? WHERE userId = ?";
+  
+  db.run(sql, [userName, userPhone, savedCard || null, userId], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    
+    // 更新成功後，回傳最新的使用者資料以便前端更新 LocalStorage
+    db.get("SELECT * FROM Users WHERE userId = ?", [userId], (err, row) => {
+        if(row) {
+            const { userPassword, ...userWithoutPass } = row;
+            res.json(userWithoutPass);
+        } else {
+            res.json({ success: true });
+        }
+    });
+  });
+});
+
+// 14. [PATCH] 取消訂單
+app.patch("/api/orders/:orderId/cancel", (req, res) => {
+  const orderId = req.params.orderId;
+  const sql = "UPDATE Bookings SET bookingStatus = 'Cancelled' WHERE bookingId = ?";
+  
+  db.run(sql, [orderId], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ success: true, message: "訂單已取消" });
+  });
+});
+
+// 15. 啟動伺服器
 app.listen(PORT, () => {
   console.log(`後端伺服器 (API) 正在 http://localhost:${PORT} 上運行...`);
 });

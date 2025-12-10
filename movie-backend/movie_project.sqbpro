@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="BookedSeats" custom_title="0" dock_id="1" table="4,11:mainBookedSeats"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011f00ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- 1. 刪除舊的 Users 表 (如果存在)
-DROP TABLE IF EXISTS Users;
-
--- 2. 建立新的 Users 表 (簡化版)
-CREATE TABLE &quot;Users&quot; (
-    &quot;userId&quot; INTEGER PRIMARY KEY AUTOINCREMENT,
-    &quot;userName&quot; TEXT NOT NULL,
-    &quot;userEmail&quot; TEXT NOT NULL UNIQUE,
-    &quot;userPassword&quot; TEXT NOT NULL, -- 存明文密碼
-    &quot;userPhone&quot; TEXT,
-    &quot;createdAt&quot; TEXT -- 存 YYYY-MM-DD
-);
-
--- 3. 修改 Bookings 表，新增欄位來存商品明細
--- 如果你的 Bookings 表已經存在資料，請小心執行，或直接刪除重建
--- 這裡我們選擇「新增欄位」的方式，讓舊資料不會壞掉
-ALTER TABLE Bookings ADD COLUMN items TEXT; -- 用來存 JSON 字串 (例如票券資訊或商品資訊)
-ALTER TABLE Bookings ADD COLUMN type TEXT;  -- 用來區分 'Movie' 或 'Store'</sql><current_tab id="0"/></tab_sql></sqlb_project>
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="movie_project.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2791"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Users" custom_title="0" dock_id="1" table="4,5:mainUsers"/><dock_state state="000000ff00000000fd00000001000000020000033c000002abfc0100000001fb000000160064006f0063006b00420072006f007700730065003101000000000000033c0000011f00ffffff000002790000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="BookedSeats" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="73"/><column index="2" value="60"/><column index="3" value="67"/><column index="4" value="65"/><column index="5" value="72"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Users" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="38"/><column index="2" value="56"/><column index="3" value="56"/><column index="4" value="73"/><column index="5" value="57"/><column index="6" value="85"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1*">ALTER TABLE Users ADD COLUMN savedCard TEXT;</sql><current_tab id="0"/></tab_sql></sqlb_project>
