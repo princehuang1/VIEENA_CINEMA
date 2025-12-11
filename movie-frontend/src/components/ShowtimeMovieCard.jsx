@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
-  // 移除原本寫死的 language 變數
-  // const language = "英語 / 日語 (字幕)"; 
+function ShowtimeMovieCard({ movie, onError, theater, selectedDate }) {
+  // 移除原本寫死的 language，改由下方 JSX 直接讀取 movie.language
   
   const mockTimes = ["10:30", "13:15", "15:40", "18:20", "21:00"];
 
@@ -19,7 +18,7 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
   // 1. 取得資料庫原始連結
   const rawTrailerUrl = movie.trailerUrl;
 
-  // 2. 轉換連結函式：將 /embed/ 轉為 /watch?v=
+  // 2. 轉換連結函式
   const getWatchUrl = (url) => {
     if (!url) return null;
     if (url.includes('/embed/')) {
@@ -51,8 +50,6 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
             <p><span className="font-semibold text-gray-400">電影種類:</span> {movie.movieType}</p>
             <p><span className="font-semibold text-gray-400">導演:</span> {movie.director || 'N/A'}</p>
             <p><span className="font-semibold text-gray-400">演員:</span> {movie.actors || 'N/A'}</p>
-            
-            {/* 🔥 修改這裡：讀取 movie.language，若無資料則預設顯示 '英語' */}
             <p><span className="font-semibold text-gray-400">語言:</span> {movie.language || '英語'}</p>
           </div>
 
@@ -80,12 +77,14 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
         </div>
         
         <div className="flex space-x-4 mt-4 ml-auto">
+          {/* 🔥 修改連結目標：跳到 ticket-meal 頁面 */}
           <Link 
-            to={`/movie/${movie.movieId}`}
+            to={`/ticket-meal/${movie.movieId}`}
             state={{ 
-                selectedTime: selectedTime,
-                theatreId: theatreId,
-                selectedDate: selectedDate 
+                movie: movie,
+                theater: theater, // 傳遞完整的影城物件
+                date: selectedDate,
+                time: selectedTime 
             }}
             onClick={handleTicketClick} 
             className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full transition duration-300 text-sm flex items-center justify-center"
@@ -93,7 +92,6 @@ function ShowtimeMovieCard({ movie, onError, theatreId, selectedDate }) {
             取得門票
           </Link>
           
-          {/* 3. 使用轉換後的 watchUrl */}
           <a
             href={watchUrl}
             target="_blank" 

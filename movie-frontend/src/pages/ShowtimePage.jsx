@@ -116,6 +116,9 @@ function ShowtimePage() {
     return title.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
+  // 🔥 取得目前選中的影城物件 (為了傳給下一頁)
+  const currentTheatreObj = theatresData.find(t => t.id === selectedTheatre);
+
   return (
     <div className="min-h-screen bg-neutral-900 text-gray-100 font-sans relative">
       {alertMessage && (
@@ -195,9 +198,9 @@ function ShowtimePage() {
                   </select>
                 </div>
                 <div className="grid grid-cols-7 gap-1 text-center mb-2">
-                   {['日', '一', '二', '三', '四', '五', '六'].map(d => (
-                     <span key={d} className="text-xs text-gray-500 font-bold py-1">{d}</span>
-                   ))}
+                    {['日', '一', '二', '三', '四', '五', '六'].map(d => (
+                      <span key={d} className="text-xs text-gray-500 font-bold py-1">{d}</span>
+                    ))}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
                   {blanks.map(blank => (
@@ -256,8 +259,6 @@ function ShowtimePage() {
           </div>
         </div>
 
-        {/* --- 修正：已移除原本在這裡的「時段:」標籤 --- */}
-
         {/* --- 電影列表 --- */}
         <div className="space-y-6 max-w-5xl mx-auto">
           {loading ? (
@@ -269,7 +270,8 @@ function ShowtimePage() {
                   <ShowtimeMovieCard 
                     key={movie.movieId} 
                     movie={movie} 
-                    theatreId={selectedTheatre}
+                    // 🔥 修改處：傳入完整的影城物件 (currentTheatreObj)
+                    theater={currentTheatreObj} 
                     selectedDate={formattedSelectedDate}
                     onError={handleSelectionError}
                   />
